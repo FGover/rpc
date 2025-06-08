@@ -1,8 +1,13 @@
+import com.fg.netty.AppClient;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.CompositeByteBuf;
 import io.netty.buffer.Unpooled;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class NettyTest {
@@ -43,5 +48,37 @@ public class NettyTest {
         while (body.isReadable()) {
             System.out.print(body.readByte() + " ");
         }
+    }
+
+    @Test
+    public void testMessage() throws IOException {
+        ByteBuf message = Unpooled.buffer();
+        message.writeBytes("fg".getBytes(StandardCharsets.UTF_8));  // 写进字符串fg的UTF-8编码的字节数据
+        message.writeByte(1);  // 写入一个字节
+        message.writeShort(125);   // 写入一个short
+        message.writeInt(256);   // 写入一个int
+        message.writeByte(1);  // 写入一个字节，标志位
+        message.writeByte(0);  // 协议版本
+        message.writeByte(2);  // 类型
+        message.writeLong(251455L); // 写入一个long
+        // 用对象流转为字节数据
+        AppClient appClient = new AppClient("127.0.0.1", 8080);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(outputStream);
+        oos.writeObject(appClient);  // 将对象序列化为字节数组
+        byte[] bytes = outputStream.toByteArray();
+        message.writeBytes(bytes);
+        printAsBinary(message);
+    }
+
+    private void printAsBinary(ByteBuf message) {
+        byte[] bytes = new byte[message.readableBytes()];
+        message.getBytes(message.readerIndex(), bytes);
+        String binaryString = ByteBufUtil.hexDump(bytes);
+        StringBuilder formattedBinary = new StringBuilder();
+        for (int i = 0; i < binaryString.length(); i += 2) {
+            formattedBinary.append(binaryString, i, i + 2).append(" ");
+        }
+        System.out.println("Binary representation: " + formattedBinary);
     }
 }

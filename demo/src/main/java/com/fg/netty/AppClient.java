@@ -9,9 +9,11 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.CharsetUtil;
 
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 
-public class AppClient {
+public class AppClient implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private final String host;
     private final int port;
