@@ -20,6 +20,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "FGover"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "git@github.com:FGover/rpc.git",
+    "accountId": "8dabaace-e1fd-4cfb-9e78-baaf4e01ff98"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -148,6 +160,7 @@
       <updated>1749363295360</updated>
       <workItem from="1749363296626" duration="389000" />
       <workItem from="1749363730442" duration="19517000" />
+      <workItem from="1749391829219" duration="405000" />
     </task>
     <servers />
   </component>
