@@ -4,7 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="" />
+    <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/demo/rpc-api/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-api/src/main/java/com/fg/HelloRpc.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-client-demo/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Impl/HelloRpcImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/fg/zookeeper/MyWatcher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/src/test/java/ZookeeperTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-manager/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/demo-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-archiver/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/surefire-reports/2025-06-08T22-12-19_481.dumpstream" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/surefire-reports/NettyTest.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/surefire-reports/TEST-NettyTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +38,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -20,18 +46,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "FGover"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;FGover&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:FGover/rpc.git",
-    "accountId": "8dabaace-e1fd-4cfb-9e78-baaf4e01ff98"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:FGover/rpc.git&quot;,
+    &quot;accountId&quot;: &quot;8dabaace-e1fd-4cfb-9e78-baaf4e01ff98&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -40,64 +66,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AppClient.executor": "Run",
-    "Application.AppServer.executor": "Run",
-    "Application.CompressSerializeDemo.executor": "Run",
-    "Application.SerializableTest.executor": "Run",
-    "JUnit.NettyTest.testByteBuf.executor": "Run",
-    "JUnit.NettyTest.testMessage.executor": "Run",
-    "JUnit.NettyTest.testSlice.executor": "Run",
-    "JUnit.NettyTest.testWrapper.executor": "Run",
-    "Maven.rpc [clean,install].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/javaLearning/rpc代码资料/rpc",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AppClient.executor&quot;: &quot;Run&quot;,
+    &quot;Application.AppServer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CompressSerializeDemo.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SerializableTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testByteBuf.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testMessage.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testSlice.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testWrapper.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testCreateNode.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testDeleteNode.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testExistsNode.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testGetNode.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rpc [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/javaLearning/rpc代码资料/rpc&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.21875&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="com.fg.netty" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CompressSerializeDemo">
-    <configuration name="AppClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.fg.netty.AppClient" />
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.fg.netty.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="AppServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.fg.netty.AppServer" />
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.fg.netty.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.ZookeeperTest.testGetNode">
     <configuration name="CompressSerializeDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="CompressSerializeDemo" />
       <module name="demo" />
@@ -105,18 +110,41 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SerializableTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="SerializableTest" />
+    <configuration name="ZookeeperTest.testCreateNode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ZookeeperTest" />
+      <option name="METHOD_NAME" value="testCreateNode" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="NettyTest.testMessage" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ZookeeperTest.testDeleteNode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="NettyTest" />
-      <option name="METHOD_NAME" value="testMessage" />
+      <option name="MAIN_CLASS_NAME" value="ZookeeperTest" />
+      <option name="METHOD_NAME" value="testDeleteNode" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ZookeeperTest.testExistsNode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ZookeeperTest" />
+      <option name="METHOD_NAME" value="testExistsNode" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ZookeeperTest.testGetNode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="ZookeeperTest" />
+      <option name="METHOD_NAME" value="testGetNode" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -134,11 +162,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ZookeeperTest.testGetNode" />
+        <item itemvalue="JUnit.ZookeeperTest.testCreateNode" />
+        <item itemvalue="JUnit.ZookeeperTest.testExistsNode" />
+        <item itemvalue="JUnit.ZookeeperTest.testDeleteNode" />
         <item itemvalue="Application.CompressSerializeDemo" />
-        <item itemvalue="Application.SerializableTest" />
-        <item itemvalue="JUnit.NettyTest.testMessage" />
-        <item itemvalue="Application.AppClient" />
-        <item itemvalue="Application.AppServer" />
       </list>
     </recent_temporary>
   </component>
@@ -160,7 +188,17 @@
       <updated>1749363295360</updated>
       <workItem from="1749363296626" duration="389000" />
       <workItem from="1749363730442" duration="19517000" />
-      <workItem from="1749391829219" duration="405000" />
+      <workItem from="1749391829219" duration="670000" />
+      <workItem from="1749392510873" duration="219000" />
+      <workItem from="1749392737589" duration="8051000" />
+      <workItem from="1749475827549" duration="2699000" />
+      <workItem from="1749478831572" duration="749000" />
+      <workItem from="1749485863004" duration="1496000" />
+      <workItem from="1749522638773" duration="10000" />
+      <workItem from="1749522654030" duration="1325000" />
+      <workItem from="1749618449831" duration="2527000" />
+      <workItem from="1749623043301" duration="7141000" />
+      <workItem from="1749630553899" duration="769000" />
     </task>
     <servers />
   </component>
