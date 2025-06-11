@@ -1,6 +1,6 @@
 package com.fg;
 
-public interface HelloRpc {
+public interface HelloRpcService {
 
     String sayHello(String msg);
 }
