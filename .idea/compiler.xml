@@ -11,7 +11,7 @@
         <module name="rpc-provider-demo" />
         <module name="rpc-api" />
         <module name="demo" />
-        <module name="rpc-client-demo" />
+        <module name="rpc-consumer-demo" />
         <module name="rpc-framework" />
         <module name="rpc-core" />
       </profile>

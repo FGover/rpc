@@ -14,7 +14,7 @@
         <module>rpc-framework/rpc-common</module>
         <module>rpc-framework/rpc-core</module>
         <module>rpc-manager</module>
-        <module>demo/rpc-client-demo</module>
+        <module>demo/rpc-consumer-demo</module>
         <module>demo/rpc-provider-demo</module>
         <module>demo/rpc-api</module>
     </modules>
