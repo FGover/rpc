@@ -9,15 +9,18 @@
       <option name="ignoredModules">
         <list>
           <option value="rpc-manager" />
+          <option value="rpc-common" />
         </list>
       </option>
       <option name="ignoredPackages">
         <list>
           <option value="org.apache.zookeeper:zookeeper:3.8.1" />
+          <option value="org.apache.zookeeper:zookeeper:3.8.1" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
         </list>
       </option>

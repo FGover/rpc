@@ -1,5 +1,7 @@
 package com.fg;
 
+import com.fg.discovery.RegistryConfig;
+
 public class Application {
     public static void main(String[] args) {
         // 配置要引用的远程服务接口

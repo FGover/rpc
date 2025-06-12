@@ -1,6 +1,7 @@
 package com.fg;
 
 import com.fg.Impl.HelloRpcServiceImpl;
+import com.fg.discovery.RegistryConfig;
 
 public class Application {
     public static void main(String[] args) {
