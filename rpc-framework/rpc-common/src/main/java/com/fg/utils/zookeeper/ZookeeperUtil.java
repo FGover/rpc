@@ -5,6 +5,7 @@ import com.fg.exception.ZookeeperException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 @Slf4j
@@ -96,6 +97,22 @@ public class ZookeeperUtil {
         } catch (InterruptedException e) {
             log.error("关闭Zookeeper实例失败", e);
             throw new ZookeeperException();
+        }
+    }
+
+    /**
+     * 获取子节点
+     *
+     * @param zooKeeper
+     * @param serviceNode
+     * @return
+     */
+    public static List<String> getChildren(ZooKeeper zooKeeper, String serviceNode, Watcher watcher) {
+        try {
+            return zooKeeper.getChildren(serviceNode, watcher);
+        } catch (InterruptedException | KeeperException e) {
+            log.error("获取子节点失败", e);
+            throw new ZookeeperException(e);
         }
     }
 }

@@ -4,7 +4,10 @@ import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Slf4j
@@ -20,6 +23,8 @@ public class RpcBootstrap {
     private int port = 8088;
 
     private Registry registry;
+    // 服务列表
+    private static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>(16);
 
     // 私有化构造方法，防止外部实例化
     private RpcBootstrap() {
@@ -75,6 +80,7 @@ public class RpcBootstrap {
     public RpcBootstrap publish(ServiceConfig<?> service) {
         // 封装要发布的服务
         registry.register(service);
+        SERVICE_LIST.put(service.getInterface().getName(), service);
         return this;
     }
 
@@ -96,7 +102,7 @@ public class RpcBootstrap {
      */
     public void start() {
         try {
-            Thread.sleep(10000);
+            Thread.sleep(100000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -109,6 +115,8 @@ public class RpcBootstrap {
      * @return
      */
     public RpcBootstrap reference(ReferenceConfig<?> reference) {
+        // 设置consumer引用的远程服务接口的注册中心配置
+        reference.setRegistry(registry);
         return this;
     }
 }
