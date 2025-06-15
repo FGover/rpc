@@ -1,7 +1,10 @@
 package com.fg;
 
 import com.fg.discovery.RegistryConfig;
+import lombok.extern.slf4j.Slf4j;
 
+
+@Slf4j
 public class Application {
     public static void main(String[] args) {
         // 配置要引用的远程服务接口
@@ -15,6 +18,7 @@ public class Application {
 
         // 获取远程服务代理对象
         HelloRpcService helloRpc = reference.get();
-        helloRpc.sayHello("我爱你");
+        String msg = helloRpc.sayHello("你好");
+        log.info("远程调用结果：{}", msg);
     }
 }

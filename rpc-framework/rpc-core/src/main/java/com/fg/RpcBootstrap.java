@@ -2,11 +2,22 @@ package com.fg;
 
 import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -25,6 +36,10 @@ public class RpcBootstrap {
     private Registry registry;
     // 服务列表
     private static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>(16);
+    // 连接缓存
+    public static final Map<InetSocketAddress, Channel> CHANNEL_MAP = new ConcurrentHashMap<>(16);
+    // 定义全局的对外挂起的completableFuture
+    public static final Map<Long, CompletableFuture<Object>> PENDING_REQUEST_MAP = new ConcurrentHashMap<>(128);
 
     // 私有化构造方法，防止外部实例化
     private RpcBootstrap() {
@@ -98,13 +113,53 @@ public class RpcBootstrap {
     }
 
     /**
-     * 启动服务
+     * 启动Netty服务
      */
     public void start() {
+        // bossGroup 负责接收客户端连接，一个线程即可
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        // workerGroup 负责处理客户端I/O事件，默认线程数为 CPU*2
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
-            Thread.sleep(100000);
+            // 创建Netty服务启动类
+            ServerBootstrap bootstrap = new ServerBootstrap();
+            // 配置启动参数
+            bootstrap.group(bossGroup, workerGroup)  // 设置线程组
+                    .channel(NioServerSocketChannel.class)  // 设置通道类型
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            ChannelPipeline pipeline = socketChannel.pipeline();
+                            pipeline.addLast(new SimpleChannelInboundHandler<>() {
+                                @Override
+                                protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg)
+                                        throws Exception {
+                                    // 处理客户端请求
+                                    ByteBuf byteBuf = (ByteBuf) msg;
+                                    log.info("接收到客户端请求：{}", byteBuf.toString(Charset.defaultCharset()));
+                                    // 回复
+                                    channelHandlerContext.channel().writeAndFlush(
+                                                    Unpooled.copiedBuffer("hello client", CharsetUtil.UTF_8))
+                                            .addListener(ChannelFutureListener.CLOSE);
+                                }
+                            });
+                        }
+                    });  // 设置通道初始化器
+            // 绑定端口并同步阻塞知道绑定完成
+            ChannelFuture channelFuture = bootstrap.bind(port).sync();
+            log.info("Netty服务已启动，监听端口：{}", port);
+            // 阻塞直到服务通道关闭
+            channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+        } finally {
+            // 关闭线程组
+            try {
+                bossGroup.shutdownGracefully().sync();
+                workerGroup.shutdownGracefully().sync();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
