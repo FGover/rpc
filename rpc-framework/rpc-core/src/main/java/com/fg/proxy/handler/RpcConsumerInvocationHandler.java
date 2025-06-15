@@ -43,7 +43,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
         InetSocketAddress address = registry.lookup(interfaceRef.getName());
         log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
         // 2.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
-        Channel channel = RpcBootstrap.CHANNEL_MAP.get(address);
+        Channel channel = getAvailableChannel(address);
         CompletableFuture<Object> completableFuture = new CompletableFuture<>();
         RpcBootstrap.PENDING_REQUEST_MAP.put(1L, completableFuture);
         // 3.发送请求
