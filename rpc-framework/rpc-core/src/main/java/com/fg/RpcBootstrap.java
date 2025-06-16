@@ -1,5 +1,6 @@
 package com.fg;
 
+import com.fg.channel.handler.RpcMessageDecoder;
 import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
 import io.netty.bootstrap.ServerBootstrap;
@@ -9,6 +10,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -130,19 +132,8 @@ public class RpcBootstrap {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast(new SimpleChannelInboundHandler<>() {
-                                @Override
-                                protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object msg)
-                                        throws Exception {
-                                    // 处理客户端请求
-                                    ByteBuf byteBuf = (ByteBuf) msg;
-                                    log.info("接收到客户端请求：{}", byteBuf.toString(Charset.defaultCharset()));
-                                    // 回复
-                                    channelHandlerContext.channel().writeAndFlush(
-                                                    Unpooled.copiedBuffer("hello client", CharsetUtil.UTF_8))
-                                            .addListener(ChannelFutureListener.CLOSE);
-                                }
-                            });
+                            pipeline.addLast(new LoggingHandler())
+                                    .addLast(new RpcMessageDecoder());
                         }
                     });  // 设置通道初始化器
             // 绑定端口并同步阻塞知道绑定完成

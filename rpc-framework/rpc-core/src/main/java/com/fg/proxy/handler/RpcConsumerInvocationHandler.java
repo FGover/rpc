@@ -4,6 +4,8 @@ import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
 import com.fg.discovery.Registry;
 import com.fg.exception.DiscoveryException;
+import com.fg.transport.message.RequestPayload;
+import com.fg.transport.message.RpcRequest;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -44,16 +46,31 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
         log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
         // 2.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
         Channel channel = getAvailableChannel(address);
+        // 3.封装请求报文
+        RequestPayload requestPayload = RequestPayload.builder()
+                .interfaceName(interfaceRef.getName())
+                .methodName(method.getName())
+                .parametersType(method.getParameterTypes())
+                .parametersValue(args)
+                .returnType(method.getReturnType())
+                .build();
+        RpcRequest request = RpcRequest.builder()
+                .requestId(1L)
+                .requestType((byte) 1)
+                .compressType((byte) 1)
+                .serializeType((byte) 1)
+                .requestPayload(requestPayload)
+                .build();
+        // 4.发送请求
         CompletableFuture<Object> completableFuture = new CompletableFuture<>();
         RpcBootstrap.PENDING_REQUEST_MAP.put(1L, completableFuture);
-        // 3.发送请求
-        channel.writeAndFlush(Unpooled.copiedBuffer("hello server", CharsetUtil.UTF_8))
+        channel.writeAndFlush(request)
                 .addListener((ChannelFutureListener) promise -> {
                     if (!promise.isSuccess()) {
                         completableFuture.completeExceptionally(promise.cause());
                     }
                 });
-        // 4.阻塞等待响应结果
+        // 5.阻塞等待响应结果
         return completableFuture.get(10, TimeUnit.SECONDS);
     }
 

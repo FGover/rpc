@@ -5,11 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/hs_err_pid14444.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid51496.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid51716.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid55020.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/hs_err_pid58048.log" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcMessageDecoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/ConsumerChannelInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/ConsumerChannelInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcMessageEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcMessageEncoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/transport/message/MessageConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/transport/message/MessageConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/transport/message/RequestPayload.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/transport/message/RequestPayload.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/transport/message/RpcRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/transport/message/RpcRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/ConsumerChannelInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/ConsumerChannelInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,40 +65,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AppClient.executor": "Run",
-    "Application.AppServer.executor": "Run",
-    "Application.Application (1).executor": "Run",
-    "Application.Application.executor": "Run",
-    "Application.CompressSerializeDemo.executor": "Run",
-    "Application.NetUtil.executor": "Run",
-    "Application.SerializableTest.executor": "Run",
-    "JUnit.NettyTest.testByteBuf.executor": "Run",
-    "JUnit.NettyTest.testMessage.executor": "Run",
-    "JUnit.NettyTest.testSlice.executor": "Run",
-    "JUnit.NettyTest.testWrapper.executor": "Run",
-    "JUnit.ZookeeperTest.testCreateNode.executor": "Run",
-    "JUnit.ZookeeperTest.testDeleteNode.executor": "Run",
-    "JUnit.ZookeeperTest.testExistsNode.executor": "Run",
-    "JUnit.ZookeeperTest.testGetNode.executor": "Run",
-    "Maven.rpc [clean,install].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/javaLearning/rpc/rpc/rpc-framework",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.21875",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AppClient.executor&quot;: &quot;Run&quot;,
+    &quot;Application.AppServer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Application (1).executor&quot;: &quot;Run&quot;,
+    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CompressSerializeDemo.executor&quot;: &quot;Run&quot;,
+    &quot;Application.NetUtil.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SerializableTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testByteBuf.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testMessage.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testSlice.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.NettyTest.testWrapper.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testCreateNode.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testDeleteNode.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testExistsNode.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ZookeeperTest.testGetNode.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rpc [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/javaLearning/rpc/rpc/rpc-framework&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.21875&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.fg.discovery" />
@@ -232,7 +241,8 @@
       <workItem from="1749730784298" duration="6709000" />
       <workItem from="1749816268601" duration="7681000" />
       <workItem from="1749903238144" duration="7299000" />
-      <workItem from="1749968671832" duration="14027000" />
+      <workItem from="1749968671832" duration="21587000" />
+      <workItem from="1750076937350" duration="6310000" />
     </task>
     <servers />
   </component>
