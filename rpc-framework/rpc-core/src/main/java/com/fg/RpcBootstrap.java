@@ -1,22 +1,19 @@
 package com.fg;
 
-import com.fg.channel.handler.RpcMessageDecoder;
+import com.fg.channel.handler.RpcRequestDecoder;
+import com.fg.channel.handler.RpcRequestHandler;
+import com.fg.channel.handler.RpcResponseEncoder;
 import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +34,7 @@ public class RpcBootstrap {
 
     private Registry registry;
     // 服务列表
-    private static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>(16);
+    public static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>(16);
     // 连接缓存
     public static final Map<InetSocketAddress, Channel> CHANNEL_MAP = new ConcurrentHashMap<>(16);
     // 定义全局的对外挂起的completableFuture
@@ -132,8 +129,10 @@ public class RpcBootstrap {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast(new LoggingHandler())
-                                    .addLast(new RpcMessageDecoder());
+                            pipeline.addLast(new LoggingHandler())      // 双向调试日志
+                                    .addLast(new RpcRequestDecoder())   // [入站]解码器
+                                    .addLast(new RpcResponseEncoder())  // [出站]编码器
+                                    .addLast(new RpcRequestHandler());   // [入站]业务处理器 + 发出响应
                         }
                     });  // 设置通道初始化器
             // 绑定端口并同步阻塞知道绑定完成

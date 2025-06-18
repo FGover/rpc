@@ -1,5 +1,6 @@
 package com.fg.channel.handler;
 
+import com.fg.enums.RequestType;
 import com.fg.transport.message.MessageConstant;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
@@ -39,10 +40,11 @@ import java.io.ObjectOutputStream;
  *  *
  */
 @Slf4j
-public class RpcMessageEncoder extends MessageToByteEncoder<RpcRequest> {
+public class RpcRequestEncoder extends MessageToByteEncoder<RpcRequest> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest, ByteBuf byteBuf)
             throws Exception {
+        log.info("请求编码器执行: {}", rpcRequest);
         // 1.写入魔数
         byteBuf.writeBytes(MessageConstant.MAGIC);
         // 2.写入版本号
@@ -60,17 +62,19 @@ public class RpcMessageEncoder extends MessageToByteEncoder<RpcRequest> {
         byteBuf.writeByte(rpcRequest.getRequestType());
         // 8.写入请求ID
         byteBuf.writeLong(rpcRequest.getRequestId());
+        // 如果是心跳请求，就不处理请求体
+        if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
+            // 没有body，fullLength只包含header长度
+            int fullLength = MessageConstant.HEADER_LENGTH;
+            writeFullLength(byteBuf, fullLengthIndex, fullLength);
+            return;
+        }
         // 9.写入消息体
         byte[] body = getBodyBytes(rpcRequest.getRequestPayload());
         byteBuf.writeBytes(body);
         // 重新处理报文的总长度
         int fullLength = MessageConstant.HEADER_LENGTH + body.length;
-        // 先保存当前写指针的位置
-        int currentWriterIndex = byteBuf.writerIndex();
-        // 将写指针移动到消息报文总长度的位置
-        byteBuf.writerIndex(fullLengthIndex); // 回到full length占位的位置
-        byteBuf.writeInt(fullLength); // 写入真正的 full length
-        byteBuf.writerIndex(currentWriterIndex); // 还原写指针
+        writeFullLength(byteBuf, fullLengthIndex, fullLength);
     }
 
     /**
@@ -92,5 +96,19 @@ public class RpcMessageEncoder extends MessageToByteEncoder<RpcRequest> {
             log.error("序列化失败", e);
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 写入消息报文总长度
+     *
+     * @param byteBuf
+     * @param fullLengthIndex
+     * @param fullLength
+     */
+    private void writeFullLength(ByteBuf byteBuf, int fullLengthIndex, int fullLength) {
+        int currentWriterIndex = byteBuf.writerIndex();
+        byteBuf.writerIndex(fullLengthIndex);
+        byteBuf.writeInt(fullLength);
+        byteBuf.writerIndex(currentWriterIndex);
     }
 }

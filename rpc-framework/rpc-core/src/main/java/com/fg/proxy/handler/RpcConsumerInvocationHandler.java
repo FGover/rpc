@@ -3,13 +3,12 @@ package com.fg.proxy.handler;
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
 import com.fg.discovery.Registry;
+import com.fg.enums.RequestType;
 import com.fg.exception.DiscoveryException;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
@@ -56,7 +55,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .build();
         RpcRequest request = RpcRequest.builder()
                 .requestId(1L)
-                .requestType((byte) 1)
+                .requestType(RequestType.REQUEST.getId())
                 .compressType((byte) 1)
                 .serializeType((byte) 1)
                 .requestPayload(requestPayload)

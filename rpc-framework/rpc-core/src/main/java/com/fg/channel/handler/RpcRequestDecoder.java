@@ -1,5 +1,6 @@
 package com.fg.channel.handler;
 
+import com.fg.enums.RequestType;
 import com.fg.transport.message.MessageConstant;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
@@ -13,8 +14,8 @@ import java.io.ObjectInputStream;
 import java.util.Arrays;
 
 @Slf4j
-public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
-    public RpcMessageDecoder() {
+public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
+    public RpcRequestDecoder() {
         super(
                 MessageConstant.MAX_FRAME_LENGTH,  // maxFrameLength：单个数据包允许的最大长度（超过后直接丢弃，防止内存溢出）
                 MessageConstant.LENGTH_FIELD_OFFSET,  // lengthFieldOffset：length 字段的偏移量（从字节流的哪个位置开始是 length 字段）
@@ -26,6 +27,7 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+        log.info("请求解码器执行了：{}", in);
         Object decode = super.decode(ctx, in);
         if (decode instanceof ByteBuf byteBuf) {
             return decodeFrame(byteBuf);
@@ -57,6 +59,16 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
         byte requestType = byteBuf.readByte();
         // 8.读取请求ID
         long requestId = byteBuf.readLong();
+        // 封装成 RpcRequest 对象
+        RpcRequest rpcRequest = new RpcRequest();
+        rpcRequest.setRequestId(requestId);
+        rpcRequest.setRequestType(requestType);
+        rpcRequest.setCompressType(compressType);
+        rpcRequest.setSerializeType(serializeType);
+        // 根据请求类型判断是否需要读取负载内容
+        if (requestType == RequestType.HEARTBEAT.getId()) {
+            return rpcRequest;
+        }
         // 9.读取消息体
         byte[] body = new byte[fullLength - headerLength];
         byteBuf.readBytes(body);
@@ -64,17 +76,12 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
         RequestPayload requestPayload;
         try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(body))) {
             requestPayload = (RequestPayload) ois.readObject();
+            // 11.封装成 RpcRequest 对象
+            rpcRequest.setRequestPayload(requestPayload);
         } catch (Exception e) {
             log.error("反序列化 body 失败", e);
             throw new RuntimeException(e);
         }
-        // 11.封装成 RpcRequest 对象
-        RpcRequest rpcRequest = new RpcRequest();
-        rpcRequest.setRequestId(requestId);
-        rpcRequest.setRequestType(requestType);
-        rpcRequest.setSerializeType(serializeType);
-        rpcRequest.setCompressType(compressType);
-        rpcRequest.setRequestPayload(requestPayload);
         return rpcRequest;
     }
 }
