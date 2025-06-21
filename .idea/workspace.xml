@@ -5,61 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/demo/target/surefire-reports/2025-06-20T22-20-24_901-jvmRun1.dump" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/target/surefire-reports/2025-06-20T22-20-24_901-jvmRun1.dumpstream" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/target/surefire-reports/2025-06-20T22-20-24_901.dumpstream" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/target/surefire-reports/NettyTest.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/target/surefire-reports/TEST-NettyTest.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/DateUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/compress/CompressFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/compress/CompressWrapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/compress/service/Compressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/compress/service/Impl/GzipCompressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/compress/service/Impl/SnappyCompressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/compress/service/Impl/ZstdCompressor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/SerializerFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/SerializerWrapper.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/HessianSerializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/JdkSerializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/JsonSerializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Serializer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/IdGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/IdGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/utils/DateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/utils/DateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/IdGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/IdGenerator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/ConsumerChannelInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/ConsumerChannelInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/MySimpleChannelInboundHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestDecoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestEncoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseDecoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseEncoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/SerializerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/SerializerFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/SerializerWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/SerializerWrapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Impl/HessianSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Impl/HessianSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Impl/JdkSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Impl/JdkSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Impl/JsonSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Impl/JsonSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Serializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/serialize/service/Serializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/ConsumerChannelInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/ConsumerChannelInitializer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/MySimpleChannelInboundHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestDecoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestDecoder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestEncoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestEncoder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseDecoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseDecoder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseEncoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseEncoder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,7 +247,7 @@
       <workItem from="1750428800266" duration="622000" />
       <workItem from="1750429428979" duration="2395000" />
       <workItem from="1750471248100" duration="69000" />
-      <workItem from="1750471356698" duration="6124000" />
+      <workItem from="1750471356698" duration="8104000" />
     </task>
     <servers />
   </component>
