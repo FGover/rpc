@@ -42,9 +42,8 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         log.info("调用远程方法：{}", method.getName());
-        // 1.从注册中心寻找一个可用的服务
-        // 传入服务的名字，返回服务的 ip + 端口
-        InetSocketAddress address = registry.lookup(interfaceRef.getName());
+        // 1.获取可用服务
+        InetSocketAddress address = RpcBootstrap.LOAD_BALANCER.getServiceAddress(interfaceRef.getName());
         log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
         // 2.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
         Channel channel = getAvailableChannel(address);

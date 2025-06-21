@@ -1,6 +1,7 @@
 package com.fg.discovery.Impl;
 
 import com.fg.Constant;
+import com.fg.RpcBootstrap;
 import com.fg.ServiceConfig;
 import com.fg.discovery.AbstractRegistry;
 import com.fg.exception.DiscoveryException;
@@ -42,7 +43,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
                     CreateMode.PERSISTENT);
         }
         // 创建本机的临时节点
-        String node = parentNode + "/" + NetUtil.getIP() + ":" + 8088;
+        String node = parentNode + "/" + NetUtil.getIP() + ":" + RpcBootstrap.PORT;
         if (!ZookeeperUtil.exists(zooKeeper, node, null)) {
             ZookeeperUtil.createNode(zooKeeper, new ZookeeperNode(node, null), null,
                     CreateMode.EPHEMERAL);
@@ -56,10 +57,10 @@ public class ZookeeperRegistry extends AbstractRegistry {
      * 查找服务
      *
      * @param serviceName
-     * @return
+     * @return  服务列表
      */
     @Override
-    public InetSocketAddress lookup(String serviceName) {
+    public List<InetSocketAddress> lookup(String serviceName) {
         // 找到服务对应的节点
         String serviceNode = Constant.BASE_PROVIDERS_PATH + "/" + serviceName;
         // 获取子节点
@@ -73,6 +74,6 @@ public class ZookeeperRegistry extends AbstractRegistry {
         if (inetSocketAddressList.isEmpty()) {
             throw new DiscoveryException("未找到服务");
         }
-        return inetSocketAddressList.get(0);
+        return inetSocketAddressList;
     }
 }

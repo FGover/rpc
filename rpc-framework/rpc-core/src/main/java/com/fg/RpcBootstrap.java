@@ -5,12 +5,14 @@ import com.fg.channel.handler.RpcRequestHandler;
 import com.fg.channel.handler.RpcResponseEncoder;
 import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
+import com.fg.loadbalancer.service.Impl.RoundRobinLoadBalancer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -23,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class RpcBootstrap {
 
+    public static final int PORT = 8088;
     // 饿汉式单例
     private static final RpcBootstrap rpcBootstrap = new RpcBootstrap();
 
@@ -30,8 +33,11 @@ public class RpcBootstrap {
     private String applicationName = "default";
     private RegistryConfig registryConfig;
     private ProtocolConfig protocolConfig;
-    private int port = 8088;
+
+    @Getter
     private Registry registry;
+
+    public static RoundRobinLoadBalancer LOAD_BALANCER = new RoundRobinLoadBalancer();
 
     // 序列化类型
     public static String SERIALIZER_TYPE = "jdk";
@@ -142,8 +148,8 @@ public class RpcBootstrap {
                         }
                     });  // 设置通道初始化器
             // 绑定端口并同步阻塞知道绑定完成
-            ChannelFuture channelFuture = bootstrap.bind(port).sync();
-            log.info("Netty服务已启动，监听端口：{}", port);
+            ChannelFuture channelFuture = bootstrap.bind(PORT).sync();
+            log.info("Netty服务已启动，监听端口：{}", PORT);
             // 阻塞直到服务通道关闭
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {

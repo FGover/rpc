@@ -5,8 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/AbstractLoadBalancer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/service/Impl/RoundRobinLoadBalancer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/service/LoadBalancer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/service/Selector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/NacosRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/NacosRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Registry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Registry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/NacosRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/NacosRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Registry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Registry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,41 +71,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.AppClient.executor&quot;: &quot;Run&quot;,
-    &quot;Application.AppServer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application (1).executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CompressSerializeDemo.executor&quot;: &quot;Run&quot;,
-    &quot;Application.IdGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Application.NetUtil.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SerializableTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testByteBuf.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testMessage.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testSlice.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testWrapper.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testCreateNode.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testDeleteNode.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testExistsNode.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testGetNode.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.rpc [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/javaLearning/rpc/rpc/rpc-framework&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.21875&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AppClient.executor": "Run",
+    "Application.AppServer.executor": "Run",
+    "Application.Application (1).executor": "Run",
+    "Application.Application.executor": "Run",
+    "Application.CompressSerializeDemo.executor": "Run",
+    "Application.IdGenerator.executor": "Run",
+    "Application.NetUtil.executor": "Run",
+    "Application.SerializableTest.executor": "Run",
+    "Application.provider2.executor": "Run",
+    "Application.provider3.executor": "Run",
+    "Application.providerApplication.executor": "Run",
+    "JUnit.NettyTest.testByteBuf.executor": "Run",
+    "JUnit.NettyTest.testMessage.executor": "Run",
+    "JUnit.NettyTest.testSlice.executor": "Run",
+    "JUnit.NettyTest.testWrapper.executor": "Run",
+    "JUnit.ZookeeperTest.testCreateNode.executor": "Run",
+    "JUnit.ZookeeperTest.testDeleteNode.executor": "Run",
+    "JUnit.ZookeeperTest.testExistsNode.executor": "Run",
+    "JUnit.ZookeeperTest.testGetNode.executor": "Run",
+    "Maven.rpc [clean,install].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/javaLearning/rpc/rpc/rpc-framework",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.21875",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.fg.discovery" />
@@ -110,19 +130,6 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.fg.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.fg.Application" />
-      <module name="rpc-provider-demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.fg.discovery.Impl.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -169,6 +176,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="provider2" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.fg.Application" />
+      <module name="rpc-provider-demo" />
+      <option name="VM_PARAMETERS" value="-Dserver.port=8089" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="provider3" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="com.fg.Application" />
+      <module name="rpc-provider-demo" />
+      <option name="VM_PARAMETERS" value="-Dserver.port=8090" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="providerApplication" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.fg.Application" />
+      <module name="rpc-provider-demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.fg.discovery.Impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ZookeeperTest.testGetNode" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <option name="PACKAGE_NAME" value="" />
@@ -189,10 +225,19 @@
       <option name="showConsole" value="true" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Application.provider2" />
+      <item itemvalue="Application.provider3" />
+      <item itemvalue="Application.providerApplication" />
+      <item itemvalue="Application.Application (1)" />
+      <item itemvalue="Application.IdGenerator" />
+      <item itemvalue="Application.NetUtil" />
+      <item itemvalue="JUnit.ZookeeperTest.testGetNode" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Application (1)" />
-        <item itemvalue="Application.Application" />
+        <item itemvalue="Application.providerApplication" />
         <item itemvalue="Application.IdGenerator" />
         <item itemvalue="Application.NetUtil" />
         <item itemvalue="JUnit.ZookeeperTest.testGetNode" />
@@ -247,7 +292,7 @@
       <workItem from="1750428800266" duration="622000" />
       <workItem from="1750429428979" duration="2395000" />
       <workItem from="1750471248100" duration="69000" />
-      <workItem from="1750471356698" duration="8104000" />
+      <workItem from="1750471356698" duration="16327000" />
     </task>
     <servers />
   </component>

@@ -21,7 +21,18 @@ public class Application {
 
         // 获取远程服务代理对象
         HelloRpcService helloRpc = reference.get();
-        String msg = helloRpc.sayHello("你好");
-        log.info("远程调用结果：{}", msg);
+//        String msg = helloRpc.sayHello("你好");
+//        log.info("远程调用结果：{}", msg);
+        for (int i = 0; i < 10; i++) {
+            String msg = helloRpc.sayHello("你好，第 " + (i + 1) + " 次调用");
+            log.info("远程调用结果：{}", msg);
+
+            // 可以稍微等待，避免调用太快
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }
