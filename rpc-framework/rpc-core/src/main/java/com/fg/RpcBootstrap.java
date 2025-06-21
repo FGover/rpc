@@ -31,8 +31,14 @@ public class RpcBootstrap {
     private RegistryConfig registryConfig;
     private ProtocolConfig protocolConfig;
     private int port = 8088;
-
     private Registry registry;
+
+    // 序列化类型
+    public static String SERIALIZER_TYPE = "jdk";
+    // 压缩类型
+    public static String COMPRESSOR_TYPE = "gzip";
+    // 定义全局的ID生成器
+    public static final IdGenerator ID_GENERATOR = new IdGenerator(1, 2);
     // 服务列表
     public static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>(16);
     // 连接缓存
@@ -164,4 +170,29 @@ public class RpcBootstrap {
         reference.setRegistry(registry);
         return this;
     }
+
+    /**
+     * 配置序列化方式
+     *
+     * @param serializerType
+     * @return
+     */
+    public RpcBootstrap serializer(String serializerType) {
+        log.debug("配置序列化方式:{}", serializerType);
+        SERIALIZER_TYPE = serializerType;
+        return this;
+    }
+
+    /**
+     * 配置压缩方式
+     *
+     * @param compressType
+     * @return
+     */
+    public RpcBootstrap compress(String compressType) {
+        log.debug("配置压缩方式:{}", compressType);
+        COMPRESSOR_TYPE = compressType;
+        return this;
+    }
+
 }

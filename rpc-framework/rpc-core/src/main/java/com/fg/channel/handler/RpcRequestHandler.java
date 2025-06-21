@@ -47,7 +47,7 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
             );
         }
         // 3.发送完整的响应对象
-        log.info("服务端发送响应：{}", rpcResponse);
+        log.info("服务端写入响应：{}", rpcResponse);
         channelHandlerContext.writeAndFlush(rpcResponse);
     }
 

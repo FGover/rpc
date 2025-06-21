@@ -1,10 +1,12 @@
 package com.fg.serialize.service.Impl;
 
-import com.fg.serialize.service.SerializerService;
+import com.fg.serialize.service.Serializer;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 
-public class JdkSerializer implements SerializerService {
+@Slf4j
+public class JdkSerializer implements Serializer {
 
     /**
      * 序列化
@@ -14,6 +16,7 @@ public class JdkSerializer implements SerializerService {
      */
     @Override
     public byte[] serialize(Object object) {
+        log.info("使用jdk序列化");
         if (object == null) {
             throw new IllegalArgumentException("序列化对象不能为空");
         }
@@ -26,7 +29,8 @@ public class JdkSerializer implements SerializerService {
             oos.writeObject(object);  // 将对象写入输出流
             return bos.toByteArray(); // 将输出流转换为字节数组
         } catch (IOException e) {
-            throw new RuntimeException("处理序列化异常", e);
+            log.error("处理序列化异常", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -40,6 +44,7 @@ public class JdkSerializer implements SerializerService {
      */
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clazz) {
+        log.info("使用jdk反序列化");
         if (bytes == null || bytes.length == 0) {
             throw new IllegalArgumentException("反序列化对象不能为空");
         }
@@ -52,7 +57,9 @@ public class JdkSerializer implements SerializerService {
             Object obj = ois.readObject();  // 读取对象
             return clazz.cast(obj); // 将对象类型转换并返回
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("处理反序列化异常", e);
+            log.error("处理反序列化异常", e);
+            throw new RuntimeException(e);
         }
     }
+
 }

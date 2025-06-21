@@ -1,17 +1,17 @@
 package com.fg.channel.handler;
 
+import com.fg.RpcBootstrap;
+import com.fg.compress.CompressFactory;
+import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
+import com.fg.serialize.SerializerFactory;
+import com.fg.serialize.service.Serializer;
 import com.fg.transport.message.MessageConstant;
-import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 
 /**
@@ -70,32 +70,19 @@ public class RpcRequestEncoder extends MessageToByteEncoder<RpcRequest> {
             return;
         }
         // 9.写入消息体
-        byte[] body = getBodyBytes(rpcRequest.getRequestPayload());
+        log.info("请求编码器执行：序列化前数据长度：{}", rpcRequest.getRequestPayload().toString().length());
+        // 获取序列化器
+        Serializer serializer = SerializerFactory.getSerializer(rpcRequest.getSerializeType()).getSerializer();
+        // 获取压缩器
+        Compressor compressor = CompressFactory.getCompressor(rpcRequest.getCompressType()).getCompressor();
+        byte[] body = serializer.serialize(rpcRequest.getRequestPayload());
+        log.info("请求编码器执行：序列化后数据长度：{}", body.length);
+        body = compressor.compress(body);
+        log.info("请求编码器执行：压缩后数据长度：{}", body.length);
         byteBuf.writeBytes(body);
         // 重新处理报文的总长度
         int fullLength = MessageConstant.HEADER_LENGTH + body.length;
         writeFullLength(byteBuf, fullLengthIndex, fullLength);
-    }
-
-    /**
-     * 将序列化请求体转为字节数组
-     * 将 Java 对象转换成可以通过网络传输的格式（byte 流），通常用于 RPC 通信中的请求体部分（body 部分）。
-     *
-     * @param requestPayload
-     * @return
-     */
-    private byte[] getBodyBytes(RequestPayload requestPayload) {
-        try {
-            // 创建一个内存缓冲区，接收序列化后的字节数据
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            // 创建一个对象输出流，用于将 Java 对象序列化到内存缓冲区
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(requestPayload);
-            return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
-            log.error("序列化失败", e);
-            throw new RuntimeException(e);
-        }
     }
 
     /**

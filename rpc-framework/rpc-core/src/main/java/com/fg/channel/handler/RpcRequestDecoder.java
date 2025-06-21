@@ -1,6 +1,11 @@
 package com.fg.channel.handler;
 
+import com.fg.RpcBootstrap;
+import com.fg.compress.CompressFactory;
+import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
+import com.fg.serialize.SerializerFactory;
+import com.fg.serialize.service.Serializer;
 import com.fg.transport.message.MessageConstant;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
@@ -9,8 +14,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.util.Arrays;
 
 @Slf4j
@@ -62,6 +65,7 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
         // 封装成 RpcRequest 对象
         RpcRequest rpcRequest = new RpcRequest();
         rpcRequest.setRequestId(requestId);
+        System.out.println("requestId: " + requestId);
         rpcRequest.setRequestType(requestType);
         rpcRequest.setCompressType(compressType);
         rpcRequest.setSerializeType(serializeType);
@@ -72,16 +76,16 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
         // 9.读取消息体
         byte[] body = new byte[fullLength - headerLength];
         byteBuf.readBytes(body);
-        // 10.反序列化 body 成 Java 对象
-        RequestPayload requestPayload;
-        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(body))) {
-            requestPayload = (RequestPayload) ois.readObject();
-            // 11.封装成 RpcRequest 对象
-            rpcRequest.setRequestPayload(requestPayload);
-        } catch (Exception e) {
-            log.error("反序列化 body 失败", e);
-            throw new RuntimeException(e);
-        }
+        log.info("请求解码器执行：解压前数据长度：{}", body.length);
+        // 10.解压
+        Compressor compressor = CompressFactory.getCompressor(compressType).getCompressor();
+        body = compressor.decompress(body);
+        log.info("请求解码器执行：解压后数据长度：{}", body.length);
+        // 11.反序列化 body 成 Java 对象
+        Serializer serializer = SerializerFactory.getSerializer(serializeType).getSerializer();
+        RequestPayload requestPayload = serializer.deserialize(body, RequestPayload.class);
+        log.info("请求解码器执行：反序列化后数据长度：{}", requestPayload.toString().length());
+        rpcRequest.setRequestPayload(requestPayload);
         return rpcRequest;
     }
 }

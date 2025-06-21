@@ -1,17 +1,17 @@
 package com.fg.channel.handler;
 
+import com.fg.RpcBootstrap;
+import com.fg.compress.CompressFactory;
+import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
+import com.fg.serialize.SerializerFactory;
+import com.fg.serialize.service.Serializer;
 import com.fg.transport.message.MessageConstant;
-import com.fg.transport.message.ResponsePayload;
 import com.fg.transport.message.RpcResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 /*
  * 自定义协议编码器
@@ -64,29 +64,19 @@ public class RpcResponseEncoder extends MessageToByteEncoder<RpcResponse> {
             writeFullLength(out, fullLengthIndex, fullLength);
         }
         // 写入消息体
-        byte[] body = getBodyBytes(rpcResponse.getResponsePayload());
+        log.info("响应编码器执行: 序列化前数据长度：{}", rpcResponse.getResponsePayload().toString().length());
+        // 获取序列化器
+        Serializer serializer = SerializerFactory.getSerializer(rpcResponse.getSerializeType()).getSerializer();
+        // 获取压缩器
+        Compressor compressor = CompressFactory.getCompressor(rpcResponse.getCompressType()).getCompressor();
+        byte[] body = serializer.serialize(rpcResponse.getResponsePayload());
+        log.info("响应编码器执行: 序列化后数据长度：{}", body.length);
+        body = compressor.compress(body);
+        log.info("响应编码器执行: 压缩后数据长度：{}", body.length);
         out.writeBytes(body);
         // 回填总长度
         int fullLength = MessageConstant.HEADER_LENGTH + body.length;
         writeFullLength(out, fullLengthIndex, fullLength);
-    }
-
-    /**
-     * 将序列化请求体转为字节数组
-     * 将 Java 对象转换成可以通过网络传输的格式（byte 流），通常用于 RPC 通信中的请求体部分（body 部分）。
-     *
-     * @param responsePayload
-     * @return
-     */
-    private byte[] getBodyBytes(ResponsePayload responsePayload) {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             ObjectOutputStream oos = new ObjectOutputStream(baos)) {
-            oos.writeObject(responsePayload);
-            return baos.toByteArray();
-        } catch (IOException e) {
-            log.error("ResponsePayload 序列化失败", e);
-            throw new RuntimeException("编码响应失败", e);
-        }
     }
 
     /**

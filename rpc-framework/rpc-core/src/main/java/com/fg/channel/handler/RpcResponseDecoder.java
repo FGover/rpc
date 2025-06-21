@@ -1,18 +1,19 @@
 package com.fg.channel.handler;
 
+import com.fg.RpcBootstrap;
+import com.fg.compress.CompressFactory;
+import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
+import com.fg.serialize.SerializerFactory;
+import com.fg.serialize.service.Serializer;
 import com.fg.transport.message.MessageConstant;
 import com.fg.transport.message.ResponsePayload;
-import com.fg.transport.message.RpcRequest;
 import com.fg.transport.message.RpcResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Arrays;
 
 /**
@@ -97,14 +98,16 @@ public class RpcResponseDecoder extends LengthFieldBasedFrameDecoder {
         // 读取 body
         byte[] body = new byte[fullLength - headerLength];
         byteBuf.readBytes(body);
-        ResponsePayload responsePayload;
-        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(body))) {
-            responsePayload = (ResponsePayload) ois.readObject();
-            // 设置响应对象
-            rpcResponse.setResponsePayload(responsePayload);
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        log.info("响应解码器执行：解压前数据长度：{}", body.length);
+        // 解压
+        Compressor compressor = CompressFactory.getCompressor(compressType).getCompressor();
+        body = compressor.decompress(body);
+        log.info("响应解码器执行：解压后数据长度：{}", body.length);
+        // 反序列化
+        Serializer serializer = SerializerFactory.getSerializer(serializationType).getSerializer();
+        ResponsePayload responsePayload = serializer.deserialize(body, ResponsePayload.class);
+        log.info("响应解码器执行：反序列化后数据长度：{}", responsePayload.toString().length());
+        rpcResponse.setResponsePayload(responsePayload);
         return rpcResponse;
     }
 }

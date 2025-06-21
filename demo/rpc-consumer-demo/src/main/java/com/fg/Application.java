@@ -11,9 +11,12 @@ public class Application {
         ReferenceConfig<HelloRpcService> reference = new ReferenceConfig<>();
         reference.setInterface(HelloRpcService.class);
 
+        // 启动并初始化
         RpcBootstrap.getInstance()
                 .application("first-rpc-consumer")
                 .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))
+                .serializer("hessian")
+                .compress("zstd")
                 .reference(reference);
 
         // 获取远程服务代理对象

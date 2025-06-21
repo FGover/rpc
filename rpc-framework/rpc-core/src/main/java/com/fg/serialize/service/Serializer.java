@@ -1,6 +1,6 @@
 package com.fg.serialize.service;
 
-public interface SerializerService {
+public interface Serializer {
 
     // 序列化，用于将请求/响应变成可以传输的字节
     byte[] serialize(Object object);

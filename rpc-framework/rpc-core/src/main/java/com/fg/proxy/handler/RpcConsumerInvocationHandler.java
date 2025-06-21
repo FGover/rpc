@@ -1,10 +1,13 @@
 package com.fg.proxy.handler;
 
+import com.fg.Constant;
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
+import com.fg.compress.CompressFactory;
 import com.fg.discovery.Registry;
 import com.fg.enums.RequestType;
 import com.fg.exception.DiscoveryException;
+import com.fg.serialize.SerializerFactory;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
 import io.netty.channel.Channel;
@@ -54,15 +57,15 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .returnType(method.getReturnType())
                 .build();
         RpcRequest request = RpcRequest.builder()
-                .requestId(1L)
+                .requestId(RpcBootstrap.ID_GENERATOR.nextId())
                 .requestType(RequestType.REQUEST.getId())
-                .compressType((byte) 1)
-                .serializeType((byte) 1)
+                .compressType(CompressFactory.getCompressor(RpcBootstrap.COMPRESSOR_TYPE).getCode())
+                .serializeType(SerializerFactory.getSerializer(RpcBootstrap.SERIALIZER_TYPE).getCode())
                 .requestPayload(requestPayload)
                 .build();
         // 4.发送请求
         CompletableFuture<Object> completableFuture = new CompletableFuture<>();
-        RpcBootstrap.PENDING_REQUEST_MAP.put(1L, completableFuture);
+        RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
         channel.writeAndFlush(request)
                 .addListener((ChannelFutureListener) promise -> {
                     if (!promise.isSuccess()) {

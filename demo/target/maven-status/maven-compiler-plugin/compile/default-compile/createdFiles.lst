@@ -1,5 +1,6 @@
 com\fg\netty\AppClient.class
 com\fg\netty\ServerChannelInitializer.class
+com\fg\zookeeper\MyWatcher.class
 com\fg\netty\ClientChannelInitializer.class
 com\fg\netty\ServerChannelHandler.class
 com\fg\netty\AppServer.class

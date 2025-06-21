@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ObjectWrapper<T> {
+public class SerializerWrapper<T> {
 
     private byte code;
     private String name;
-    private T impl;
+    private T serializer;
 }

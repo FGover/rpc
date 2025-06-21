@@ -1,6 +1,6 @@
 package com.fg.channel;
 
-import com.fg.channel.handler.MySimpleChannelInboundHandler;
+import com.fg.channel.handler.RpcResponseHandler;
 import com.fg.channel.handler.RpcRequestEncoder;
 import com.fg.channel.handler.RpcResponseDecoder;
 import io.netty.channel.ChannelInitializer;
@@ -16,6 +16,6 @@ public class ConsumerChannelInitializer extends ChannelInitializer<SocketChannel
                 .addLast(new LoggingHandler(LogLevel.DEBUG))  // 双向调试日志
                 .addLast(new RpcRequestEncoder())  // [出站]消息编码器
                 .addLast(new RpcResponseDecoder())  // [入站]消息解码器
-                .addLast(new MySimpleChannelInboundHandler());   // [入站]业务处理器 + 处理响应
+                .addLast(new RpcResponseHandler());   // [入站]业务处理器 + 处理响应
     }
 }
