@@ -23,7 +23,7 @@ public class Application {
         HelloRpcService helloRpc = reference.get();
 //        String msg = helloRpc.sayHello("你好");
 //        log.info("远程调用结果：{}", msg);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             String msg = helloRpc.sayHello("你好，第 " + (i + 1) + " 次调用");
             log.info("远程调用结果：{}", msg);
 

@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class RpcBootstrap {
 
-    public static final int PORT = 8088;
+    public static final int PORT = 8090;
     // 饿汉式单例
     private static final RpcBootstrap rpcBootstrap = new RpcBootstrap();
 
