@@ -7,7 +7,7 @@ public class MessageConstant {
     // 协议版本号。1B
     public static final byte VERSION = 1;
     // 头部长度。2B
-    public static final int HEADER_LENGTH = 22;
+    public static final int HEADER_LENGTH = 30;
 
     // netty 解码器参数：
     public static final int MAX_FRAME_LENGTH = 1024 * 1024;   // 最大帧长度限制
