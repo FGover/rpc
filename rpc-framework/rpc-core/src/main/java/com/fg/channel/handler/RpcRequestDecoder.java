@@ -1,12 +1,11 @@
 package com.fg.channel.handler;
 
-import com.fg.RpcBootstrap;
 import com.fg.compress.CompressFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
 import com.fg.serialize.service.Serializer;
-import com.fg.transport.message.MessageConstant;
+import com.fg.transport.constant.MessageConstant;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
 import io.netty.buffer.ByteBuf;
@@ -15,6 +14,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.Random;
 
 @Slf4j
 public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
@@ -30,6 +30,7 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+        Thread.sleep(new Random().nextInt(50));
         log.info("请求解码器执行了：{}", in);
         Object decode = super.decode(ctx, in);
         if (decode instanceof ByteBuf byteBuf) {
@@ -62,26 +63,28 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
         byte requestType = byteBuf.readByte();
         // 8.读取请求ID
         long requestId = byteBuf.readLong();
+        // 9. 读取时间戳
+        long timestamp = byteBuf.readLong();
         // 封装成 RpcRequest 对象
         RpcRequest rpcRequest = new RpcRequest();
         rpcRequest.setRequestId(requestId);
-        System.out.println("requestId: " + requestId);
         rpcRequest.setRequestType(requestType);
         rpcRequest.setCompressType(compressType);
         rpcRequest.setSerializeType(serializeType);
+        rpcRequest.setTimestamp(timestamp);
         // 根据请求类型判断是否需要读取负载内容
         if (requestType == RequestType.HEARTBEAT.getId()) {
             return rpcRequest;
         }
-        // 9.读取消息体
+        // 10.读取消息体
         byte[] body = new byte[fullLength - headerLength];
         byteBuf.readBytes(body);
         log.info("请求解码器执行：解压前数据长度：{}", body.length);
-        // 10.解压
+        // 11.解压
         Compressor compressor = CompressFactory.getCompressor(compressType).getCompressor();
         body = compressor.decompress(body);
         log.info("请求解码器执行：解压后数据长度：{}", body.length);
-        // 11.反序列化 body 成 Java 对象
+        // 12.反序列化 body 成 Java 对象
         Serializer serializer = SerializerFactory.getSerializer(serializeType).getSerializer();
         RequestPayload requestPayload = serializer.deserialize(body, RequestPayload.class);
         log.info("请求解码器执行：反序列化后数据长度：{}", requestPayload.toString().length());

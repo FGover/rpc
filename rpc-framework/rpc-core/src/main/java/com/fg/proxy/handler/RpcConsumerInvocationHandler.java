@@ -1,6 +1,5 @@
 package com.fg.proxy.handler;
 
-import com.fg.Constant;
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
 import com.fg.compress.CompressFactory;
@@ -42,12 +41,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         log.info("调用远程方法：{}", method.getName());
-        // 1.获取可用服务
-        InetSocketAddress address = RpcBootstrap.LOAD_BALANCER.getServiceAddress(interfaceRef.getName());
-        log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
-        // 2.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
-        Channel channel = getAvailableChannel(address);
-        // 3.封装请求报文
+        // 1.封装请求报文
         RequestPayload requestPayload = RequestPayload.builder()
                 .interfaceName(interfaceRef.getName())
                 .methodName(method.getName())
@@ -56,12 +50,20 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .returnType(method.getReturnType())
                 .build();
         RpcRequest request = RpcRequest.builder()
-                .requestId(RpcBootstrap.ID_GENERATOR.nextId())
+                .requestId(RpcBootstrap.ID_GENERATOR.getId())
                 .requestType(RequestType.REQUEST.getId())
                 .compressType(CompressFactory.getCompressor(RpcBootstrap.COMPRESSOR_TYPE).getCode())
                 .serializeType(SerializerFactory.getSerializer(RpcBootstrap.SERIALIZER_TYPE).getCode())
+                .timestamp(System.currentTimeMillis())
                 .requestPayload(requestPayload)
                 .build();
+        // 将请求存入当前线程
+        RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
+        // 2.从注册中心拉去服务列表并通过负载均衡获取可用服务
+        InetSocketAddress address = RpcBootstrap.LOAD_BALANCER.getServiceAddress(interfaceRef.getName());
+        log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
+        // 3.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
+        Channel channel = getAvailableChannel(address);
         // 4.发送请求
         CompletableFuture<Object> completableFuture = new CompletableFuture<>();
         RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
@@ -71,6 +73,8 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                         completableFuture.completeExceptionally(promise.cause());
                     }
                 });
+        // 清理ThreadLocal
+        RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
         // 5.阻塞等待响应结果
         return completableFuture.get(10, TimeUnit.SECONDS);
     }

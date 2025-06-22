@@ -1,4 +1,4 @@
-package com.fg.transport.message;
+package com.fg.transport.constant;
 
 public class MessageConstant {
 

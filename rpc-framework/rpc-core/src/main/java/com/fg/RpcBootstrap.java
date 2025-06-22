@@ -5,7 +5,12 @@ import com.fg.channel.handler.RpcRequestHandler;
 import com.fg.channel.handler.RpcResponseEncoder;
 import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
+import com.fg.heartbeat.HeartBeatDetector;
+import com.fg.loadbalancer.service.Impl.ConsistentHashLoadBalancer;
+import com.fg.loadbalancer.service.Impl.MinimumResponseTimeLoadBalancer;
 import com.fg.loadbalancer.service.Impl.RoundRobinLoadBalancer;
+import com.fg.loadbalancer.service.LoadBalancer;
+import com.fg.transport.message.RpcRequest;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -18,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,8 +43,10 @@ public class RpcBootstrap {
     @Getter
     private Registry registry;
 
-    public static RoundRobinLoadBalancer LOAD_BALANCER = new RoundRobinLoadBalancer();
-
+    // 负载均衡器
+    public static LoadBalancer LOAD_BALANCER;
+    // 当前线程
+    public static final ThreadLocal<RpcRequest> REQUEST_THREAD_LOCAL = new ThreadLocal<>();
     // 序列化类型
     public static String SERIALIZER_TYPE = "jdk";
     // 压缩类型
@@ -46,11 +54,13 @@ public class RpcBootstrap {
     // 定义全局的ID生成器
     public static final IdGenerator ID_GENERATOR = new IdGenerator(1, 2);
     // 服务列表
-    public static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>(16);
+    public static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>();
     // 连接缓存
-    public static final Map<InetSocketAddress, Channel> CHANNEL_MAP = new ConcurrentHashMap<>(16);
+    public static final Map<InetSocketAddress, Channel> CHANNEL_MAP = new ConcurrentHashMap<>();
+    // 响应时间缓存
+    public static final TreeMap<Long, Channel> RESPONSE_TIME_CHANNEL_MAP = new TreeMap<>();
     // 定义全局的对外挂起的completableFuture
-    public static final Map<Long, CompletableFuture<Object>> PENDING_REQUEST_MAP = new ConcurrentHashMap<>(128);
+    public static final Map<Long, CompletableFuture<Object>> PENDING_REQUEST_MAP = new ConcurrentHashMap<>();
 
     // 私有化构造方法，防止外部实例化
     private RpcBootstrap() {
@@ -80,6 +90,8 @@ public class RpcBootstrap {
      */
     public RpcBootstrap registry(RegistryConfig registryConfig) {
         this.registry = registryConfig.getRegistry();
+        // 配置负载均衡器
+        RpcBootstrap.LOAD_BALANCER = new RoundRobinLoadBalancer();
         return this;
     }
 
@@ -174,6 +186,8 @@ public class RpcBootstrap {
     public RpcBootstrap reference(ReferenceConfig<?> reference) {
         // 设置consumer引用的远程服务接口的注册中心配置
         reference.setRegistry(registry);
+        // 开启心跳检测
+        HeartBeatDetector.detect(reference.getInterface().getName());
         return this;
     }
 

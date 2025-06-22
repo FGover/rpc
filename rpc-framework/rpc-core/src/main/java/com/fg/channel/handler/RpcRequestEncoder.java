@@ -1,12 +1,11 @@
 package com.fg.channel.handler;
 
-import com.fg.RpcBootstrap;
 import com.fg.compress.CompressFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
 import com.fg.serialize.service.Serializer;
-import com.fg.transport.message.MessageConstant;
+import com.fg.transport.constant.MessageConstant;
 import com.fg.transport.message.RpcRequest;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -27,16 +26,17 @@ import lombok.extern.slf4j.Slf4j;
  * compressType：压缩类型。1B
  * requestType：请求类型。1B
  * requestId：请求ID。8B
+ * timestamp：时间戳。8B
  * body：消息体，存放实际传输的数据。
  * * * <pre>
- *  *   0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16   17   18   19   20   21  22
- *  *   +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
- *  *   |    magic          |ver |head  len|    full length    | qt | ser|comp|              RequestId                |
- *  *   +-----+-----+-------+----+----+----+----+-----------+----- ---+--------+----+----+----+----+----+----+---+---+
- *  *   |                                                                                                             |
- *  *   |                                         body                                                                |
- *  *   |                                                                                                             |
- *  *   +--------------------------------------------------------------------------------------------------------+---+
+ *  *   0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16   17   18   19   20   21  22  23  24 25 26  27  28  29  30
+ *  *   +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+ *  *   |    magic          |ver |head  len|    full length    | qt | ser|comp|              RequestId                |         timestamp           |
+ *  *   +-----+-----+-------+----+----+----+----+-----------+----- ---+--------+----+----+----+----+----+----+---+---+----+----+----+----+----+----+
+ *  *   |                                                                                                                                           |
+ *  *   |                                         body                                                                                              |
+ *  *   |                                                                                                                                           |
+ *  *   +--------------------------------------------------------------------------------------------------------+---+----+----+----+----+----+----+
  *  *
  */
 @Slf4j
@@ -62,6 +62,8 @@ public class RpcRequestEncoder extends MessageToByteEncoder<RpcRequest> {
         byteBuf.writeByte(rpcRequest.getRequestType());
         // 8.写入请求ID
         byteBuf.writeLong(rpcRequest.getRequestId());
+        // 9.写入时间戳
+        byteBuf.writeLong(rpcRequest.getTimestamp());
         // 如果是心跳请求，就不处理请求体
         if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
             // 没有body，fullLength只包含header长度
@@ -69,7 +71,7 @@ public class RpcRequestEncoder extends MessageToByteEncoder<RpcRequest> {
             writeFullLength(byteBuf, fullLengthIndex, fullLength);
             return;
         }
-        // 9.写入消息体
+        // 10.写入消息体
         log.info("请求编码器执行：序列化前数据长度：{}", rpcRequest.getRequestPayload().toString().length());
         // 获取序列化器
         Serializer serializer = SerializerFactory.getSerializer(rpcRequest.getSerializeType()).getSerializer();

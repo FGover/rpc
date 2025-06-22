@@ -56,7 +56,7 @@ public class IdGenerator {
      *
      * @return
      */
-    public synchronized long nextId() {
+    public synchronized long getId() {
         long timestamp = currentTime();
         if (timestamp < lastTimestamp) {
             throw new RuntimeException("系统时钟回退，拒绝生成ID");

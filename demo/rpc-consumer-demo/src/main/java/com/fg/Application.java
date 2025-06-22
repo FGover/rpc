@@ -3,6 +3,10 @@ package com.fg;
 import com.fg.discovery.RegistryConfig;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 @Slf4j
 public class Application {
@@ -21,18 +25,15 @@ public class Application {
 
         // 获取远程服务代理对象
         HelloRpcService helloRpc = reference.get();
-//        String msg = helloRpc.sayHello("你好");
-//        log.info("远程调用结果：{}", msg);
-        for (int i = 0; i < 5; i++) {
-            String msg = helloRpc.sayHello("你好，第 " + (i + 1) + " 次调用");
-            log.info("远程调用结果：{}", msg);
-
-            // 可以稍微等待，避免调用太快
+        // 调用远程服务
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(() -> {
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                String msg = helloRpc.sayHello("你好，定时调用");
+                log.info("远程调用结果：{}", msg);
+            } catch (Exception e) {
+                log.error("远程调用异常", e);
             }
-        }
+        }, 0, 2, TimeUnit.SECONDS);
     }
 }

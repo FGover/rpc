@@ -1,6 +1,7 @@
 package com.fg.loadbalancer.service;
 
 import java.net.InetSocketAddress;
+import java.util.List;
 
 /**
  * 负载均衡器
@@ -14,4 +15,11 @@ public interface LoadBalancer {
      * @return
      */
     InetSocketAddress getServiceAddress(String serviceName);
+
+    /**
+     * 重新平衡负载
+     *
+     * @param serviceName
+     */
+    void reLoadBalance(String serviceName, List<InetSocketAddress> addressList);
 }

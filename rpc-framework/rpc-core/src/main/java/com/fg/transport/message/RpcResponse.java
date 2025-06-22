@@ -19,6 +19,8 @@ public class RpcResponse {
     private byte compressType;
     // 序列化类型
     private byte serializeType;
+    // 时间戳
+    private Long timestamp;
     // 响应体
     private ResponsePayload responsePayload;
 }

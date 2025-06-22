@@ -1,12 +1,11 @@
 package com.fg.channel.handler;
 
-import com.fg.RpcBootstrap;
 import com.fg.compress.CompressFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
 import com.fg.serialize.service.Serializer;
-import com.fg.transport.message.MessageConstant;
+import com.fg.transport.constant.MessageConstant;
 import com.fg.transport.message.ResponsePayload;
 import com.fg.transport.message.RpcResponse;
 import io.netty.buffer.ByteBuf;
@@ -85,9 +84,12 @@ public class RpcResponseDecoder extends LengthFieldBasedFrameDecoder {
         byte requestType = byteBuf.readByte();
         // 读取 requestId
         long requestId = byteBuf.readLong();
+        // 读取时间戳
+        long timestamp = byteBuf.readLong();
         // 封装响应对象
         RpcResponse rpcResponse = new RpcResponse();
         rpcResponse.setRequestId(requestId);
+        rpcResponse.setTimestamp(timestamp);
         rpcResponse.setRequestType(requestType);
         rpcResponse.setCompressType(compressType);
         rpcResponse.setSerializeType(serializationType);

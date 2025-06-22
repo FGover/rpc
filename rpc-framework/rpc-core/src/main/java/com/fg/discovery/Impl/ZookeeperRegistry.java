@@ -8,6 +8,7 @@ import com.fg.exception.DiscoveryException;
 import com.fg.utils.NetUtil;
 import com.fg.utils.zookeeper.ZookeeperNode;
 import com.fg.utils.zookeeper.ZookeeperUtil;
+import com.fg.watcher.ServiceChangeWatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZooKeeper;
@@ -57,15 +58,14 @@ public class ZookeeperRegistry extends AbstractRegistry {
      * 查找服务
      *
      * @param serviceName
-     * @return  服务列表
+     * @return 服务列表
      */
     @Override
     public List<InetSocketAddress> lookup(String serviceName) {
         // 找到服务对应的节点
         String serviceNode = Constant.BASE_PROVIDERS_PATH + "/" + serviceName;
         // 获取子节点
-        List<String> children = ZookeeperUtil.getChildren(zooKeeper, serviceNode, null);
-        System.out.println(children);
+        List<String> children = ZookeeperUtil.getChildren(zooKeeper, serviceNode, new ServiceChangeWatcher(serviceName));
         // 获取子节点的ip和端口
         List<InetSocketAddress> inetSocketAddressList = children.stream().map(child -> {
             String[] info = child.split(":");

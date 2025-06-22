@@ -1,12 +1,11 @@
 package com.fg.channel.handler;
 
-import com.fg.RpcBootstrap;
 import com.fg.compress.CompressFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
 import com.fg.serialize.service.Serializer;
-import com.fg.transport.message.MessageConstant;
+import com.fg.transport.constant.MessageConstant;
 import com.fg.transport.message.RpcResponse;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -58,10 +57,13 @@ public class RpcResponseEncoder extends MessageToByteEncoder<RpcResponse> {
         out.writeByte(rpcResponse.getRequestType());
         // 写入请求ID
         out.writeLong(rpcResponse.getRequestId());
+        // 写入时间戳
+        out.writeLong(System.currentTimeMillis());
         // 如果是心跳请求，就不处理请求体
         if (rpcResponse.getRequestType() == RequestType.HEARTBEAT.getId()) {
             int fullLength = MessageConstant.HEADER_LENGTH;
             writeFullLength(out, fullLengthIndex, fullLength);
+            return;
         }
         // 写入消息体
         log.info("响应编码器执行: 序列化前数据长度：{}", rpcResponse.getResponsePayload().toString().length());

@@ -2,6 +2,7 @@ package com.fg.channel.handler;
 
 import com.fg.RpcBootstrap;
 import com.fg.ServiceConfig;
+import com.fg.enums.RequestType;
 import com.fg.enums.ResponseCode;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.ResponsePayload;
@@ -18,12 +19,18 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
-        // 1.封装响应对象
+        // 封装响应对象
         RpcResponse rpcResponse = new RpcResponse();
         rpcResponse.setRequestId(rpcRequest.getRequestId());
         rpcResponse.setRequestType(rpcRequest.getRequestType());
         rpcResponse.setCompressType(rpcRequest.getCompressType());
         rpcResponse.setSerializeType(rpcRequest.getSerializeType());
+        // 1.判断是否为心跳请求
+        if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
+            log.info("收到心跳请求：{}", rpcRequest.getRequestId());
+            channelHandlerContext.writeAndFlush(rpcResponse);
+            return;
+        }
         try {
             // 2.处理请求，调用目标方法
             RequestPayload requestPayload = rpcRequest.getRequestPayload();

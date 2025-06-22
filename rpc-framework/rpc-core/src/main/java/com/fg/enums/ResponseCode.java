@@ -3,7 +3,8 @@ package com.fg.enums;
 
 public enum ResponseCode {
 
-    SUCCESS((byte) 1, "SUCCESS"), FAILURE((byte) 2, "FAILURE");
+    SUCCESS((byte) 1, "SUCCESS"),
+    FAILURE((byte) 2, "FAILURE");
 
     private final byte code;
     private final String message;
