@@ -16,7 +16,7 @@ public class Application {
                 .application("first-rpc-provider")  // 设置应用信息
                 .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))   // 连接注册中心
                 .protocol(new ProtocolConfig("jdk"))   // 设置通信协议
-                .publish(service)   // 发布服务
+                .scan("com.fg")   // 扫描指定包下的服务
                 .start();   // 启动服务
     }
 }

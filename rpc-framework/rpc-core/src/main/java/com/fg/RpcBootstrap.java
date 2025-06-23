@@ -1,13 +1,12 @@
 package com.fg;
 
+import com.fg.annotation.RpcService;
 import com.fg.channel.handler.RpcRequestDecoder;
 import com.fg.channel.handler.RpcRequestHandler;
 import com.fg.channel.handler.RpcResponseEncoder;
 import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
 import com.fg.heartbeat.HeartBeatDetector;
-import com.fg.loadbalancer.service.Impl.ConsistentHashLoadBalancer;
-import com.fg.loadbalancer.service.Impl.MinimumResponseTimeLoadBalancer;
 import com.fg.loadbalancer.service.Impl.RoundRobinLoadBalancer;
 import com.fg.loadbalancer.service.LoadBalancer;
 import com.fg.transport.message.RpcRequest;
@@ -20,7 +19,12 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -31,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class RpcBootstrap {
 
-    public static final int PORT = 8090;
+    public static final int PORT = 8088;
     // 饿汉式单例
     private static final RpcBootstrap rpcBootstrap = new RpcBootstrap();
 
@@ -113,13 +117,11 @@ public class RpcBootstrap {
      * 发布服务
      *
      * @param service
-     * @return
      */
-    public RpcBootstrap publish(ServiceConfig<?> service) {
+    public void publish(ServiceConfig<?> service) {
         // 封装要发布的服务
         registry.register(service);
         SERVICE_LIST.put(service.getInterface().getName(), service);
-        return this;
     }
 
     /**
@@ -213,6 +215,105 @@ public class RpcBootstrap {
         log.debug("配置压缩方式:{}", compressType);
         COMPRESSOR_TYPE = compressType;
         return this;
+    }
+
+    /**
+     * 扫描指定包下所有使用了 @RpcService 注解的类，并将其注册为 RPC 服务
+     *
+     * @param packageName
+     * @return
+     */
+    public RpcBootstrap scan(String packageName) {
+        // 获取指定包名下的所有类的全限定类名
+        List<String> classNames = getAllClassNames(packageName);
+        classNames.stream().map(className -> {
+                    try {
+                        // 通过反射加载类对象
+                        return Class.forName(className);
+                    } catch (ClassNotFoundException e) {
+                        // 若找不到类，抛出运行时异常
+                        throw new RuntimeException(e);
+                    }
+                })
+                // 只报留标注了@RpcService注解的类
+                .filter(clazz -> clazz.isAnnotationPresent(RpcService.class))
+                .forEach(clazz -> {
+                    try {
+                        // 获取无参构造方法，并设置可访问
+                        Constructor<?> constructor = clazz.getDeclaredConstructor();
+                        constructor.setAccessible(true);
+                        // 通过反射创建类的实例
+                        Object serviceInstance = constructor.newInstance();
+                        // 获取该类实现的所有接口（一个服务类应至少实现一个接口）
+                        Class<?>[] interfaces = clazz.getInterfaces();
+                        if (interfaces.length == 0) {
+                            throw new RuntimeException("类 " + clazz.getName() + " 未实现任何接口，无法注册为服务");
+                        }
+                        // 遍历所有接口，将每个接口作为一个服务注册
+                        for (Class<?> anInterface : interfaces) {
+                            // 创建服务配置对象
+                            ServiceConfig<?> serviceConfig = new ServiceConfig<>();
+                            serviceConfig.setInterface(anInterface);  // 设置服务接口
+                            serviceConfig.setRef(serviceInstance);  // 设置服务实现类实例
+                            // 发布服务
+                            publish(serviceConfig);
+                            log.info("服务注册成功: {} -> {}", anInterface.getName(), clazz.getName());
+                        }
+                    } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                             NoSuchMethodException e) {
+                        throw new RuntimeException("服务类实例化失败：" + clazz.getName(), e);
+                    }
+                });
+        return this;
+    }
+
+    /**
+     * 获取指定包下所有类的全限定类名
+     *
+     * @param packageName
+     * @return
+     */
+    private List<String> getAllClassNames(String packageName) {
+        List<String> classNames = new ArrayList<>();
+        // 将包名转换为路径
+        String basePath = packageName.replace(".", "/");
+        // 获取包对应的绝对路径（target/classes 目录下的路径）
+        URL url = ClassLoader.getSystemClassLoader().getResource(basePath);
+        if (url == null) {
+            throw new RuntimeException("包路径不存在：" + packageName);
+        }
+        // 获取该路径对应的绝对文件系统路径
+        String absolutePath = url.getPath();
+        // 从该路径递归扫描 .class 文件
+        recursionFile(new File(absolutePath), packageName, classNames);
+        return classNames;
+    }
+
+    /**
+     * 递归扫描文件目录，找出所有类的全限定名
+     *
+     * @param file
+     * @param currentPackage
+     * @param classNames
+     */
+    private void recursionFile(File file, String currentPackage, List<String> classNames) {
+        if (!file.exists()) return;
+        if (file.isDirectory()) {
+            // 获取当前目录下的所有文件/目录
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    // 如果是子目录，递归处理，并拼接包名
+                    if (child.isDirectory()) {
+                        recursionFile(child, currentPackage + "." + child.getName(), classNames);
+                    } else if (child.getName().endsWith(".class")) {
+                        // 如果是 .class 文件，去掉后缀并拼接成全限定类名
+                        String className = currentPackage + "." + child.getName().replace(".class", "");
+                        classNames.add(className);
+                    }
+                }
+            }
+        }
     }
 
 }

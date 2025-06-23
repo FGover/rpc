@@ -1,23 +1,21 @@
 package com.fg;
 
+import lombok.Getter;
+import lombok.Setter;
+
 public class ServiceConfig<T> {
 
-    private Class<T> interfaceService;
+    private Class<?> interfaceService;
+    @Getter
+    @Setter
     private Object ref;
 
-    public Class<T> getInterface() {
+    public Class<?> getInterface() {
         return interfaceService;
     }
 
-    public void setInterface(Class<T> interfaceService) {
+    public void setInterface(Class<?> interfaceService) {
         this.interfaceService = interfaceService;
     }
 
-    public Object getRef() {
-        return ref;
-    }
-
-    public void setRef(Object ref) {
-        this.ref = ref;
-    }
 }
