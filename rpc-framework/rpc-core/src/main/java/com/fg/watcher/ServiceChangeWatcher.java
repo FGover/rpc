@@ -28,7 +28,7 @@ public class ServiceChangeWatcher implements Watcher {
         // 子节点变化
         if (watchedEvent.getType() == Event.EventType.NodeChildrenChanged) {
             log.info("监听到服务[{}]节点上下线，将重新拉取服务列表", serviceName);
-            Registry registry = RpcBootstrap.getInstance().getRegistry();
+            Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
             // 重新拉取服务列表
             List<InetSocketAddress> addressList = registry.lookup(serviceName);
             // 新增节点
@@ -66,7 +66,7 @@ public class ServiceChangeWatcher implements Watcher {
                 return false;
             });
             // 重新负载均衡
-            RpcBootstrap.LOAD_BALANCER.reLoadBalance(serviceName, addressList);
+            RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(serviceName, addressList);
             log.info("刷新负载均衡器，服务[{}]当前列表为：{}", serviceName, addressList);
         }
     }

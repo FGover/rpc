@@ -5,20 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/demo/rpc-api/src/main/java/com/fg/HelloRpcService2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Impl/HelloRpcServiceImpl2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/annotation/RpcService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/resources/rpc-config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/resources/rpc-config.dtd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/resources/rpc-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Impl/HelloRpcServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Impl/HelloRpcServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Impl/HelloRpcServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Impl/HelloRpcServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/Configuration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/ServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/ServiceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/HeartBeatDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/HeartBeatDetector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/AbstractLoadBalancer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/AbstractLoadBalancer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ServiceChangeWatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ServiceChangeWatcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/ServiceConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/ServiceConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector$HeartBeatTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector$HeartBeatTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/loadbalancer/AbstractLoadBalancer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/loadbalancer/AbstractLoadBalancer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/watcher/ServiceChangeWatcher.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/watcher/ServiceChangeWatcher.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,10 +35,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="XML File" />
         <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="XML File" />
       </list>
     </option>
   </component>
@@ -58,6 +65,9 @@
     &quot;accountId&quot;: &quot;8dabaace-e1fd-4cfb-9e78-baaf4e01ff98&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/Configuration.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -92,7 +102,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/javaLearning/rpc/rpc/demo/rpc-consumer-demo/src/main/resources",
+    "last_opened_file_path": "E:/javaLearning/rpc/rpc/demo/rpc-provider-demo/src/main/resources",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -111,17 +121,21 @@
       <recent name="com.fg" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\javaLearning\rpc\rpc\demo\rpc-consumer-demo\src\main\resources" />
+      <recent name="E:\javaLearning\rpc\rpc\demo\rpc-provider-demo\src\main\resources" />
       <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-core\src\main\resources" />
+      <recent name="E:\javaLearning\rpc\rpc\demo\rpc-consumer-demo\src\main\resources" />
       <recent name="E:\javaLearning\rpc\rpc\rpc-framework" />
       <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-common\src\main\resources" />
-      <recent name="E:\javaLearning\rpc\rpc\rpc-manager\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-core\src\main\java\com\fg\builder\xml" />
+      <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-core\src\main\resources" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="com.fg.netty" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.provider2">
+  <component name="RunManager" selected="Application.Application (1)">
     <configuration name="Application (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.fg.Application" />
       <module name="rpc-consumer-demo" />
@@ -282,7 +296,9 @@
       <workItem from="1750471248100" duration="69000" />
       <workItem from="1750471356698" duration="16327000" />
       <workItem from="1750571230982" duration="10975000" />
-      <workItem from="1750682802696" duration="5608000" />
+      <workItem from="1750682802696" duration="5717000" />
+      <workItem from="1750745779765" duration="6627000" />
+      <workItem from="1750752439136" duration="11378000" />
     </task>
     <servers />
   </component>

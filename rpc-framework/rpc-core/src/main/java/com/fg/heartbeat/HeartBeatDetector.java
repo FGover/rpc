@@ -32,7 +32,7 @@ public class HeartBeatDetector {
     public static void detect(String serviceName) {
         log.info("开始服务[{}]的心跳检测", serviceName);
         // 获取注册中心实例
-        Registry registry = RpcBootstrap.getInstance().getRegistry();
+        Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
         // 拉取服务节点列表
         List<InetSocketAddress> serviceList = registry.lookup(serviceName);
         // 建立连接缓存
@@ -77,9 +77,11 @@ public class HeartBeatDetector {
                     long startTime = System.currentTimeMillis();  // 记录发送时间
                     // 构建心跳请求对象
                     RpcRequest request = RpcRequest.builder()
-                            .requestId(RpcBootstrap.ID_GENERATOR.getId())
-                            .compressType(CompressFactory.getCompressor(RpcBootstrap.COMPRESSOR_TYPE).getCode())
-                            .serializeType(SerializerFactory.getSerializer(RpcBootstrap.SERIALIZER_TYPE).getCode())
+                            .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
+                            .compressType(CompressFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
+                                    .getCompressType()).getCode())
+                            .serializeType(SerializerFactory.getSerializer(RpcBootstrap.getInstance().getConfiguration()
+                                    .getSerializeType()).getCode())
                             .requestType(RequestType.HEARTBEAT.getId())
                             .timestamp(System.currentTimeMillis())
                             .build();

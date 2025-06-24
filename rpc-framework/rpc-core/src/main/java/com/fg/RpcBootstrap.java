@@ -4,10 +4,8 @@ import com.fg.annotation.RpcService;
 import com.fg.channel.handler.RpcRequestDecoder;
 import com.fg.channel.handler.RpcRequestHandler;
 import com.fg.channel.handler.RpcResponseEncoder;
-import com.fg.discovery.Registry;
 import com.fg.discovery.RegistryConfig;
 import com.fg.heartbeat.HeartBeatDetector;
-import com.fg.loadbalancer.service.Impl.RoundRobinLoadBalancer;
 import com.fg.loadbalancer.service.LoadBalancer;
 import com.fg.transport.message.RpcRequest;
 import io.netty.bootstrap.ServerBootstrap;
@@ -16,7 +14,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LoggingHandler;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -34,29 +31,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class RpcBootstrap {
-
-    public static final int PORT = 8088;
     // 饿汉式单例
     private static final RpcBootstrap rpcBootstrap = new RpcBootstrap();
-
-    // 定义基础配置
-    private String applicationName = "default";
-    private RegistryConfig registryConfig;
-    private ProtocolConfig protocolConfig;
-
-    @Getter
-    private Registry registry;
-
-    // 负载均衡器
-    public static LoadBalancer LOAD_BALANCER;
-    // 当前线程
+    // 全局配置中心
+    private final Configuration configuration;
+    // 当前请求线程
     public static final ThreadLocal<RpcRequest> REQUEST_THREAD_LOCAL = new ThreadLocal<>();
-    // 序列化类型
-    public static String SERIALIZER_TYPE = "jdk";
-    // 压缩类型
-    public static String COMPRESSOR_TYPE = "gzip";
-    // 定义全局的ID生成器
-    public static final IdGenerator ID_GENERATOR = new IdGenerator(1, 2);
     // 服务列表
     public static final Map<String, ServiceConfig<?>> SERVICE_LIST = new ConcurrentHashMap<>();
     // 连接缓存
@@ -68,11 +48,21 @@ public class RpcBootstrap {
 
     // 私有化构造方法，防止外部实例化
     private RpcBootstrap() {
+        configuration = new Configuration();
     }
 
     // 获取实例的静态方法
     public static RpcBootstrap getInstance() {
         return rpcBootstrap;
+    }
+
+    /**
+     * 配置中心
+     *
+     * @return
+     */
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     /**
@@ -82,7 +72,7 @@ public class RpcBootstrap {
      * @return
      */
     public RpcBootstrap application(String applicationName) {
-        this.applicationName = applicationName;
+        configuration.setApplicationName(applicationName);
         return this;
     }
 
@@ -93,9 +83,18 @@ public class RpcBootstrap {
      * @return
      */
     public RpcBootstrap registry(RegistryConfig registryConfig) {
-        this.registry = registryConfig.getRegistry();
-        // 配置负载均衡器
-        RpcBootstrap.LOAD_BALANCER = new RoundRobinLoadBalancer();
+        configuration.setRegistryConfig(registryConfig);
+        return this;
+    }
+
+    /**
+     * 配置负载均衡器
+     *
+     * @param loadBalancer
+     * @return
+     */
+    public RpcBootstrap loadBalancer(LoadBalancer loadBalancer) {
+        configuration.setLoadBalancer(loadBalancer);
         return this;
     }
 
@@ -106,7 +105,7 @@ public class RpcBootstrap {
      * @return
      */
     public RpcBootstrap protocol(ProtocolConfig protocolConfig) {
-        this.protocolConfig = protocolConfig;
+        configuration.setProtocolConfig(protocolConfig);
         if (log.isDebugEnabled()) {
             log.debug("配置通信协议:{}", protocolConfig);
         }
@@ -120,7 +119,7 @@ public class RpcBootstrap {
      */
     public void publish(ServiceConfig<?> service) {
         // 封装要发布的服务
-        registry.register(service);
+        configuration.getRegistryConfig().getRegistry().register(service);
         SERVICE_LIST.put(service.getInterface().getName(), service);
     }
 
@@ -162,8 +161,8 @@ public class RpcBootstrap {
                         }
                     });  // 设置通道初始化器
             // 绑定端口并同步阻塞知道绑定完成
-            ChannelFuture channelFuture = bootstrap.bind(PORT).sync();
-            log.info("Netty服务已启动，监听端口：{}", PORT);
+            ChannelFuture channelFuture = bootstrap.bind(configuration.getPort()).sync();
+            log.info("Netty服务已启动，监听端口：{}", configuration.getPort());
             // 阻塞直到服务通道关闭
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
@@ -187,7 +186,7 @@ public class RpcBootstrap {
      */
     public RpcBootstrap reference(ReferenceConfig<?> reference) {
         // 设置consumer引用的远程服务接口的注册中心配置
-        reference.setRegistry(registry);
+        reference.setRegistry(configuration.getRegistryConfig().getRegistry());
         // 开启心跳检测
         HeartBeatDetector.detect(reference.getInterface().getName());
         return this;
@@ -201,7 +200,7 @@ public class RpcBootstrap {
      */
     public RpcBootstrap serializer(String serializerType) {
         log.debug("配置序列化方式:{}", serializerType);
-        SERIALIZER_TYPE = serializerType;
+        configuration.setSerializeType(serializerType);
         return this;
     }
 
@@ -213,7 +212,7 @@ public class RpcBootstrap {
      */
     public RpcBootstrap compress(String compressType) {
         log.debug("配置压缩方式:{}", compressType);
-        COMPRESSOR_TYPE = compressType;
+        configuration.setCompressType(compressType);
         return this;
     }
 

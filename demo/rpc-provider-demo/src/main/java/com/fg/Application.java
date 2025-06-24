@@ -2,6 +2,7 @@ package com.fg;
 
 import com.fg.Impl.HelloRpcServiceImpl;
 import com.fg.discovery.RegistryConfig;
+import com.fg.loadbalancer.service.Impl.MinimumResponseTimeLoadBalancer;
 
 public class Application {
     public static void main(String[] args) {

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+        <!ELEMENT configuration (
+                port?,
+                applicationName?,
+                registry?,
+                serializeType?,
+                serializer?,
+                compressType?,
+                compressor?,
+                loadBalancerType?,
+                loadBalancer?,
+                idGenerator?
+                )>
+
+        <!-- 端口 -->
+        <!ELEMENT port (#PCDATA)>
+
+        <!-- 应用名称 -->
+        <!ELEMENT applicationName (#PCDATA)>
+
+        <!-- 注册中心 -->
+        <!ELEMENT registry EMPTY>
+        <!ATTLIST registry
+                url CDATA #REQUIRED>
+
+        <!-- 序列化类型 -->
+        <!ELEMENT serializeType EMPTY>
+        <!ATTLIST serializeType
+                type CDATA #REQUIRED
+                >
+        <!-- 序列化实现 -->
+        <!ELEMENT serializer EMPTY>
+        <!ATTLIST serializer
+                class CDATA #REQUIRED
+                >
+
+        <!-- 压缩类型 -->
+        <!ELEMENT compressType EMPTY>
+        <!ATTLIST compressType
+                type CDATA #REQUIRED
+                >
+
+        <!-- 压缩实现 -->
+        <!ELEMENT compressor EMPTY>
+        <!ATTLIST compressor
+                class CDATA #REQUIRED
+                >
+
+        <!-- 负载均衡类型 -->
+        <!ELEMENT loadBalancerType EMPTY>
+        <!ATTLIST loadBalancerType
+                type CDATA #REQUIRED
+                >
+
+        <!-- 负载均衡实现 -->
+        <!ELEMENT loadBalancer EMPTY>
+        <!ATTLIST loadBalancer
+                class CDATA #REQUIRED
+                >
+
+        <!-- ID生成器 -->
+        <!ELEMENT idGenerator EMPTY>
+        <!ATTLIST idGenerator
+                class CDATA #REQUIRED
+                dataCenterId CDATA #REQUIRED
+                machineId CDATA #REQUIRED
+                >
+
+

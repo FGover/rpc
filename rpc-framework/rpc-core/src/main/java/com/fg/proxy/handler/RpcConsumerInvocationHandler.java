@@ -50,17 +50,20 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .returnType(method.getReturnType())
                 .build();
         RpcRequest request = RpcRequest.builder()
-                .requestId(RpcBootstrap.ID_GENERATOR.getId())
+                .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
                 .requestType(RequestType.REQUEST.getId())
-                .compressType(CompressFactory.getCompressor(RpcBootstrap.COMPRESSOR_TYPE).getCode())
-                .serializeType(SerializerFactory.getSerializer(RpcBootstrap.SERIALIZER_TYPE).getCode())
+                .compressType(CompressFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
+                        .getCompressType()).getCode())
+                .serializeType(SerializerFactory.getSerializer(RpcBootstrap.getInstance().getConfiguration()
+                        .getSerializeType()).getCode())
                 .timestamp(System.currentTimeMillis())
                 .requestPayload(requestPayload)
                 .build();
         // 将请求存入当前线程
         RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
         // 2.从注册中心拉去服务列表并通过负载均衡获取可用服务
-        InetSocketAddress address = RpcBootstrap.LOAD_BALANCER.getServiceAddress(interfaceRef.getName());
+        InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
+                .getServiceAddress(interfaceRef.getName());
         log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
         // 3.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
         Channel channel = getAvailableChannel(address);

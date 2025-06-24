@@ -28,7 +28,8 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
         Selector selector = selectors.get(serviceName);
         // 如果缓存器中没有，则创建一个选择器
         if (selector == null) {
-            List<InetSocketAddress> serviceList = RpcBootstrap.getInstance().getRegistry().lookup(serviceName);
+            List<InetSocketAddress> serviceList = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig()
+                    .getRegistry().lookup(serviceName);
             if (serviceList == null || serviceList.isEmpty()) {
                 log.error("{}服务的列表为空", serviceName);
                 throw new RuntimeException("Service not found: " + serviceName);

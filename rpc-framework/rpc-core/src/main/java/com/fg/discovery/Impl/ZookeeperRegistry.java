@@ -44,7 +44,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
                     CreateMode.PERSISTENT);
         }
         // 创建本机的临时节点
-        String node = parentNode + "/" + NetUtil.getIP() + ":" + RpcBootstrap.PORT;
+        String node = parentNode + "/" + NetUtil.getIP() + ":" + RpcBootstrap.getInstance().getConfiguration().getPort();
         if (!ZookeeperUtil.exists(zooKeeper, node, null)) {
             ZookeeperUtil.createNode(zooKeeper, new ZookeeperNode(node, null), null,
                     CreateMode.EPHEMERAL);
