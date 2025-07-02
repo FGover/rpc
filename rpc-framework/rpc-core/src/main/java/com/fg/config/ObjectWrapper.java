@@ -1,4 +1,4 @@
-package com.fg.serialize;
+package com.fg.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SerializerWrapper<T> {
+public class ObjectWrapper<T> {
 
-    private byte code;
-    private String name;
-    private T serializer;
+    private Byte code;
+    private String type;
+    private T impl;
 }

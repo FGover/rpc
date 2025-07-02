@@ -1,6 +1,6 @@
 package com.fg.channel.handler;
 
-import com.fg.compress.CompressFactory;
+import com.fg.compress.CompressorFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
@@ -74,9 +74,9 @@ public class RpcRequestEncoder extends MessageToByteEncoder<RpcRequest> {
         // 10.写入消息体
         log.info("请求编码器执行：序列化前数据长度：{}", rpcRequest.getRequestPayload().toString().length());
         // 获取序列化器
-        Serializer serializer = SerializerFactory.getSerializer(rpcRequest.getSerializeType()).getSerializer();
+        Serializer serializer = SerializerFactory.getSerializer(rpcRequest.getSerializeType()).getImpl();
         // 获取压缩器
-        Compressor compressor = CompressFactory.getCompressor(rpcRequest.getCompressType()).getCompressor();
+        Compressor compressor = CompressorFactory.getCompressor(rpcRequest.getCompressType()).getImpl();
         byte[] body = serializer.serialize(rpcRequest.getRequestPayload());
         log.info("请求编码器执行：序列化后数据长度：{}", body.length);
         body = compressor.compress(body);

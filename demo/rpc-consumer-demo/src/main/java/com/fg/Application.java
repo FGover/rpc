@@ -1,6 +1,5 @@
 package com.fg;
 
-import com.fg.discovery.RegistryConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Executors;
@@ -17,10 +16,8 @@ public class Application {
 
         // 启动并初始化
         RpcBootstrap.getInstance()
-                .application("first-rpc-consumer")
-                .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))
-                .serializer("hessian")
-                .compress("zstd")
+//                .application("first-rpc-consumer")
+//                .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))
                 .reference(reference);
 
         // 获取远程服务代理对象

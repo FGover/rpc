@@ -1,4 +1,4 @@
-package com.fg.compress.service.Impl;
+package com.fg.compress.service.impl;
 
 import com.fg.compress.service.Compressor;
 import lombok.extern.slf4j.Slf4j;

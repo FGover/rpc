@@ -1,4 +1,4 @@
-package com.fg.compress.service.Impl;
+package com.fg.compress.service.impl;
 
 import com.fg.compress.service.Compressor;
 import com.github.luben.zstd.Zstd;

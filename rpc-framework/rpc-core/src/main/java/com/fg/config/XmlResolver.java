@@ -1,11 +1,17 @@
-package com.fg;
+package com.fg.config;
 
+import com.fg.IdGenerator;
+import com.fg.compress.CompressorFactory;
+import com.fg.compress.service.Compressor;
 import com.fg.discovery.RegistryConfig;
-import com.fg.loadbalancer.service.Impl.RoundRobinLoadBalancer;
+import com.fg.loadbalancer.service.impl.RoundRobinLoadBalancer;
 import com.fg.loadbalancer.service.LoadBalancer;
-import lombok.Data;
+import com.fg.serialize.SerializerFactory;
+import com.fg.serialize.service.Serializer;
 import lombok.extern.slf4j.Slf4j;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,36 +20,17 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/**
- * 全局配置类
- */
-@Data
 @Slf4j
-public class Configuration {
-    // 默认端口
-    private int port = 8088;
-    // 定义基础配置
-    private String applicationName;
-    // 注册中心
-    private RegistryConfig registryConfig;
-    // 序列化协议
-    private ProtocolConfig protocolConfig;
-    // 序列化类型
-    private String serializeType;
-    // 压缩类型
-    private String compressType;
-    // 定义全局的ID生成器
-    private IdGenerator idGenerator;
-    // 负载均衡器
-    private LoadBalancer loadBalancer;
+public class XmlResolver {
 
-    public Configuration() {
-        loadFromXml(this);
+    public void loadMergedConfig(Configuration configuration) {
+        // 先加载 core 默认配置
+        loadFromXml(configuration, "rpc-config.xml");
+        // 再加载 provider 自定义配置（覆盖核心配置）
+        loadFromXml(configuration, "provider-rpc-config.xml");
     }
 
     /**
@@ -51,10 +38,10 @@ public class Configuration {
      *
      * @param configuration
      */
-    private void loadFromXml(Configuration configuration) {
+    public void loadFromXml(Configuration configuration, String fileName) {
         try {
             // 加载resources目录下的配置文件
-            InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream("rpc-config.xml");
+            InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(fileName);
             if (inputStream == null) {
                 log.error("未找到rpc-config.xml配置文件，使用默认配置");
                 return;
@@ -81,12 +68,31 @@ public class Configuration {
             Document doc = builder.parse(inputStream);
             XPath xPath = XPathFactory.newInstance().newXPath();
             // 解析所有配置
-            configuration.setPort(resolvePort(doc, xPath));
-            configuration.setApplicationName(resolveApplicationName(doc, xPath));
+            Integer port = resolvePort(doc, xPath);
+            if (port != null) {
+                configuration.setPort(port);
+            }
+            String applicationName = resolveApplicationName(doc, xPath);
+            if (applicationName != null) {
+                configuration.setApplicationName(applicationName);
+            }
             configuration.setRegistryConfig(resolveRegistryConfig(doc, xPath));
-            configuration.setSerializeType(resolveSerializeType(doc, xPath));
-            configuration.setProtocolConfig(new ProtocolConfig(configuration.getSerializeType()));
-            configuration.setCompressType(resolveCompressType(doc, xPath));
+            String serializeType = resolveSerializeType(doc, xPath);
+            if (serializeType != null) {
+                configuration.setSerializeType(serializeType);
+            }
+            String compressType = resolveCompressType(doc, xPath);
+            if (compressType != null) {
+                configuration.setCompressType(compressType);
+            }
+            ObjectWrapper<Serializer> serializerObjectWrapper = resolveSerializer(doc, xPath);
+            if (serializerObjectWrapper != null) {
+                SerializerFactory.addSerializer(serializerObjectWrapper);
+            }
+            ObjectWrapper<Compressor> compressorObjectWrapper = resolveCompressor(doc, xPath);
+            if (compressorObjectWrapper != null) {
+                CompressorFactory.addCompressor(compressorObjectWrapper);
+            }
             configuration.setLoadBalancer(resolveLoadBalancer(doc, xPath));
             configuration.setIdGenerator(resolveIdGenerator(doc, xPath));
         } catch (IOException | SAXException | ParserConfigurationException e) {
@@ -106,7 +112,7 @@ public class Configuration {
         try {
             XPathExpression express = xPath.compile(expression);
             Node targetNode = (Node) express.evaluate(doc, XPathConstants.NODE);
-            return targetNode.getTextContent();
+            return targetNode != null ? targetNode.getTextContent().trim() : null;
         } catch (XPathExpressionException e) {
             log.error("解析 XPath 表达式失败: {}", expression, e);
         }
@@ -155,7 +161,10 @@ public class Configuration {
             XPathExpression express = xPath.compile(expression);
             Node targetNode = (Node) express.evaluate(doc, XPathConstants.NODE);
             if (targetNode == null) return null;
-            String className = targetNode.getAttributes().getNamedItem("class").getNodeValue();
+            Node classNode = targetNode.getAttributes().getNamedItem("class");
+            if (classNode == null) return null;
+            String className = classNode.getNodeValue();
+            if (className == null || className.isEmpty()) return null;
             Class<?> clazz = Class.forName(className);
             Object instance;
             if (paramType == null) {
@@ -164,9 +173,9 @@ public class Configuration {
                 instance = clazz.getConstructor(paramType).newInstance(param);
             }
             return (T) instance;
-        } catch (XPathExpressionException | ClassNotFoundException | InvocationTargetException |
-                 InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException("XML 对象实例化失败: " + expression, e);
+        } catch (Exception e) {
+            log.warn("反射创建对象失败: {}，忽略该配置", expression, e);
+            return null;
         }
     }
 
@@ -177,18 +186,18 @@ public class Configuration {
      * @param xPath
      * @return
      */
-    private int resolvePort(Document doc, XPath xPath) {
+    private Integer resolvePort(Document doc, XPath xPath) {
         String expression = "/configuration/port";
         String portString = parseString(doc, xPath, expression);
         if (portString == null || portString.isEmpty()) {
             log.error("未找到端口配置，使用默认端口: 8088");
-            return 8088;
+            return null;
         }
         try {
             return Integer.parseInt(portString.trim());
         } catch (NumberFormatException e) {
             log.error("端口配置格式错误: {}", portString, e);
-            return 8080;
+            return null;
         }
     }
 
@@ -203,7 +212,7 @@ public class Configuration {
         String expression = "/configuration/applicationName";
         String appName = parseString(doc, xPath, expression);
         if (appName == null || appName.isEmpty()) {
-            return "default";
+            return null;
         }
         return appName.trim();
     }
@@ -225,7 +234,7 @@ public class Configuration {
             if (attrMap.containsKey("dataCenterId")) {
                 dataCenterId = Long.parseLong(attrMap.get("dataCenterId"));
             }
-            if (attrMap.containsKey("MachineId")) {
+            if (attrMap.containsKey("machineId")) {
                 machineId = Long.parseLong(attrMap.get("machineId"));
             }
         } catch (NumberFormatException e) {
@@ -265,6 +274,21 @@ public class Configuration {
         return attrMap.getOrDefault("type", "gzip");
     }
 
+
+    private ObjectWrapper<Compressor> resolveCompressor(Document doc, XPath xPath) {
+        String expression = "/configuration/compressor";
+        try {
+            Compressor compressor = parseObject(doc, xPath, expression, null);
+            Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
+            if (compressor == null || attrMap.isEmpty()) return null;
+            return new ObjectWrapper<>(Byte.parseByte(attrMap.getOrDefault("code", "0")), attrMap.getOrDefault("type", "gzip"), compressor);
+        } catch (Exception e) {
+            log.warn("加载 Compressor 失败，忽略该配置", e);
+            return null;
+        }
+    }
+
+
     /**
      * 解析XML文档中的序列化类型配置
      *
@@ -276,6 +300,19 @@ public class Configuration {
         String expression = "/configuration/serializeType";
         Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
         return attrMap.getOrDefault("type", "jdk");
+    }
+
+    private ObjectWrapper<Serializer> resolveSerializer(Document doc, XPath xPath) {
+        String expression = "/configuration/serializer";
+        try {
+            Serializer serializer = parseObject(doc, xPath, expression, null);
+            Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
+            if (serializer == null || attrMap.isEmpty()) return null;
+            return new ObjectWrapper<>(Byte.parseByte(attrMap.getOrDefault("code", "0")), attrMap.getOrDefault("type", "jdk"), serializer);
+        } catch (Exception e) {
+            log.warn("加载 Serializer 失败，忽略该配置", e);
+            return null;
+        }
     }
 
     /**
@@ -294,5 +331,4 @@ public class Configuration {
         }
         return new RegistryConfig(attrMap.get("url"));
     }
-
 }

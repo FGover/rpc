@@ -1,26 +1,29 @@
 package com.fg.compress;
 
-import com.fg.compress.service.Impl.GzipCompressor;
-import com.fg.compress.service.Impl.SnappyCompressor;
-import com.fg.compress.service.Impl.ZstdCompressor;
+import com.fg.compress.service.Compressor;
+import com.fg.compress.service.impl.GzipCompressor;
+import com.fg.compress.service.impl.SnappyCompressor;
+import com.fg.compress.service.impl.ZstdCompressor;
+import com.fg.config.ObjectWrapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
-public class CompressFactory {
+public class CompressorFactory {
 
     // 缓存：名称 -> 包装器
-    private static final ConcurrentHashMap<String, CompressWrapper> COMPRESSOR_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, ObjectWrapper<Compressor>> COMPRESSOR_CACHE = new ConcurrentHashMap<>();
 
     // 缓存：编号 -> 包装器
-    private static final ConcurrentHashMap<Byte, CompressWrapper> COMPRESSOR_CACHE_CODE = new ConcurrentHashMap<>();
+    private static final Map<Byte, ObjectWrapper<Compressor>> COMPRESSOR_CACHE_CODE = new ConcurrentHashMap<>();
 
     // 静态初始化支持的压缩器
     static {
-        CompressWrapper gzipWrapper = new CompressWrapper((byte) 1, "gzip", new GzipCompressor());
-        CompressWrapper snappyWrapper = new CompressWrapper((byte) 2, "snappy", new SnappyCompressor());
-        CompressWrapper zstdWrapper = new CompressWrapper((byte) 3, "zstd", new ZstdCompressor());
+        ObjectWrapper<Compressor> gzipWrapper = new ObjectWrapper<>((byte) 1, "gzip", new GzipCompressor());
+        ObjectWrapper<Compressor> snappyWrapper = new ObjectWrapper<>((byte) 2, "snappy", new SnappyCompressor());
+        ObjectWrapper<Compressor> zstdWrapper = new ObjectWrapper<>((byte) 3, "zstd", new ZstdCompressor());
 
         COMPRESSOR_CACHE.put("gzip", gzipWrapper);
         COMPRESSOR_CACHE.put("snappy", snappyWrapper);
@@ -37,8 +40,8 @@ public class CompressFactory {
      * @param compressType
      * @return
      */
-    public static CompressWrapper getCompressor(String compressType) {
-        CompressWrapper wrapper = COMPRESSOR_CACHE.get(compressType);
+    public static ObjectWrapper<Compressor> getCompressor(String compressType) {
+        ObjectWrapper<Compressor> wrapper = COMPRESSOR_CACHE.get(compressType);
         if (wrapper == null) {
             log.error("未找到您配置的{}压缩工具，使用默认gzip压缩方式", compressType);
             return getDefaultCompressor();
@@ -52,8 +55,8 @@ public class CompressFactory {
      * @param compressCode
      * @return
      */
-    public static CompressWrapper getCompressor(Byte compressCode) {
-        CompressWrapper wrapper = COMPRESSOR_CACHE_CODE.get(compressCode);
+    public static ObjectWrapper<Compressor> getCompressor(Byte compressCode) {
+        ObjectWrapper<Compressor> wrapper = COMPRESSOR_CACHE_CODE.get(compressCode);
         if (wrapper == null) {
             log.error("未找到您配置的{}压缩工具，使用默认gzip压缩方式", compressCode);
             return getDefaultCompressor();
@@ -66,7 +69,7 @@ public class CompressFactory {
      *
      * @return
      */
-    public static CompressWrapper getDefaultCompressor() {
+    public static ObjectWrapper<Compressor> getDefaultCompressor() {
         return COMPRESSOR_CACHE.get("gzip");
     }
 
@@ -75,8 +78,8 @@ public class CompressFactory {
      *
      * @param wrapper
      */
-    public static void addCompressor(CompressWrapper wrapper) {
-        COMPRESSOR_CACHE.put(wrapper.getName(), wrapper);
+    public static void addCompressor(ObjectWrapper<Compressor> wrapper) {
+        COMPRESSOR_CACHE.put(wrapper.getType(), wrapper);
         COMPRESSOR_CACHE_CODE.put(wrapper.getCode(), wrapper);
     }
 }

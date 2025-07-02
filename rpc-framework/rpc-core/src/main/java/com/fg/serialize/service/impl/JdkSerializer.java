@@ -1,4 +1,4 @@
-package com.fg.serialize.service.Impl;
+package com.fg.serialize.service.impl;
 
 import com.fg.serialize.service.Serializer;
 import lombok.extern.slf4j.Slf4j;

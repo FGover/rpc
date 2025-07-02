@@ -1,6 +1,6 @@
 package com.fg.channel.handler;
 
-import com.fg.compress.CompressFactory;
+import com.fg.compress.CompressorFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
@@ -81,11 +81,11 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
         byteBuf.readBytes(body);
         log.info("请求解码器执行：解压前数据长度：{}", body.length);
         // 11.解压
-        Compressor compressor = CompressFactory.getCompressor(compressType).getCompressor();
+        Compressor compressor = CompressorFactory.getCompressor(compressType).getImpl();
         body = compressor.decompress(body);
         log.info("请求解码器执行：解压后数据长度：{}", body.length);
         // 12.反序列化 body 成 Java 对象
-        Serializer serializer = SerializerFactory.getSerializer(serializeType).getSerializer();
+        Serializer serializer = SerializerFactory.getSerializer(serializeType).getImpl();
         RequestPayload requestPayload = serializer.deserialize(body, RequestPayload.class);
         log.info("请求解码器执行：反序列化后数据长度：{}", requestPayload.toString().length());
         rpcRequest.setRequestPayload(requestPayload);

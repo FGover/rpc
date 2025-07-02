@@ -4,6 +4,7 @@ import com.fg.annotation.RpcService;
 import com.fg.channel.handler.RpcRequestDecoder;
 import com.fg.channel.handler.RpcRequestHandler;
 import com.fg.channel.handler.RpcResponseEncoder;
+import com.fg.config.Configuration;
 import com.fg.discovery.RegistryConfig;
 import com.fg.heartbeat.HeartBeatDetector;
 import com.fg.loadbalancer.service.LoadBalancer;
@@ -99,20 +100,6 @@ public class RpcBootstrap {
     }
 
     /**
-     * 配置通信协议
-     *
-     * @param protocolConfig
-     * @return
-     */
-    public RpcBootstrap protocol(ProtocolConfig protocolConfig) {
-        configuration.setProtocolConfig(protocolConfig);
-        if (log.isDebugEnabled()) {
-            log.debug("配置通信协议:{}", protocolConfig);
-        }
-        return this;
-    }
-
-    /**
      * 发布服务
      *
      * @param service
@@ -162,7 +149,7 @@ public class RpcBootstrap {
                     });  // 设置通道初始化器
             // 绑定端口并同步阻塞知道绑定完成
             ChannelFuture channelFuture = bootstrap.bind(configuration.getPort()).sync();
-            log.info("Netty服务已启动，监听端口：{}", configuration.getPort());
+            log.info("Netty服务{}已启动，监听端口：{}", configuration.getApplicationName(), configuration.getPort());
             // 阻塞直到服务通道关闭
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {

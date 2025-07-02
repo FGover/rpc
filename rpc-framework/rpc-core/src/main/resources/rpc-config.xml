@@ -7,14 +7,14 @@
     
     <registry url="zookeeper://127.0.0.1:2181"/>
 
-    <serializeType type="jdk"/>
-    <serializer class="com.fg.serialize.service.Impl.HessianSerializer"/>
+    <serializeType type="hessian"/>
+    <serializer code="3" type="hessian" class="com.fg.serialize.service.impl.HessianSerializer"/>
 
     <compressType type="gzip"/>
-    <compressor class="com.fg.compress.service.Impl.GzipCompressor"/>
-    
+    <compressor code="1" type="gzip" class="com.fg.compress.service.impl.GzipCompressor"/>
+
     <loadBalancerType type="RoundRobin"/>
-    <loadBalancer class="com.fg.loadbalancer.service.Impl.MinimumResponseTimeLoadBalancer"/>
+    <loadBalancer class="com.fg.loadbalancer.service.impl.RoundRobinLoadBalancer"/>
 
     <idGenerator class="com.fg.IdGenerator" dataCenterId="1" machineId="2"/>
 </configuration>

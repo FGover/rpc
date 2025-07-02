@@ -1,4 +1,4 @@
-package com.fg.loadbalancer.service.Impl;
+package com.fg.loadbalancer.service.impl;
 
 import com.fg.loadbalancer.AbstractLoadBalancer;
 import com.fg.loadbalancer.service.Selector;

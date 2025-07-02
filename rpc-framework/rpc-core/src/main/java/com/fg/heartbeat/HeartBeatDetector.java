@@ -2,7 +2,7 @@ package com.fg.heartbeat;
 
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
-import com.fg.compress.CompressFactory;
+import com.fg.compress.CompressorFactory;
 import com.fg.discovery.Registry;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
@@ -78,7 +78,7 @@ public class HeartBeatDetector {
                     // 构建心跳请求对象
                     RpcRequest request = RpcRequest.builder()
                             .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
-                            .compressType(CompressFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
+                            .compressType(CompressorFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
                                     .getCompressType()).getCode())
                             .serializeType(SerializerFactory.getSerializer(RpcBootstrap.getInstance().getConfiguration()
                                     .getSerializeType()).getCode())

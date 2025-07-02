@@ -1,6 +1,6 @@
 package com.fg.channel.handler;
 
-import com.fg.compress.CompressFactory;
+import com.fg.compress.CompressorFactory;
 import com.fg.compress.service.Compressor;
 import com.fg.enums.RequestType;
 import com.fg.serialize.SerializerFactory;
@@ -68,9 +68,9 @@ public class RpcResponseEncoder extends MessageToByteEncoder<RpcResponse> {
         // 写入消息体
         log.info("响应编码器执行: 序列化前数据长度：{}", rpcResponse.getResponsePayload().toString().length());
         // 获取序列化器
-        Serializer serializer = SerializerFactory.getSerializer(rpcResponse.getSerializeType()).getSerializer();
+        Serializer serializer = SerializerFactory.getSerializer(rpcResponse.getSerializeType()).getImpl();
         // 获取压缩器
-        Compressor compressor = CompressFactory.getCompressor(rpcResponse.getCompressType()).getCompressor();
+        Compressor compressor = CompressorFactory.getCompressor(rpcResponse.getCompressType()).getImpl();
         byte[] body = serializer.serialize(rpcResponse.getResponsePayload());
         log.info("响应编码器执行: 序列化后数据长度：{}", body.length);
         body = compressor.compress(body);

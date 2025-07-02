@@ -2,7 +2,8 @@ package com.fg.proxy.handler;
 
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
-import com.fg.compress.CompressFactory;
+import com.fg.annotation.Idempotent;
+import com.fg.compress.CompressorFactory;
 import com.fg.discovery.Registry;
 import com.fg.enums.RequestType;
 import com.fg.exception.DiscoveryException;
@@ -52,7 +53,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
         RpcRequest request = RpcRequest.builder()
                 .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
                 .requestType(RequestType.REQUEST.getId())
-                .compressType(CompressFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
+                .compressType(CompressorFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
                         .getCompressType()).getCode())
                 .serializeType(SerializerFactory.getSerializer(RpcBootstrap.getInstance().getConfiguration()
                         .getSerializeType()).getCode())
@@ -61,26 +62,47 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .build();
         // 将请求存入当前线程
         RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
-        // 2.从注册中心拉去服务列表并通过负载均衡获取可用服务
-        InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
-                .getServiceAddress(interfaceRef.getName());
-        log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
-        // 3.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
-        Channel channel = getAvailableChannel(address);
-        // 4.发送请求
-        CompletableFuture<Object> completableFuture = new CompletableFuture<>();
-        RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
-        channel.writeAndFlush(request)
-                .addListener((ChannelFutureListener) promise -> {
-                    if (!promise.isSuccess()) {
-                        completableFuture.completeExceptionally(promise.cause());
-                    }
-                });
-        // 清理ThreadLocal
-        RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
-        // 5.阻塞等待响应结果
-        return completableFuture.get(10, TimeUnit.SECONDS);
+        Idempotent idempotent = method.getAnnotation(Idempotent.class);
+        int maxRetry = idempotent != null ? idempotent.maxRetry() : 1;
+        long retryIntervalMs = idempotent != null ? idempotent.retryIntervalMs() : 0;
+        int attempt = 0;
+        while (true) {
+            try {
+                // 2.从注册中心拉去服务列表并通过负载均衡获取可用服务
+                InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
+                        .getServiceAddress(interfaceRef.getName());
+                log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
+                // 3.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
+                Channel channel = getAvailableChannel(address);
+                // 4.发送请求
+                CompletableFuture<Object> completableFuture = new CompletableFuture<>();
+                RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
+                channel.writeAndFlush(request)
+                        .addListener((ChannelFutureListener) promise -> {
+                            if (!promise.isSuccess()) {
+                                completableFuture.completeExceptionally(promise.cause());
+                            }
+                        });
+                // 清理ThreadLocal
+                RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
+                // 5.阻塞等待响应结果
+                return completableFuture.get(10, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                attempt++;
+                if (attempt >= maxRetry) {
+                    log.error("调用远程方法 {} 最多重试 {} 次仍失败", method.getName(), maxRetry);
+                    throw e;
+                }
+                log.warn("调用远程方法 {} 第 {} 次失败，{}ms 后重试...：{}", method.getName(), attempt, retryIntervalMs,
+                        e.getMessage());
+                Thread.sleep(retryIntervalMs);
+            }
+        }
     }
+
+//    private Object doRpcCall(Method method, Object[] args) {
+//
+//    }
 
     /**
      * 从缓存中获取一个可用的通道，如果缓存中没有，则创建一个通道，尝试连接服务器

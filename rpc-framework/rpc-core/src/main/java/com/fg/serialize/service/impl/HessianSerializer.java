@@ -1,4 +1,4 @@
-package com.fg.serialize.service.Impl;
+package com.fg.serialize.service.impl;
 
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;

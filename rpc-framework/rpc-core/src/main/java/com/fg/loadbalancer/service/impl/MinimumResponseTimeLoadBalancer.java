@@ -1,4 +1,4 @@
-package com.fg.loadbalancer.service.Impl;
+package com.fg.loadbalancer.service.impl;
 
 import com.fg.RpcBootstrap;
 import com.fg.loadbalancer.AbstractLoadBalancer;

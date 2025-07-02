@@ -33,6 +33,8 @@
         <!ELEMENT serializer EMPTY>
         <!ATTLIST serializer
                 class CDATA #REQUIRED
+                type CDATA #REQUIRED
+                code CDATA #REQUIRED
                 >
 
         <!-- 压缩类型 -->
@@ -45,6 +47,8 @@
         <!ELEMENT compressor EMPTY>
         <!ATTLIST compressor
                 class CDATA #REQUIRED
+                type CDATA #REQUIRED
+                code CDATA #REQUIRED
                 >
 
         <!-- 负载均衡类型 -->

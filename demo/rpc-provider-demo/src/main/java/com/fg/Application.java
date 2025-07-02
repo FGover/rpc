@@ -2,7 +2,6 @@ package com.fg;
 
 import com.fg.Impl.HelloRpcServiceImpl;
 import com.fg.discovery.RegistryConfig;
-import com.fg.loadbalancer.service.Impl.MinimumResponseTimeLoadBalancer;
 
 public class Application {
     public static void main(String[] args) {
@@ -14,9 +13,10 @@ public class Application {
 
         // 服务提供方，需要注册服务，启动类
         RpcBootstrap.getInstance()  // 获取启动类实例
-                .application("first-rpc-provider")  // 设置应用信息
-                .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))   // 连接注册中心
-                .protocol(new ProtocolConfig("jdk"))   // 设置通信协议
+//                .application("first-rpc-provider")  // 设置应用信息
+//                .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))   // 连接注册中心
+//                .serializer("jdk")
+//                .compress("gzip")
                 .scan("com.fg")   // 扫描指定包下的服务
                 .start();   // 启动服务
     }
