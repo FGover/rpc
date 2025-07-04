@@ -7,6 +7,7 @@ import com.fg.compress.CompressorFactory;
 import com.fg.discovery.Registry;
 import com.fg.enums.RequestType;
 import com.fg.exception.DiscoveryException;
+import com.fg.protection.CircuitBreaker;
 import com.fg.serialize.SerializerFactory;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
@@ -42,51 +43,20 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         log.info("调用远程方法：{}", method.getName());
-        // 1.封装请求报文
-        RequestPayload requestPayload = RequestPayload.builder()
-                .interfaceName(interfaceRef.getName())
-                .methodName(method.getName())
-                .parametersType(method.getParameterTypes())
-                .parametersValue(args)
-                .returnType(method.getReturnType())
-                .build();
-        RpcRequest request = RpcRequest.builder()
-                .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
-                .requestType(RequestType.REQUEST.getId())
-                .compressType(CompressorFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
-                        .getCompressType()).getCode())
-                .serializeType(SerializerFactory.getSerializer(RpcBootstrap.getInstance().getConfiguration()
-                        .getSerializeType()).getCode())
-                .timestamp(System.currentTimeMillis())
-                .requestPayload(requestPayload)
-                .build();
+        // 封装请求报文
+        RpcRequest request = buildRpcRequest(method, args);
         // 将请求存入当前线程
         RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
+        // 判断是否位幂等请求
         Idempotent idempotent = method.getAnnotation(Idempotent.class);
         int maxRetry = idempotent != null ? idempotent.maxRetry() : 1;
         long retryIntervalMs = idempotent != null ? idempotent.retryIntervalMs() : 0;
         int attempt = 0;
         while (true) {
             try {
-                // 2.从注册中心拉去服务列表并通过负载均衡获取可用服务
-                InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
-                        .getServiceAddress(interfaceRef.getName());
-                log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
-                // 3.通过 Netty 客户端发送请求，从全局缓存中获取一个通道
-                Channel channel = getAvailableChannel(address);
-                // 4.发送请求
-                CompletableFuture<Object> completableFuture = new CompletableFuture<>();
-                RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
-                channel.writeAndFlush(request)
-                        .addListener((ChannelFutureListener) promise -> {
-                            if (!promise.isSuccess()) {
-                                completableFuture.completeExceptionally(promise.cause());
-                            }
-                        });
-                // 清理ThreadLocal
-                RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
-                // 5.阻塞等待响应结果
-                return completableFuture.get(10, TimeUnit.SECONDS);
+                // 发送请求
+                CircuitBreaker circuitBreaker = RpcBootstrap.getInstance().getConfiguration().getCircuitBreaker();
+                return circuitBreaker.call(() -> doRpcCall(request));
             } catch (Exception e) {
                 attempt++;
                 if (attempt >= maxRetry) {
@@ -100,9 +70,60 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
         }
     }
 
-//    private Object doRpcCall(Method method, Object[] args) {
-//
-//    }
+    /**
+     * 构建 RpcRequest
+     *
+     * @param method
+     * @param args
+     * @return
+     */
+    private RpcRequest buildRpcRequest(Method method, Object[] args) {
+        RequestPayload requestPayload = RequestPayload.builder()
+                .interfaceName(interfaceRef.getName())
+                .methodName(method.getName())
+                .parametersType(method.getParameterTypes())
+                .parametersValue(args)
+                .returnType(method.getReturnType())
+                .build();
+        return RpcRequest.builder()
+                .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
+                .requestType(RequestType.REQUEST.getId())
+                .compressType(CompressorFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
+                        .getCompressType()).getCode())
+                .serializeType(SerializerFactory.getSerializer(RpcBootstrap.getInstance().getConfiguration()
+                        .getSerializeType()).getCode())
+                .timestamp(System.currentTimeMillis())
+                .requestPayload(requestPayload)
+                .build();
+    }
+
+    /**
+     * 远程调用
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    private Object doRpcCall(RpcRequest request) throws Exception {
+        // 1.从注册中心拉去服务列表并通过负载均衡获取可用服务
+        InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
+                .getServiceAddress(interfaceRef.getName());
+        log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
+        // 2.获取可用通道并发送请求
+        Channel channel = getAvailableChannel(address);
+        CompletableFuture<Object> completableFuture = new CompletableFuture<>();
+        RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
+        channel.writeAndFlush(request)
+                .addListener((ChannelFutureListener) promise -> {
+                    if (!promise.isSuccess()) {
+                        completableFuture.completeExceptionally(promise.cause());
+                    }
+                });
+        // 3.清理线程变量
+        RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
+        // 4.阻塞等待响应
+        return completableFuture.get(10, TimeUnit.SECONDS);
+    }
 
     /**
      * 从缓存中获取一个可用的通道，如果缓存中没有，则创建一个通道，尝试连接服务器

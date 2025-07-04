@@ -23,14 +23,28 @@ public class Application {
         // 获取远程服务代理对象
         HelloRpcService helloRpc = reference.get();
         // 调用远程服务
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleAtFixedRate(() -> {
-            try {
-                String msg = helloRpc.sayHello("你好，定时调用");
-                log.info("远程调用结果：{}", msg);
-            } catch (Exception e) {
-                log.error("远程调用异常", e);
-            }
-        }, 0, 2, TimeUnit.SECONDS);
+//        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+//        executor.scheduleAtFixedRate(() -> {
+//            try {
+//                String msg = helloRpc.sayHello("你好，定时调用");
+//                log.info("远程调用结果：{}", msg);
+//            } catch (Exception e) {
+//                log.error("远程调用异常", e);
+//            }
+//        }, 0, 2, TimeUnit.SECONDS);
+        int threadCount = 10;
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(threadCount);
+        for (int i = 0; i < threadCount; i++) {
+            int threadId = i;
+            executor.scheduleAtFixedRate(() -> {
+                try {
+                    // 模拟传递参数：区分调用来源
+                    String msg = helloRpc.sayHello("线程 " + threadId);
+                    log.info("调用结果：{}", msg);
+                } catch (Exception e) {
+                    log.error("线程 {} 调用异常：{}", threadId, e.getMessage());
+                }
+            }, 0, 300, TimeUnit.MILLISECONDS); // 每个线程每 300ms 发一次请求
+        }
     }
 }

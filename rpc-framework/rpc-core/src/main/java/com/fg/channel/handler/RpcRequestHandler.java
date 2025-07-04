@@ -4,6 +4,7 @@ import com.fg.RpcBootstrap;
 import com.fg.ServiceConfig;
 import com.fg.enums.RequestType;
 import com.fg.enums.ResponseCode;
+import com.fg.protection.limiter.service.impl.TokenBucketLimiter;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.ResponsePayload;
 import com.fg.transport.message.RpcRequest;
@@ -31,8 +32,21 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
             channelHandlerContext.writeAndFlush(rpcResponse);
             return;
         }
+        // 2.限流逻辑：尝试获取令牌
+        TokenBucketLimiter limiter = RpcBootstrap.getInstance().getConfiguration().getLimiter();
+        if (!limiter.tryAcquire()) {
+            log.error("请求{}被限流", rpcRequest.getRequestId());
+            rpcResponse.setResponsePayload(
+                    ResponsePayload.builder()
+                            .code(ResponseCode.FAILURE.getCode())
+                            .data("请求被限流")
+                            .build()
+            );
+            channelHandlerContext.writeAndFlush(rpcResponse);
+            return;
+        }
         try {
-            // 2.处理请求，调用目标方法
+            // 3.处理请求，调用目标方法
             RequestPayload requestPayload = rpcRequest.getRequestPayload();
             // 根据负载内容进行方法调用
             Object result = callTargetMethod(requestPayload);
@@ -53,11 +67,17 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
                             .build()
             );
         }
-        // 3.发送完整的响应对象
+        // 4.发送完整的响应对象
         log.info("服务端写入响应：{}", rpcResponse);
         channelHandlerContext.writeAndFlush(rpcResponse);
     }
 
+    /**
+     * 调用目标服务的方法
+     *
+     * @param requestPayload
+     * @return
+     */
     private Object callTargetMethod(RequestPayload requestPayload) {
         String interfaceName = requestPayload.getInterfaceName();
         String methodName = requestPayload.getMethodName();
