@@ -18,6 +18,7 @@ public class Application {
         RpcBootstrap.getInstance()
 //                .application("first-rpc-consumer")
 //                .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))
+                .group("main")
                 .reference(reference);
 
         // 获取远程服务代理对象

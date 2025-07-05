@@ -169,13 +169,24 @@ public class RpcBootstrap {
      * 用于配置 consumer 引用的远程服务接口
      *
      * @param reference
-     * @return
      */
-    public RpcBootstrap reference(ReferenceConfig<?> reference) {
+    public void reference(ReferenceConfig<?> reference) {
         // 设置consumer引用的远程服务接口的注册中心配置
         reference.setRegistry(configuration.getRegistryConfig().getRegistry());
+        // 设置分组
+        reference.setGroup(configuration.getGroup());
         // 开启心跳检测
         HeartBeatDetector.detect(reference.getInterface().getName());
+    }
+
+    /**
+     * 设置服务分组
+     *
+     * @param groupName
+     * @return
+     */
+    public RpcBootstrap group(String groupName) {
+        configuration.setGroup(groupName);
         return this;
     }
 
@@ -235,15 +246,20 @@ public class RpcBootstrap {
                         if (interfaces.length == 0) {
                             throw new RuntimeException("类 " + clazz.getName() + " 未实现任何接口，无法注册为服务");
                         }
+                        RpcService annotation = clazz.getAnnotation(RpcService.class);
+                        // 获取分组
+                        String group = annotation.group();
                         // 遍历所有接口，将每个接口作为一个服务注册
                         for (Class<?> anInterface : interfaces) {
                             // 创建服务配置对象
                             ServiceConfig<?> serviceConfig = new ServiceConfig<>();
                             serviceConfig.setInterface(anInterface);  // 设置服务接口
                             serviceConfig.setRef(serviceInstance);  // 设置服务实现类实例
+                            serviceConfig.setGroup(group);           // 设置分组
+
                             // 发布服务
                             publish(serviceConfig);
-                            log.info("服务注册成功: {} -> {}", anInterface.getName(), clazz.getName());
+                            log.info("服务注册成功: {} -> {}, group = {}", anInterface.getName(), clazz.getName(), group);
                         }
                     } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
                              NoSuchMethodException e) {

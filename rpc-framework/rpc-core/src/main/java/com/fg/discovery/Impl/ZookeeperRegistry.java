@@ -37,7 +37,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
     @Override
     public void register(ServiceConfig<?> service) {
         // 服务名称的节点
-        String parentNode = Constant.BASE_PROVIDERS_PATH + "/" + service.getInterface().getName();
+        String parentNode = Constant.BASE_PROVIDERS_PATH + "/" + service.getInterface().getName() + "/" + service.getGroup();
         // 创建节点
         if (!ZookeeperUtil.exists(zooKeeper, parentNode, null)) {
             ZookeeperUtil.createNode(zooKeeper, new ZookeeperNode(parentNode, null), null,
@@ -50,7 +50,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
                     CreateMode.EPHEMERAL);
         }
         if (log.isDebugEnabled()) {
-            log.debug("发布服务:{}", service);
+            log.debug("发布服务:{}, group={}", service, service.getGroup());
         }
     }
 
@@ -61,9 +61,9 @@ public class ZookeeperRegistry extends AbstractRegistry {
      * @return 服务列表
      */
     @Override
-    public List<InetSocketAddress> lookup(String serviceName) {
+    public List<InetSocketAddress> lookup(String serviceName, String group) {
         // 找到服务对应的节点
-        String serviceNode = Constant.BASE_PROVIDERS_PATH + "/" + serviceName;
+        String serviceNode = Constant.BASE_PROVIDERS_PATH + "/" + serviceName + "/" + group;
         // 获取子节点
         List<String> children = ZookeeperUtil.getChildren(zooKeeper, serviceNode, new ServiceChangeWatcher(serviceName));
         // 获取子节点的ip和端口

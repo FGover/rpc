@@ -34,10 +34,13 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     private final Registry registry;
     // 接口引用（通过接口引用，服务消费者可以调用服务提供者实现的具体方法）
     private final Class<?> interfaceRef;
+    // 服务分组
+    private final String group;
 
-    public RpcConsumerInvocationHandler(Registry registry, Class<?> interfaceRef) {
+    public RpcConsumerInvocationHandler(Registry registry, Class<?> interfaceRef, String group) {
         this.registry = registry;
         this.interfaceRef = interfaceRef;
+        this.group = group;
     }
 
     @Override
@@ -107,7 +110,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     private Object doRpcCall(RpcRequest request) throws Exception {
         // 1.从注册中心拉去服务列表并通过负载均衡获取可用服务
         InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
-                .getServiceAddress(interfaceRef.getName());
+                .getServiceAddress(interfaceRef.getName(), group);
         log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
         // 2.获取可用通道并发送请求
         Channel channel = getAvailableChannel(address);

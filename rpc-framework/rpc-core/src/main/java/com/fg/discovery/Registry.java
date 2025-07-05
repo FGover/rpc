@@ -11,5 +11,5 @@ public interface Registry {
     void register(ServiceConfig<?> serviceConfig);
 
     // 获取服务列表
-    List<InetSocketAddress> lookup(String serviceName);
+    List<InetSocketAddress> lookup(String serviceName, String group);
 }

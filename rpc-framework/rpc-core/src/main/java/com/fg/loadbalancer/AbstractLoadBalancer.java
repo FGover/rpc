@@ -20,16 +20,17 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
      * 通过轮询选择器选取服务地址
      *
      * @param serviceName
+     * @param group
      * @return
      */
     @Override
-    public InetSocketAddress getServiceAddress(String serviceName) {
+    public InetSocketAddress getServiceAddress(String serviceName, String group) {
         // 优先从缓存器中获取一个选择器
         Selector selector = selectors.get(serviceName);
         // 如果缓存器中没有，则创建一个选择器
         if (selector == null) {
             List<InetSocketAddress> serviceList = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig()
-                    .getRegistry().lookup(serviceName);
+                    .getRegistry().lookup(serviceName, group);
             if (serviceList == null || serviceList.isEmpty()) {
                 log.error("{}服务的列表为空", serviceName);
                 throw new RuntimeException("Service not found: " + serviceName);

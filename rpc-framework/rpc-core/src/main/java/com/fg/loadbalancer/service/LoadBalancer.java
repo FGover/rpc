@@ -12,9 +12,10 @@ public interface LoadBalancer {
      * 根据服务名获取一个可用服务
      *
      * @param serviceName
+     * @param group
      * @return
      */
-    InetSocketAddress getServiceAddress(String serviceName);
+    InetSocketAddress getServiceAddress(String serviceName, String group);
 
     /**
      * 重新平衡负载

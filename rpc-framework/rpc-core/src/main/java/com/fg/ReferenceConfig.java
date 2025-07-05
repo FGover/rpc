@@ -17,6 +17,9 @@ public class ReferenceConfig<T> {
     @Getter
     @Setter
     private Registry registry;
+    @Getter
+    @Setter
+    private String group;
 
     public Class<T> getInterface() {
         return interfaceRef;
@@ -28,8 +31,9 @@ public class ReferenceConfig<T> {
 
     @SuppressWarnings("unchecked")
     public T get() {
-        RpcConsumerInvocationHandler handler = new RpcConsumerInvocationHandler(registry, interfaceRef);
+        RpcConsumerInvocationHandler handler = new RpcConsumerInvocationHandler(registry, interfaceRef, group);
         // 动态代理
         return (T) Proxy.newProxyInstance(interfaceRef.getClassLoader(), new Class[]{interfaceRef}, handler);
     }
+
 }

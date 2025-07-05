@@ -34,7 +34,8 @@ public class HeartBeatDetector {
         // 获取注册中心实例
         Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
         // 拉取服务节点列表
-        List<InetSocketAddress> serviceList = registry.lookup(serviceName);
+        List<InetSocketAddress> serviceList = registry.lookup(serviceName, RpcBootstrap.getInstance().getConfiguration()
+                .getGroup());
         // 建立连接缓存
         for (InetSocketAddress address : serviceList) {
             try {

@@ -30,7 +30,8 @@ public class ServiceChangeWatcher implements Watcher {
             log.info("监听到服务[{}]节点上下线，将重新拉取服务列表", serviceName);
             Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
             // 重新拉取服务列表
-            List<InetSocketAddress> addressList = registry.lookup(serviceName);
+            List<InetSocketAddress> addressList = registry.lookup(serviceName, RpcBootstrap.getInstance()
+                    .getConfiguration().getGroup());
             // 新增节点
             for (InetSocketAddress address : addressList) {
                 if (!RpcBootstrap.CHANNEL_MAP.containsKey(address)) {

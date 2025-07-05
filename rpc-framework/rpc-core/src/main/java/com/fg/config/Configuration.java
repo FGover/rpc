@@ -32,6 +32,8 @@ public class Configuration {
     private TokenBucketLimiter limiter = new TokenBucketLimiter(10, 5);
     // 熔断器
     private CircuitBreaker circuitBreaker = new CircuitBreaker(3, 2, 5000);
+    // 分组
+    private String group = "default";
 
     public Configuration() {
         // 先用spi加载接口的实现类
