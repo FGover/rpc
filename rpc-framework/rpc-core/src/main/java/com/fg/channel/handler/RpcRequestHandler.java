@@ -4,6 +4,7 @@ import com.fg.RpcBootstrap;
 import com.fg.ServiceConfig;
 import com.fg.enums.RequestType;
 import com.fg.enums.ResponseCode;
+import com.fg.heartbeat.ShutdownHolder;
 import com.fg.protection.limiter.service.impl.TokenBucketLimiter;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.ResponsePayload;
@@ -26,9 +27,29 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
         rpcResponse.setRequestType(rpcRequest.getRequestType());
         rpcResponse.setCompressType(rpcRequest.getCompressType());
         rpcResponse.setSerializeType(rpcRequest.getSerializeType());
+        // 查看关闭的挡板是否打开，如果挡板已经打开，返回关闭响应
+        if (ShutdownHolder.BAFFLE.get()) {
+            rpcResponse.setResponsePayload(
+                    ResponsePayload
+                            .builder()
+                            .code(ResponseCode.CLOSING.getCode())
+                            .data("服务端正在关闭")
+                            .build()
+            );
+            channelHandlerContext.writeAndFlush(rpcResponse);
+            return;
+        }
+        // 计数器加1
+        ShutdownHolder.REQUEST_COUNT.increment();
         // 1.判断是否为心跳请求
         if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
             log.info("收到心跳请求：{}", rpcRequest.getRequestId());
+            rpcResponse.setResponsePayload(
+                    ResponsePayload.builder()
+                            .code(ResponseCode.SUCCESS.getCode())
+                            .data("心跳响应")
+                            .build()
+            );
             channelHandlerContext.writeAndFlush(rpcResponse);
             return;
         }
@@ -70,6 +91,8 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
         // 4.发送完整的响应对象
         log.info("服务端写入响应：{}", rpcResponse);
         channelHandlerContext.writeAndFlush(rpcResponse);
+        // 计数器减1
+        ShutdownHolder.REQUEST_COUNT.decrement();
     }
 
     /**

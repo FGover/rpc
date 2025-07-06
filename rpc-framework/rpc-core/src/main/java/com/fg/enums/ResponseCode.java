@@ -4,7 +4,8 @@ package com.fg.enums;
 public enum ResponseCode {
 
     SUCCESS((byte) 1, "SUCCESS"),
-    FAILURE((byte) 2, "FAILURE");
+    FAILURE((byte) 2, "FAILURE"),
+    CLOSING((byte) 3, "CLOSING");   // 正在关闭
 
     private final byte code;
     private final String message;

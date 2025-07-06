@@ -5,30 +5,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/src/main/java/com/fg/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/src/main/java/com/fg/HelloController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/src/main/java/com/fg/RpcProxyBeanPostProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/src/main/java/com/fg/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/src/main/java/com/fg/Impl/HelloRpcServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/src/main/java/com/fg/Impl/HelloRpcServiceImpl2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/src/main/java/com/fg/RpcStarter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/src/main/resources/provider-rpc-config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/annotation/RpcApiService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/RpcShutdownHook.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/ShutdownHolder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/ProxyFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Impl/HelloRpcServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Impl/HelloRpcServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Impl/HelloRpcServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Impl/HelloRpcServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/annotation/RpcService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/annotation/RpcService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/annotation/RpcService.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/annotation/RpcService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/ReferenceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/ReferenceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/ServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/ServiceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/config/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/config/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/NacosRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/NacosRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Registry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Registry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/HeartBeatDetector.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/HeartBeatDetector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/AbstractLoadBalancer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/AbstractLoadBalancer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/service/LoadBalancer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/loadbalancer/service/LoadBalancer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/proxy/handler/RpcConsumerInvocationHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ServiceChangeWatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ServiceChangeWatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcRequestHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseDecoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseEncoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/channel/handler/RpcResponseHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/enums/ResponseCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/enums/ResponseCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/NettyBootstrapInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/NettyBootstrapInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/ProtocolConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/ProtocolConfig.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/ServiceConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/ServiceConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/limiter/RateLimiterFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/limiter/RateLimiterFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/limiter/service/impl/TokenBucketLimiter.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/limiter/service/impl/TokenBucketLimiter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/ConsumerChannelInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/ConsumerChannelInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestDecoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestDecoder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestEncoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestEncoder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseDecoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseDecoder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseEncoder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseEncoder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcResponseHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/CompressorFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/CompressorFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/service/Impl/GzipCompressor.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/service/Impl/GzipCompressor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/service/Impl/SnappyCompressor.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/service/Impl/SnappyCompressor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/service/Impl/ZstdCompressor.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/compress/service/Impl/ZstdCompressor.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/ObjectWrapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/ObjectWrapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/SpiResolver.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/SpiResolver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/XmlResolver.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/XmlResolver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/RegistryConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/RegistryConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/enums/RequestType.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/enums/RequestType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/enums/ResponseCode.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/enums/ResponseCode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/CircuitBreaker$State.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/CircuitBreaker$State.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/CircuitBreaker$SupplierWithException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/CircuitBreaker$SupplierWithException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/CircuitBreaker.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/protection/CircuitBreaker.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/SerializerFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/SerializerFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/HessianSerializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/HessianSerializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/JdkSerializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/JdkSerializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/JsonSerializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/serialize/service/Impl/JsonSerializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/spi/SpiHandler$ParsedSpiConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/spi/SpiHandler$ParsedSpiConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/spi/SpiHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/spi/SpiHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/constant/MessageConstant.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/constant/MessageConstant.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RequestPayload$RequestPayloadBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RequestPayload$RequestPayloadBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RequestPayload.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RequestPayload.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/ResponsePayload$ResponsePayloadBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/ResponsePayload$ResponsePayloadBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/ResponsePayload.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/ResponsePayload.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcRequest$RpcRequestBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcRequest$RpcRequestBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcResponse$RpcResponseBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcResponse$RpcResponseBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/transport/message/RpcResponse.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,9 +81,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Interface" />
         <option value="XML File" />
         <option value="AnnotationType" />
-        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -80,61 +122,67 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.AppClient.executor&quot;: &quot;Run&quot;,
-    &quot;Application.AppServer.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application (1).executor&quot;: &quot;Run&quot;,
-    &quot;Application.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CircuitBreaker.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CompressSerializeDemo.executor&quot;: &quot;Run&quot;,
-    &quot;Application.IdGenerator.executor&quot;: &quot;Run&quot;,
-    &quot;Application.NetUtil.executor&quot;: &quot;Run&quot;,
-    &quot;Application.RpcBootstrap.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SerializableTest.executor&quot;: &quot;Run&quot;,
-    &quot;Application.SpiHandler.executor&quot;: &quot;Run&quot;,
-    &quot;Application.TokenBucketLimiter.executor&quot;: &quot;Run&quot;,
-    &quot;Application.consumer1.executor&quot;: &quot;Run&quot;,
-    &quot;Application.provider1.executor&quot;: &quot;Run&quot;,
-    &quot;Application.provider2.executor&quot;: &quot;Run&quot;,
-    &quot;Application.provider3.executor&quot;: &quot;Run&quot;,
-    &quot;Application.providerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testByteBuf.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testMessage.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testSlice.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.NettyTest.testWrapper.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testCreateNode.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testDeleteNode.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testExistsNode.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.ZookeeperTest.testGetNode.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.rpc [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/javaLearning/rpc/rpc/demo/rpc-provider-demo/src/main/resources&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.21875&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AppClient.executor": "Run",
+    "Application.AppServer.executor": "Run",
+    "Application.Application (1).executor": "Run",
+    "Application.Application.executor": "Run",
+    "Application.CircuitBreaker.executor": "Run",
+    "Application.CompressSerializeDemo.executor": "Run",
+    "Application.IdGenerator.executor": "Run",
+    "Application.NetUtil.executor": "Run",
+    "Application.RpcBootstrap.executor": "Run",
+    "Application.SerializableTest.executor": "Run",
+    "Application.SpiHandler.executor": "Run",
+    "Application.TokenBucketLimiter.executor": "Run",
+    "Application.consumer1.executor": "Run",
+    "Application.provider1.executor": "Run",
+    "Application.provider2.executor": "Run",
+    "Application.provider3.executor": "Run",
+    "Application.providerApplication.executor": "Run",
+    "JUnit.NettyTest.testByteBuf.executor": "Run",
+    "JUnit.NettyTest.testMessage.executor": "Run",
+    "JUnit.NettyTest.testSlice.executor": "Run",
+    "JUnit.NettyTest.testWrapper.executor": "Run",
+    "JUnit.ZookeeperTest.testCreateNode.executor": "Run",
+    "JUnit.ZookeeperTest.testDeleteNode.executor": "Run",
+    "JUnit.ZookeeperTest.testExistsNode.executor": "Run",
+    "JUnit.ZookeeperTest.testGetNode.executor": "Run",
+    "Maven.rpc [clean,install].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.Application (1).executor": "Run",
+    "Spring Boot.Application.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/javaLearning/rpc/rpc/demo/rpc-springboot-provider/src/main/resources",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.21875",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.fg.discovery" />
       <recent name="com.fg" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\javaLearning\rpc\rpc\demo\rpc-springboot-provider\src\main\resources" />
+      <recent name="E:\javaLearning\rpc\rpc\demo\rpc-springboot-provider\src\main\java\com\fg" />
       <recent name="E:\javaLearning\rpc\rpc\demo\rpc-provider-demo\src\main\resources" />
       <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-core\src\main\resources" />
       <recent name="E:\javaLearning\rpc\rpc\demo\rpc-consumer-demo\src\main\resources" />
-      <recent name="E:\javaLearning\rpc\rpc\rpc-framework" />
-      <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-common\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\javaLearning\rpc\rpc\rpc-framework\rpc-core\src\main\java\com\fg\builder\xml" />
@@ -144,35 +192,9 @@
       <recent name="com.fg.netty" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.consumer1">
+  <component name="RunManager" selected="Spring Boot.Application (1)">
     <configuration name="CircuitBreaker" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.fg.protection.CircuitBreaker" />
-      <module name="rpc-core" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.fg.protection.limiter.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SpiHandler" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.fg.spi.SpiHandler" />
-      <module name="rpc-core" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.fg.spi.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TokenBucketLimiter" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.fg.protection.limiter.service.impl.TokenBucketLimiter" />
       <module name="rpc-core" />
       <extension name="coverage">
         <pattern>
@@ -226,6 +248,32 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Application (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="rpc-springboot-consumer" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.fg.Application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.fg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="rpc-springboot-provider" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.fg.Application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.fg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="lua.app" factoryName="Lua Application">
       <option name="program" value="lua.exe" />
       <option name="file" value="" />
@@ -240,18 +288,18 @@
       <item itemvalue="Application.provider2" />
       <item itemvalue="Application.provider3" />
       <item itemvalue="Application.CircuitBreaker" />
-      <item itemvalue="Application.TokenBucketLimiter" />
       <item itemvalue="Application.consumer1" />
-      <item itemvalue="Application.SpiHandler" />
       <item itemvalue="Application.provider1" />
+      <item itemvalue="Spring Boot.Application" />
+      <item itemvalue="Spring Boot.Application (1)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.Application (1)" />
+        <item itemvalue="Spring Boot.Application" />
         <item itemvalue="Application.consumer1" />
         <item itemvalue="Application.provider1" />
         <item itemvalue="Application.CircuitBreaker" />
-        <item itemvalue="Application.TokenBucketLimiter" />
-        <item itemvalue="Application.SpiHandler" />
       </list>
     </recent_temporary>
   </component>
@@ -317,7 +365,8 @@
       <workItem from="1751596352625" duration="869000" />
       <workItem from="1751620715093" duration="9050000" />
       <workItem from="1751637141872" duration="144000" />
-      <workItem from="1751707012458" duration="4568000" />
+      <workItem from="1751707012458" duration="8092000" />
+      <workItem from="1751778540275" duration="13638000" />
     </task>
     <servers />
   </component>

@@ -60,11 +60,11 @@ public class RpcResponseEncoder extends MessageToByteEncoder<RpcResponse> {
         // 写入时间戳
         out.writeLong(System.currentTimeMillis());
         // 如果是心跳请求，就不处理请求体
-        if (rpcResponse.getRequestType() == RequestType.HEARTBEAT.getId()) {
-            int fullLength = MessageConstant.HEADER_LENGTH;
-            writeFullLength(out, fullLengthIndex, fullLength);
-            return;
-        }
+//        if (rpcResponse.getRequestType() == RequestType.HEARTBEAT.getId()) {
+//            int fullLength = MessageConstant.HEADER_LENGTH;
+//            writeFullLength(out, fullLengthIndex, fullLength);
+//            return;
+//        }
         // 写入消息体
         log.info("响应编码器执行: 序列化前数据长度：{}", rpcResponse.getResponsePayload().toString().length());
         // 获取序列化器

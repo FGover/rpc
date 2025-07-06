@@ -7,6 +7,7 @@ import com.fg.channel.handler.RpcResponseEncoder;
 import com.fg.config.Configuration;
 import com.fg.discovery.RegistryConfig;
 import com.fg.heartbeat.HeartBeatDetector;
+import com.fg.heartbeat.RpcShutdownHook;
 import com.fg.loadbalancer.service.LoadBalancer;
 import com.fg.transport.message.RpcRequest;
 import io.netty.bootstrap.ServerBootstrap;
@@ -127,6 +128,8 @@ public class RpcBootstrap {
      * 启动Netty服务
      */
     public void start() {
+        // 注册关闭应用程序的钩子函数
+        Runtime.getRuntime().addShutdownHook(new RpcShutdownHook());
         // bossGroup 负责接收客户端连接，一个线程即可
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         // workerGroup 负责处理客户端I/O事件，默认线程数为 CPU*2

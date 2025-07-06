@@ -94,9 +94,9 @@ public class RpcResponseDecoder extends LengthFieldBasedFrameDecoder {
         rpcResponse.setCompressType(compressType);
         rpcResponse.setSerializeType(serializationType);
         // 如果是心跳响应，无body
-        if (requestType == RequestType.HEARTBEAT.getId()) {
-            return rpcResponse;
-        }
+//        if (requestType == RequestType.HEARTBEAT.getId()) {
+//            return rpcResponse;
+//        }
         // 读取 body
         byte[] body = new byte[fullLength - headerLength];
         byteBuf.readBytes(body);

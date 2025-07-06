@@ -7,9 +7,9 @@ public class Application {
     public static void main(String[] args) {
 
         // 封装要发布的服务
-        ServiceConfig<HelloRpcService> service = new ServiceConfig<>();
-        service.setInterface(HelloRpcService.class);
-        service.setRef(new HelloRpcServiceImpl());
+//        ServiceConfig<HelloRpcService> service = new ServiceConfig<>();
+//        service.setInterface(HelloRpcService.class);
+//        service.setRef(new HelloRpcServiceImpl());
 
         // 服务提供方，需要注册服务，启动类
         RpcBootstrap.getInstance()  // 获取启动类实例

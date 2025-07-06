@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration SYSTEM "rpc-config.dtd">
+<configuration>
+    <port>8088</port>
+    <applicationName>first-rpc-provider</applicationName>
+</configuration>

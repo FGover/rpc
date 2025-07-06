@@ -17,6 +17,8 @@
         <module>demo/rpc-consumer-demo</module>
         <module>demo/rpc-provider-demo</module>
         <module>demo/rpc-api</module>
+        <module>demo/rpc-springboot-provider</module>
+        <module>demo/rpc-springboot-consumer</module>
     </modules>
 
     <properties>
