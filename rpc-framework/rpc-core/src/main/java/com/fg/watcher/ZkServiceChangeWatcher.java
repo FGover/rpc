@@ -10,16 +10,28 @@ import org.apache.zookeeper.Watcher;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 动态感知服务上下线监听器，用于监听ZooKeeper子节点的变化
  */
 @Slf4j
-public class ServiceChangeWatcher implements Watcher {
+public class ZkServiceChangeWatcher implements Watcher {
+
+    private static final ExecutorService EVENT_EXECUTOR = Executors.newSingleThreadExecutor(r -> {
+        Thread thread = new Thread(r, "zk-service-change-watcher");
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    private static final ConcurrentHashMap<InetSocketAddress, Boolean> CONNECTING = new ConcurrentHashMap<>();
+
     // 服务名称
     private final String serviceName;
 
-    public ServiceChangeWatcher(String serviceName) {
+    public ZkServiceChangeWatcher(String serviceName) {
         this.serviceName = serviceName;
     }
 
@@ -34,7 +46,8 @@ public class ServiceChangeWatcher implements Watcher {
                     .getConfiguration().getGroup());
             // 新增节点
             for (InetSocketAddress address : addressList) {
-                if (!RpcBootstrap.CHANNEL_MAP.containsKey(address)) {
+                if (!RpcBootstrap.CHANNEL_MAP.containsKey(address) &&
+                        CONNECTING.putIfAbsent(address, Boolean.TRUE) == null) {
                     log.info("新增服务节点[{}:{}]，尝试连接上线", address.getHostString(), address.getPort());
                     try {
                         // 使用Netty的Bootstrap发起异步连接，同步阻塞直到连接建立成功
@@ -47,6 +60,8 @@ public class ServiceChangeWatcher implements Watcher {
                         log.info("成功连接到服务节点[{}:{}]，服务已成功上线", address.getHostString(), address.getPort());
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
+                    } finally {
+                        CONNECTING.remove(address);
                     }
                 }
             }
@@ -60,6 +75,7 @@ public class ServiceChangeWatcher implements Watcher {
                     if (channel != null && channel.isActive()) {
                         channel.close();
                     }
+                    CONNECTING.remove(existingAddress);
                     log.info("服务节点[{}:{}]已下线，移除缓存并关闭连接", existingAddress.getHostString(),
                             existingAddress.getPort());
                     return true;

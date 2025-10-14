@@ -81,8 +81,8 @@ public class NacosServiceChangeListener implements EventListener {
                         Channel channel = RpcBootstrap.CHANNEL_MAP.get(existing);
                         if (channel != null && channel.isActive()) {
                             channel.close();
-                            CONNECTING.remove(existing);
                         }
+                        CONNECTING.remove(existing);
                         log.info("服务节点[{}:{}]已下线，已移除并关闭连接", existing.getHostName(), existing.getPort());
                         return true;
                     }

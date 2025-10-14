@@ -5,47 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/resources/consumer-rpc-config.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/utils/nacos/NacosNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/src/main/java/com/fg/utils/nacos/NacosUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/NacosServiceChangeListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/src/main/java/com/fg/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/java/com/fg/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/resources/provider-rpc-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/src/main/resources/provider-rpc-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Impl/HelloRpcServiceImpl2.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/com/fg/Impl/HelloRpcServiceImpl2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/provider-rpc-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-provider-demo/target/classes/provider-rpc-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-consumer/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/target/classes/com/fg/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-consumer/target/classes/com/fg/HelloController.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/target/classes/com/fg/HelloController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-consumer/target/classes/com/fg/RpcProxyBeanPostProcessor.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-consumer/target/classes/com/fg/RpcProxyBeanPostProcessor.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/Impl/HelloRpcServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/Impl/HelloRpcServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/Impl/HelloRpcServiceImpl2.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/Impl/HelloRpcServiceImpl2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/RpcStarter.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-springboot-provider/target/classes/com/fg/RpcStarter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/Constant.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/Constant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/IdGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/IdGenerator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/DiscoveryException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/DiscoveryException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/NetworkException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/NetworkException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/ZookeeperException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/ZookeeperException.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/DateUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/DateUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/NetUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/NetUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperUtil.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/config/XmlResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/config/XmlResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/AbstractRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/AbstractRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/NacosRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/NacosRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/RpcShutdownHook.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/heartbeat/RpcShutdownHook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/resources/rpc-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/resources/rpc-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/XmlResolver.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/config/XmlResolver.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/NacosRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/NacosRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/RegistryConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/RegistryConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/RpcShutdownHook.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/RpcShutdownHook.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/rpc-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/rpc-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ServiceChangeWatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ZkServiceChangeWatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/watcher/ServiceChangeWatcher.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -348,7 +312,7 @@
       <workItem from="1751778540275" duration="13638000" />
       <workItem from="1751812381684" duration="49000" />
       <workItem from="1760365004378" duration="16593000" />
-      <workItem from="1760430522948" duration="11745000" />
+      <workItem from="1760430522948" duration="12833000" />
     </task>
     <servers />
   </component>

@@ -3,6 +3,7 @@ package com.fg.heartbeat;
 
 import com.fg.RpcBootstrap;
 import com.fg.discovery.Impl.NacosRegistry;
+import com.fg.discovery.Impl.ZookeeperRegistry;
 import com.fg.discovery.Registry;
 
 public class RpcShutdownHook extends Thread {
@@ -25,6 +26,8 @@ public class RpcShutdownHook extends Thread {
             Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
             if (registry instanceof NacosRegistry nacosRegistry) {
                 nacosRegistry.shutdown();
+            } else if (registry instanceof ZookeeperRegistry zkRegistry) {
+                zkRegistry.shutdown();
             }
         } catch (Exception ignore) {
         }
