@@ -31,6 +31,8 @@ public class XmlResolver {
         loadFromXml(configuration, "rpc-config.xml");
         // 再加载 provider 自定义配置（覆盖核心配置）
         loadFromXml(configuration, "provider-rpc-config.xml");
+        // 再加载 consumer 自定义配置
+        loadFromXml(configuration, "consumer-rpc-config.xml");
     }
 
     /**

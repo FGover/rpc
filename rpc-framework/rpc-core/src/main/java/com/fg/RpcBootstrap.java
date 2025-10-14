@@ -259,7 +259,6 @@ public class RpcBootstrap {
                             serviceConfig.setInterface(anInterface);  // 设置服务接口
                             serviceConfig.setRef(serviceInstance);  // 设置服务实现类实例
                             serviceConfig.setGroup(group);           // 设置分组
-
                             // 发布服务
                             publish(serviceConfig);
                             log.info("服务注册成功: {} -> {}, group = {}", anInterface.getName(), clazz.getName(), group);

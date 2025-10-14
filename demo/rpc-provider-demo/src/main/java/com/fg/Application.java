@@ -14,7 +14,7 @@ public class Application {
         // 服务提供方，需要注册服务，启动类
         RpcBootstrap.getInstance()  // 获取启动类实例
 //                .application("first-rpc-provider")  // 设置应用信息
-//                .registry(new RegistryConfig("zookeeper://127.0.0.1:2181"))   // 连接注册中心
+//                .registry(new RegistryConfig("nacos://127.0.0.1:8848"))   // 连接注册中心
 //                .serializer("jdk")
 //                .compress("gzip")
                 .scan("com.fg")   // 扫描指定包下的服务

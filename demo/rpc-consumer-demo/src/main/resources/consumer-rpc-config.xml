@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration SYSTEM "rpc-config.dtd">
 <configuration>
-    <port>8090</port>
-    <applicationName>second-rpc-provider</applicationName>
+    <port>8088</port>
+    <applicationName>second-rpc-consumer</applicationName>
     <registry url="nacos://127.0.0.1:8848"/>
 </configuration>

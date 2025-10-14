@@ -33,7 +33,7 @@ public class Application {
 //                log.error("远程调用异常", e);
 //            }
 //        }, 0, 2, TimeUnit.SECONDS);
-        int threadCount = 10;
+        int threadCount = 3;
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(threadCount);
         for (int i = 0; i < threadCount; i++) {
             int threadId = i;
@@ -45,7 +45,7 @@ public class Application {
                 } catch (Exception e) {
                     log.error("线程 {} 调用异常：{}", threadId, e.getMessage());
                 }
-            }, 0, 300, TimeUnit.MILLISECONDS); // 每个线程每 300ms 发一次请求
+            }, 0, 3000, TimeUnit.MILLISECONDS); // 每个线程每 300ms 发一次请求
         }
     }
 }

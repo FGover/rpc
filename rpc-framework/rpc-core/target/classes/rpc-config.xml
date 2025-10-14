@@ -6,6 +6,7 @@
     <applicationName>rpc-default-appName</applicationName>
     
     <registry url="zookeeper://127.0.0.1:2181"/>
+<!--    <registry url="nacos://127.0.0.1:8848"/>-->
 
     <serializeType type="hessian"/>
     <serializer code="3" type="hessian" class="com.fg.serialize.service.impl.HessianSerializer"/>
