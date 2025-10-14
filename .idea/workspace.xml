@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ServiceChangeWatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/watcher/ZkServiceChangeWatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/watcher/ServiceChangeWatcher.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/RpcBootstrap.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -312,7 +311,7 @@
       <workItem from="1751778540275" duration="13638000" />
       <workItem from="1751812381684" duration="49000" />
       <workItem from="1760365004378" duration="16593000" />
-      <workItem from="1760430522948" duration="12833000" />
+      <workItem from="1760430522948" duration="15904000" />
     </task>
     <servers />
   </component>
@@ -329,21 +328,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java</url>
-          <line>262</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/RpcBootstrap.java</url>
-          <line>263</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

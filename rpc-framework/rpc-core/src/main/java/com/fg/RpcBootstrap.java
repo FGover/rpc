@@ -101,13 +101,12 @@ public class RpcBootstrap {
     }
 
     /**
-     * 发布服务
+     * 发布服务（先启动netty后，再注册服务）
      *
      * @param service
      */
     public void publish(ServiceConfig<?> service) {
-        // 封装要发布的服务
-        configuration.getRegistryConfig().getRegistry().register(service);
+//        configuration.getRegistryConfig().getRegistry().register(service);
         SERVICE_LIST.put(service.getInterface().getName(), service);
     }
 
@@ -153,6 +152,24 @@ public class RpcBootstrap {
             // 绑定端口并同步阻塞知道绑定完成
             ChannelFuture channelFuture = bootstrap.bind(configuration.getPort()).sync();
             log.info("Netty服务{}已启动，监听端口：{}", configuration.getApplicationName(), configuration.getPort());
+            // 端口就绪后，再向注册中心发布服务，避免已注册但未就绪的窗口
+            try {
+                if (configuration.getRegistryConfig() == null || configuration.getRegistryConfig().getRegistry() == null) {
+                    log.info("未配置注册中心，无需发布服务");
+                } else {
+                    // 注册服务
+                    SERVICE_LIST.values().forEach(service -> {
+                        try {
+                            configuration.getRegistryConfig().getRegistry().register(service);
+                            log.info("服务已发布到注册中心：{}（group={}）", service.getInterface().getName(), service.getGroup());
+                        } catch (Exception e) {
+                            log.warn("服务注册失败：{}，err={}", service.getInterface().getName(), e.getMessage());
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                log.warn("批量服务注册异常：{}", e.getMessage());
+            }
             // 阻塞直到服务通道关闭
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
