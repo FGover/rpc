@@ -3,6 +3,45 @@
 
 ![image](https://github.com/user-attachments/assets/ace76d12-667a-41a9-be3d-40eb2162206e)
 
+## 完整调用流程
+1.Provider 启动  
+- RpcBootstrap.start() 启动 Netty 服务端
+- 绑定端口成功后，向注册中心注册服务
+- 服务端 pipeline：LoggingHandler → RpcRequestDecoder → RpcResponseEncoder → RpcRequestHandler  
+
+2.Consumer 启动  
+- 从注册中心发现服务实例
+- 建立 Netty 客户端连接
+- 客户端 pipeline：RpcRequestEncoder → RpcResponseDecoder → RpcResponseHandler 
+
+3.Consumer 发送请求  
+- 调用远程服务时，通过 RpcRequestEncoder 编码请求
+- 发送到 Provider 的 Netty 服务端
+
+4.Provider 接收并解码  
+- 服务端通过 RpcRequestDecoder 解码请求
+- 解码后的 RpcRequest 传递给 RpcRequestHandler 处理业务
+- 业务处理完成后，通过 RpcResponseEncoder 编码响应
+- 发送响应给 Consumer
+
+5.Consumer 接收响应  
+- 通过 RpcResponseDecoder 解码响应
+- 解码后的 RpcResponse 传递给 RpcResponseHandler 处理
+
+
+
+## 自定义协议  
+┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
+│ 魔数     │ 版本号   │ 头部长度  │ 总长度   │ 序列化   │ 压缩     │ 请求     │ 请求ID  │ 时间戳   │
+│ 4字节    │ 1字节    │2字节    │ 4字节    │ 类型     │ 类型     │ 类型     │ 8字节   │ 8字节    │
+│ 'rpc'   │ 1       │ 30      │ 变长     │ 1字节    │ 1字节    │ 1字节   │         │         │
+└─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┴─────────┘
+│                                                                                         │
+│                                    消息体 (变长)                                          │
+│                              (序列化+压缩后的实际数据)                                      │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+
 ### 负载均衡是指将请求合理分发到多个服务器节点上，从而提高系统的并发能力、容错性和可用性。  
 解决的问题是：当有多个服务提供者时，我们如何选择其中一个去调用？  
 负载均衡器通常位于客户端和服务器之间，根据一定的算法将请求分发到不同的服务器节点上。常见的负载均衡算法有轮询、随机、最少连接、哈希等。 

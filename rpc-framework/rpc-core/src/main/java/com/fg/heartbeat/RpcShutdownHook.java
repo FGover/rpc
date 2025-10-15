@@ -11,13 +11,15 @@ public class RpcShutdownHook extends Thread {
     public void run() {
         // 打开挡板，阻止新请求（除了心跳）
         ShutdownHolder.enableBaffle();
+        HeartBeatDetector.stop();  // 先停止心跳定时器，避免关停期间产生心跳
         // 记录开始时间
         long start = System.currentTimeMillis();
         do {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Thread.currentThread().interrupt();
+                break;
             }
             // 请求全部处理完 || 等待超过 5 秒 => 退出
         } while (ShutdownHolder.hasProcessingRequests() && System.currentTimeMillis() - start <= 5000);

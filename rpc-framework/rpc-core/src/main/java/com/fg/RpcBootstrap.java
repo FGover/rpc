@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 
 @Slf4j
@@ -44,7 +45,7 @@ public class RpcBootstrap {
     // 连接缓存
     public static final Map<InetSocketAddress, Channel> CHANNEL_MAP = new ConcurrentHashMap<>();
     // 响应时间缓存
-    public static final TreeMap<Long, Channel> RESPONSE_TIME_CHANNEL_MAP = new TreeMap<>();
+    public static final ConcurrentSkipListMap<Long, Channel> RESPONSE_TIME_CHANNEL_MAP = new ConcurrentSkipListMap<>();
     // 定义全局的对外挂起的completableFuture
     public static final Map<Long, CompletableFuture<Object>> PENDING_REQUEST_MAP = new ConcurrentHashMap<>();
 

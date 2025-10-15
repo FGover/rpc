@@ -14,7 +14,6 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
-import java.util.Random;
 
 @Slf4j
 public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
@@ -30,8 +29,7 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        Thread.sleep(new Random().nextInt(50));
-        log.info("请求解码器执行了：{}", in);
+        log.debug("请求解码器执行了：{}", in);
         Object decode = super.decode(ctx, in);
         if (decode instanceof ByteBuf byteBuf) {
             return decodeFrame(byteBuf);
@@ -77,17 +75,21 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
             return rpcRequest;
         }
         // 10.读取消息体
-        byte[] body = new byte[fullLength - headerLength];
+        int bodyLength = fullLength - headerLength;
+        if (bodyLength < 0 || bodyLength > MessageConstant.MAX_FRAME_LENGTH) {
+            throw new IllegalArgumentException("非法的消息体长度：" + bodyLength);
+        }
+        byte[] body = new byte[bodyLength];
         byteBuf.readBytes(body);
-        log.info("请求解码器执行：解压前数据长度：{}", body.length);
+        log.debug("请求解码器执行：解压前数据长度：{}", body.length);
         // 11.解压
         Compressor compressor = CompressorFactory.getCompressor(compressType).getImpl();
         body = compressor.decompress(body);
-        log.info("请求解码器执行：解压后数据长度：{}", body.length);
+        log.debug("请求解码器执行：解压后数据长度：{}", body.length);
         // 12.反序列化 body 成 Java 对象
         Serializer serializer = SerializerFactory.getSerializer(serializeType).getImpl();
         RequestPayload requestPayload = serializer.deserialize(body, RequestPayload.class);
-        log.info("请求解码器执行：反序列化后数据长度：{}", requestPayload.toString().length());
+        log.debug("请求解码器执行：反序列化后数据长度：{}", requestPayload.toString().length());
         rpcRequest.setRequestPayload(requestPayload);
         return rpcRequest;
     }

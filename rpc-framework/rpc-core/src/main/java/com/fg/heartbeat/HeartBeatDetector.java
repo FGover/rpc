@@ -13,13 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 @Slf4j
 public class HeartBeatDetector {
+
+    private static volatile ScheduledExecutorService heartbeatExecutor;
+    private static volatile boolean isRunning = false;
 
     /**
      * 心跳检测
@@ -48,15 +48,30 @@ public class HeartBeatDetector {
                     RpcBootstrap.CHANNEL_MAP.put(address, channel);
                 }
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 log.error("建立连接失败", e);
                 throw new RuntimeException(e);
             }
         }
-        // 启动定时任务检测线程（守护线程）
-        Thread thread = new Thread(() -> new Timer().scheduleAtFixedRate(new HeartBeatTask(), 0, 2000),
-                "rpc-HeartBeatDetector-thread");
-        thread.setDaemon(true);
-        thread.start();
+        if (isRunning) {
+            log.debug("心跳检测已在运行中");
+            return;
+        }
+        heartbeatExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread thread = new Thread(r, "rpc-HeartBeatDetector-exec");
+            thread.setDaemon(true);
+            return thread;
+        });
+        heartbeatExecutor.scheduleAtFixedRate(new HeartBeatTask(), 0, 2, TimeUnit.SECONDS);
+        isRunning = true;
+    }
+
+    public static void stop() {
+        if (heartbeatExecutor != null) {
+            heartbeatExecutor.shutdownNow();
+            heartbeatExecutor = null;
+        }
+        isRunning = false;
     }
 
     /**
@@ -71,7 +86,7 @@ public class HeartBeatDetector {
             // 遍历缓存的所有节点channel
             Map<InetSocketAddress, Channel> channelCache = RpcBootstrap.CHANNEL_MAP;
             for (Map.Entry<InetSocketAddress, Channel> entry : channelCache.entrySet()) {
-                log.info("开始检测服务节点: {}", entry.getKey());
+                log.debug("开始检测服务节点: {}", entry.getKey());
                 int tryTimes = 3;   // 重试次数
                 while (tryTimes > 0) {
                     Channel channel = entry.getValue();
@@ -104,11 +119,14 @@ public class HeartBeatDetector {
                         endTime = System.currentTimeMillis();
                     } catch (ExecutionException | InterruptedException | TimeoutException e) {
                         tryTimes--;
-                        log.warn("心跳检测: [{}]服务节点异常, 第{}次重试中...", channel.remoteAddress(), 3 - tryTimes);
+                        log.warn("心跳检测: [{}]服务节点异常, 第{}次重试中...", entry.getKey(), 3 - tryTimes);
                         if (tryTimes == 0) {
                             // 重试次数用尽，关闭连接并从缓存中移除
                             log.error("节点[{}]心跳连接失败，移除缓存并关闭连接", entry.getKey());
                             RpcBootstrap.CHANNEL_MAP.remove(entry.getKey());
+                            RpcBootstrap.PENDING_REQUEST_MAP.remove(request.getRequestId());
+                            RpcBootstrap.RESPONSE_TIME_CHANNEL_MAP.entrySet()
+                                    .removeIf(item -> item.getValue().equals(channel));
                             // 关闭channel
                             if (channel.isOpen()) {
                                 channel.close();
@@ -116,9 +134,13 @@ public class HeartBeatDetector {
                         }
                         // 重试前随机等待一小段时间，避免雪崩
                         try {
-                            Thread.sleep(10 * (1 + new Random().nextInt(5)));
+                            // 指数退避
+                            int retryDelay = 10 * (1 << (3 - tryTimes));   // 10ms, 20ms, 40ms
+                            Thread.sleep(retryDelay);
                         } catch (InterruptedException ex) {
-                            throw new RuntimeException(ex);
+                            Thread.currentThread().interrupt();
+                            log.warn("心跳检测被中断");
+                            return;
                         }
                         continue;
                     }
@@ -129,10 +151,6 @@ public class HeartBeatDetector {
                     RpcBootstrap.RESPONSE_TIME_CHANNEL_MAP.put(time, channel);
                     break;  // 心跳检测成功，跳出重试循环
                 }
-            }
-            // 打印当前响应时间缓存内容
-            for (Map.Entry<Long, Channel> entry : RpcBootstrap.RESPONSE_TIME_CHANNEL_MAP.entrySet()) {
-                log.debug("响应时间：{}，对应节点：{}", entry.getKey(), entry.getValue());
             }
         }
     }
