@@ -1,5 +1,8 @@
 package com.fg.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum RequestType {
 
     REQUEST((byte) 1, "普通请求"),
@@ -13,11 +16,4 @@ public enum RequestType {
         this.type = type;
     }
 
-    public byte getId() {
-        return id;
-    }
-
-    public String getType() {
-        return type;
-    }
 }

@@ -29,7 +29,7 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        log.debug("请求解码器执行了：{}", in);
+        log.info("请求解码器执行：{}", in);
         Object decode = super.decode(ctx, in);
         if (decode instanceof ByteBuf byteBuf) {
             return decodeFrame(byteBuf);
@@ -70,13 +70,14 @@ public class RpcRequestDecoder extends LengthFieldBasedFrameDecoder {
         rpcRequest.setCompressType(compressType);
         rpcRequest.setSerializeType(serializeType);
         rpcRequest.setTimestamp(timestamp);
-        // 根据请求类型判断是否需要读取负载内容
+        // 根据请求类型判断是否需要读取负载内容(是否心跳请求)
         if (requestType == RequestType.HEARTBEAT.getId()) {
             return rpcRequest;
         }
         // 10.读取消息体
         int bodyLength = fullLength - headerLength;
-        if (bodyLength < 0 || bodyLength > MessageConstant.MAX_FRAME_LENGTH) {
+        int maxBody = MessageConstant.MAX_FRAME_LENGTH - MessageConstant.HEADER_LENGTH;
+        if (bodyLength < 0 || bodyLength > maxBody) {
             throw new IllegalArgumentException("非法的消息体长度：" + bodyLength);
         }
         byte[] body = new byte[bodyLength];

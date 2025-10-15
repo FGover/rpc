@@ -67,20 +67,23 @@ public class RpcRequestEncoder extends MessageToByteEncoder<RpcRequest> {
         // 如果是心跳请求，就不处理请求体
         if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
             // 没有body，fullLength只包含header长度
-            int fullLength = MessageConstant.HEADER_LENGTH;
-            writeFullLength(byteBuf, fullLengthIndex, fullLength);
+            writeFullLength(byteBuf, fullLengthIndex, MessageConstant.HEADER_LENGTH);
             return;
         }
         // 10.写入消息体
-        log.info("请求编码器执行：序列化前数据长度：{}", rpcRequest.getRequestPayload().toString().length());
+        log.debug("请求编码器执行：序列化前数据长度：{}", rpcRequest.getRequestPayload().toString().length());
         // 获取序列化器
         Serializer serializer = SerializerFactory.getSerializer(rpcRequest.getSerializeType()).getImpl();
         // 获取压缩器
         Compressor compressor = CompressorFactory.getCompressor(rpcRequest.getCompressType()).getImpl();
         byte[] body = serializer.serialize(rpcRequest.getRequestPayload());
-        log.info("请求编码器执行：序列化后数据长度：{}", body.length);
+        log.debug("请求编码器执行：序列化后数据长度：{}", body.length);
         body = compressor.compress(body);
-        log.info("请求编码器执行：压缩后数据长度：{}", body.length);
+        log.debug("请求编码器执行：压缩后数据长度：{}", body.length);
+        int maxBodyLen = MessageConstant.MAX_FRAME_LENGTH - MessageConstant.HEADER_LENGTH;
+        if (body.length > maxBodyLen) {
+            throw new IllegalArgumentException("请求体长度超过最大限制：{}" + body.length);
+        }
         byteBuf.writeBytes(body);
         // 重新处理报文的总长度
         int fullLength = MessageConstant.HEADER_LENGTH + body.length;

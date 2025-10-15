@@ -93,22 +93,23 @@ public class RpcResponseDecoder extends LengthFieldBasedFrameDecoder {
         rpcResponse.setRequestType(requestType);
         rpcResponse.setCompressType(compressType);
         rpcResponse.setSerializeType(serializationType);
-        // 如果是心跳响应，无body
-//        if (requestType == RequestType.HEARTBEAT.getId()) {
-//            return rpcResponse;
-//        }
         // 读取 body
-        byte[] body = new byte[fullLength - headerLength];
+        int bodyLength = fullLength - headerLength;
+        int maxBody = MessageConstant.MAX_FRAME_LENGTH - MessageConstant.HEADER_LENGTH;
+        if (bodyLength < 0 || bodyLength > maxBody) {
+            throw new IllegalArgumentException("非法 body 长度: " + bodyLength);
+        }
+        byte[] body = new byte[bodyLength];
         byteBuf.readBytes(body);
-        log.info("响应解码器执行：解压前数据长度：{}", body.length);
+        log.debug("响应解码器执行：解压前数据长度：{}", body.length);
         // 解压
         Compressor compressor = CompressorFactory.getCompressor(compressType).getImpl();
         body = compressor.decompress(body);
-        log.info("响应解码器执行：解压后数据长度：{}", body.length);
+        log.debug("响应解码器执行：解压后数据长度：{}", body.length);
         // 反序列化
         Serializer serializer = SerializerFactory.getSerializer(serializationType).getImpl();
         ResponsePayload responsePayload = serializer.deserialize(body, ResponsePayload.class);
-        log.info("响应解码器执行：反序列化后数据长度：{}", responsePayload.toString().length());
+        log.debug("响应解码器执行：反序列化后数据长度：{}", responsePayload.toString().length());
         rpcResponse.setResponsePayload(responsePayload);
         return rpcResponse;
     }

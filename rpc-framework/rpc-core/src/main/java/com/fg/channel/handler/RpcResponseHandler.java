@@ -18,7 +18,7 @@ public class RpcResponseHandler extends SimpleChannelInboundHandler<RpcResponse>
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse rpcResponse) {
-        log.info("哈哈哈哈哈哈哈==================：{}", rpcResponse);
+        log.info("收到响应：{}，进行响应处理...", rpcResponse);
         // 判断是否为关闭响应
         if (rpcResponse.getResponsePayload().getCode() == ResponseCode.CLOSING.getCode()) {
             log.warn("服务端正在关闭，响应被拒绝：{}", rpcResponse.getResponsePayload().getData());
@@ -31,35 +31,40 @@ public class RpcResponseHandler extends SimpleChannelInboundHandler<RpcResponse>
             RpcBootstrap.CHANNEL_MAP.remove(remoteAddress);
             log.info("已从CHANNEL_MAP中移除服务端：{}", remoteAddress);
             // 重新负载均衡
-            RpcRequest request = RpcBootstrap.REQUEST_THREAD_LOCAL.get();
-            RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(
-                    request.getRequestPayload().getInterfaceName(), RpcBootstrap.CHANNEL_MAP.keySet().stream().toList());
+//            RpcRequest request = RpcBootstrap.REQUEST_THREAD_LOCAL.get();
+//            RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(
+//                    request.getRequestPayload().getInterfaceName(), RpcBootstrap.CHANNEL_MAP.keySet().stream().toList());
             return;
         }
 
         // 判断是否为心跳响应
         if (rpcResponse.getRequestType() == RequestType.HEARTBEAT.getId()) {
-            log.info("收到心跳响应：{}", rpcResponse.getRequestId());
-            CompletableFuture<Object> future = RpcBootstrap.PENDING_REQUEST_MAP.get(rpcResponse.getRequestId());
+            log.debug("收到心跳响应：{}", rpcResponse.getRequestId());
+            CompletableFuture<Object> future = RpcBootstrap.PENDING_REQUEST_MAP.remove(rpcResponse.getRequestId());
             if (future != null) {
                 future.complete(null);
-                RpcBootstrap.PENDING_REQUEST_MAP.remove(rpcResponse.getRequestId());
             }
             // 收到心跳响应，直接返回
             return;
         }
         // 服务提供方给的结果
-        System.out.println("收到服务提供方返回的结果：" + rpcResponse);
+        log.debug("收到服务端响应：{}", rpcResponse);
         ResponsePayload responsePayload = rpcResponse.getResponsePayload();
+        if (responsePayload.getCode() != ResponseCode.SUCCESS.getCode()) {
+            CompletableFuture<Object> future = RpcBootstrap.PENDING_REQUEST_MAP.remove(rpcResponse.getRequestId());
+            if (future != null) {
+                Object err = responsePayload.getData();
+                future.completeExceptionally(new RuntimeException(err == null ? "远端返回失败" : err.toString()));
+            }
+            return;
+        }
         Object result = responsePayload.getData();  // 获取data
         // 从全局的挂起请求中寻找与之匹配的待处理的completableFuture
-        CompletableFuture<Object> completableFuture = RpcBootstrap.PENDING_REQUEST_MAP.get(rpcResponse.getRequestId());
-        System.out.println(completableFuture);
+        CompletableFuture<Object> completableFuture = RpcBootstrap.PENDING_REQUEST_MAP.remove(rpcResponse.getRequestId());
+        log.debug("挂起请求Future：{}", completableFuture);
         if (completableFuture != null) {
             // 将结果放入completableFuture中，唤醒等待的线程
             completableFuture.complete(result);
-            // 移除完成的请求
-            RpcBootstrap.PENDING_REQUEST_MAP.remove(rpcResponse.getRequestId());
         }
     }
 

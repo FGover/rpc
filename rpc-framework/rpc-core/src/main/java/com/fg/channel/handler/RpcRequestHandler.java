@@ -21,6 +21,7 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
+        log.info("收到请求：{}，进行请求处理...", rpcRequest);
         // 封装响应对象
         RpcResponse rpcResponse = new RpcResponse();
         rpcResponse.setRequestId(rpcRequest.getRequestId());
@@ -41,58 +42,61 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
         }
         // 计数器加1
         ShutdownHolder.REQUEST_COUNT.increment();
-        // 1.判断是否为心跳请求
-        if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
-            log.info("收到心跳请求：{}", rpcRequest.getRequestId());
-            rpcResponse.setResponsePayload(
-                    ResponsePayload.builder()
-                            .code(ResponseCode.SUCCESS.getCode())
-                            .data("心跳响应")
-                            .build()
-            );
-            channelHandlerContext.writeAndFlush(rpcResponse);
-            return;
-        }
-        // 2.限流逻辑：尝试获取令牌
-        TokenBucketLimiter limiter = RpcBootstrap.getInstance().getConfiguration().getLimiter();
-        if (!limiter.tryAcquire()) {
-            log.error("请求{}被限流", rpcRequest.getRequestId());
-            rpcResponse.setResponsePayload(
-                    ResponsePayload.builder()
-                            .code(ResponseCode.FAILURE.getCode())
-                            .data("请求被限流")
-                            .build()
-            );
-            channelHandlerContext.writeAndFlush(rpcResponse);
-            return;
-        }
         try {
-            // 3.处理请求，调用目标方法
-            RequestPayload requestPayload = rpcRequest.getRequestPayload();
-            // 根据负载内容进行方法调用
-            Object result = callTargetMethod(requestPayload);
-            // 构造响应体
-            rpcResponse.setResponsePayload(
-                    ResponsePayload.builder()
-                            .code(ResponseCode.SUCCESS.getCode())
-                            .data(result)
-                            .build()
-            );
-        } catch (Exception e) {
-            log.error("处理请求{}失败", rpcRequest, e);
-            // 构造失败响应体
-            rpcResponse.setResponsePayload(
-                    ResponsePayload.builder()
-                            .code(ResponseCode.FAILURE.getCode())
-                            .data("调用服务失败: " + e.getMessage())
-                            .build()
-            );
+            // 1.判断是否为心跳请求
+            if (rpcRequest.getRequestType() == RequestType.HEARTBEAT.getId()) {
+                log.debug("收到心跳请求：{}", rpcRequest.getRequestId());
+                rpcResponse.setResponsePayload(
+                        ResponsePayload.builder()
+                                .code(ResponseCode.SUCCESS.getCode())
+                                .data("心跳响应")
+                                .build()
+                );
+                channelHandlerContext.writeAndFlush(rpcResponse);
+                return;
+            }
+            // 2.限流逻辑：尝试获取令牌
+            TokenBucketLimiter limiter = RpcBootstrap.getInstance().getConfiguration().getLimiter();
+            if (!limiter.tryAcquire()) {
+                log.error("请求{}被限流", rpcRequest.getRequestId());
+                rpcResponse.setResponsePayload(
+                        ResponsePayload.builder()
+                                .code(ResponseCode.FAILURE.getCode())
+                                .data("请求被限流")
+                                .build()
+                );
+                channelHandlerContext.writeAndFlush(rpcResponse);
+                return;
+            }
+            try {
+                // 3.处理请求，调用目标方法
+                RequestPayload requestPayload = rpcRequest.getRequestPayload();
+                // 根据负载内容进行方法调用
+                Object result = callTargetMethod(requestPayload);
+                // 构造响应体
+                rpcResponse.setResponsePayload(
+                        ResponsePayload.builder()
+                                .code(ResponseCode.SUCCESS.getCode())
+                                .data(result)
+                                .build()
+                );
+            } catch (Exception e) {
+                log.error("处理请求{}失败", rpcRequest, e);
+                // 构造失败响应体
+                rpcResponse.setResponsePayload(
+                        ResponsePayload.builder()
+                                .code(ResponseCode.FAILURE.getCode())
+                                .data("调用服务失败: " + e.getMessage())
+                                .build()
+                );
+            }
+            // 4.发送完整的响应对象
+            log.debug("服务端写入响应：{}", rpcResponse);
+            channelHandlerContext.writeAndFlush(rpcResponse);
+        } finally {
+            // 计数器减1
+            ShutdownHolder.REQUEST_COUNT.decrement();
         }
-        // 4.发送完整的响应对象
-        log.info("服务端写入响应：{}", rpcResponse);
-        channelHandlerContext.writeAndFlush(rpcResponse);
-        // 计数器减1
-        ShutdownHolder.REQUEST_COUNT.decrement();
     }
 
     /**
@@ -107,6 +111,9 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
         Class<?>[] parametersType = requestPayload.getParametersType();
         Object[] parametersValue = requestPayload.getParametersValue();
         ServiceConfig<?> serviceConfig = RpcBootstrap.SERVICE_LIST.get(interfaceName);
+        if (serviceConfig == null) {
+            throw new RuntimeException("未找到服务：" + interfaceName);
+        }
         Object ref = serviceConfig.getRef();
         try {
             Method method = ref.getClass().getMethod(methodName, parametersType);

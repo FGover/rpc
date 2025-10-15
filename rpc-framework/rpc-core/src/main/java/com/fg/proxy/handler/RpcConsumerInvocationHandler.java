@@ -45,31 +45,40 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        log.info("调用远程方法：{}", method.getName());
-        // 封装请求报文
-        RpcRequest request = buildRpcRequest(method, args);
-        // 将请求存入当前线程
-        RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
-        // 判断是否位幂等请求
-        Idempotent idempotent = method.getAnnotation(Idempotent.class);
-        int maxRetry = idempotent != null ? idempotent.maxRetry() : 1;
-        long retryIntervalMs = idempotent != null ? idempotent.retryIntervalMs() : 0;
-        int attempt = 0;
-        while (true) {
-            try {
-                // 发送请求
-                CircuitBreaker circuitBreaker = RpcBootstrap.getInstance().getConfiguration().getCircuitBreaker();
-                return circuitBreaker.call(() -> doRpcCall(request));
-            } catch (Exception e) {
-                attempt++;
-                if (attempt >= maxRetry) {
-                    log.error("调用远程方法 {} 最多重试 {} 次仍失败", method.getName(), maxRetry);
-                    throw e;
+        try {
+            log.debug("调用远程方法：{}", method.getName());
+            // 封装请求报文
+            RpcRequest request = buildRpcRequest(method, args);
+            // 将请求存入当前线程
+            RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
+            // 判断是否为幂等请求
+            Idempotent idempotent = method.getAnnotation(Idempotent.class);
+            int maxRetry = idempotent != null ? idempotent.maxRetry() : 1;
+            long retryIntervalMs = idempotent != null ? idempotent.retryIntervalMs() : 0;
+            int attempt = 0;
+            while (true) {
+                try {
+                    // 发送请求
+                    CircuitBreaker circuitBreaker = RpcBootstrap.getInstance().getConfiguration().getCircuitBreaker();
+                    return circuitBreaker.call(() -> doRpcCall(request));
+                } catch (Exception e) {
+                    attempt++;
+                    if (attempt >= maxRetry) {
+                        log.error("调用远程方法 {} 最多重试 {} 次仍失败", method.getName(), maxRetry);
+                        throw e;
+                    }
+                    log.warn("调用远程方法 {} 第 {} 次失败，{}ms 后重试...：{}", method.getName(), attempt, retryIntervalMs,
+                            e.getMessage());
+                    try {
+                        Thread.sleep(retryIntervalMs);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                        throw ex;
+                    }
                 }
-                log.warn("调用远程方法 {} 第 {} 次失败，{}ms 后重试...：{}", method.getName(), attempt, retryIntervalMs,
-                        e.getMessage());
-                Thread.sleep(retryIntervalMs);
             }
+        } finally {
+            RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
         }
     }
 
@@ -116,6 +125,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
         Channel channel = getAvailableChannel(address);
         CompletableFuture<Object> completableFuture = new CompletableFuture<>();
         RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
+        completableFuture.whenComplete((r, ex) -> RpcBootstrap.PENDING_REQUEST_MAP.remove(request.getRequestId()));
         channel.writeAndFlush(request)
                 .addListener((ChannelFutureListener) promise -> {
                     if (!promise.isSuccess()) {
@@ -137,7 +147,9 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     private Channel getAvailableChannel(InetSocketAddress address) {
         // 从缓存中获取通道
         Channel channel = RpcBootstrap.CHANNEL_MAP.get(address);
-        if (channel == null) {
+        if (channel == null || !channel.isActive()) {
+            // 移除失效缓存，重新连接
+            RpcBootstrap.CHANNEL_MAP.remove(address);
             // 如果缓存中没有，则创建一个通道，尝试连接服务器
             // sync()同步等待连接完成，如果发生异常会抛出
             // await()阻塞当前线程等待某个操作完成，如果发生异常不会抛出，只会返回false（需手动检查）
