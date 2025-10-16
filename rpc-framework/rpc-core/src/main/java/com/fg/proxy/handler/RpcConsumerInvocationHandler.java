@@ -3,12 +3,13 @@ package com.fg.proxy.handler;
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
 import com.fg.annotation.Idempotent;
-import com.fg.compress.CompressorFactory;
+import com.fg.compressor.CompressorFactory;
 import com.fg.discovery.Registry;
 import com.fg.enums.RequestType;
 import com.fg.exception.DiscoveryException;
+import com.fg.protection.BreakerRegistry;
 import com.fg.protection.CircuitBreaker;
-import com.fg.serialize.SerializerFactory;
+import com.fg.serializer.SerializerFactory;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.RpcRequest;
 import io.netty.channel.Channel;
@@ -59,7 +60,10 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
             while (true) {
                 try {
                     // 发送请求
-                    CircuitBreaker circuitBreaker = RpcBootstrap.getInstance().getConfiguration().getCircuitBreaker();
+                    String normGroup = (group == null || group.isBlank())
+                            ? RpcBootstrap.getInstance().getConfiguration().getGroup()
+                            :group;
+                    CircuitBreaker circuitBreaker = BreakerRegistry.get(interfaceRef.getName(), normGroup);
                     return circuitBreaker.call(() -> doRpcCall(request));
                 } catch (Exception e) {
                     attempt++;
@@ -118,8 +122,11 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
      */
     private Object doRpcCall(RpcRequest request) throws Exception {
         // 1.从注册中心拉去服务列表并通过负载均衡获取可用服务
+        String normGroup = (group == null || group.isBlank())
+                ? RpcBootstrap.getInstance().getConfiguration().getGroup()
+                : group;
         InetSocketAddress address = RpcBootstrap.getInstance().getConfiguration().getLoadBalancer()
-                .getServiceAddress(interfaceRef.getName(), group);
+                .getServiceAddress(interfaceRef.getName(), normGroup);
         log.info("找到{}服务，地址：{}:{}", interfaceRef.getName(), address.getHostString(), address.getPort());
         // 2.获取可用通道并发送请求
         Channel channel = getAvailableChannel(address);

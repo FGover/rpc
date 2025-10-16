@@ -1,10 +1,9 @@
 package com.fg.channel.handler;
 
-import com.fg.compress.CompressorFactory;
-import com.fg.compress.service.Compressor;
-import com.fg.enums.RequestType;
-import com.fg.serialize.SerializerFactory;
-import com.fg.serialize.service.Serializer;
+import com.fg.compressor.CompressorFactory;
+import com.fg.compressor.service.Compressor;
+import com.fg.serializer.SerializerFactory;
+import com.fg.serializer.service.Serializer;
 import com.fg.transport.constant.MessageConstant;
 import com.fg.transport.message.ResponsePayload;
 import com.fg.transport.message.RpcResponse;

@@ -1,13 +1,15 @@
 package com.fg.config;
 
 import com.fg.IdGenerator;
-import com.fg.compress.CompressorFactory;
-import com.fg.compress.service.Compressor;
+import com.fg.compressor.CompressorFactory;
+import com.fg.compressor.service.Compressor;
 import com.fg.discovery.RegistryConfig;
 import com.fg.loadbalancer.service.impl.RoundRobinLoadBalancer;
 import com.fg.loadbalancer.service.LoadBalancer;
-import com.fg.serialize.SerializerFactory;
-import com.fg.serialize.service.Serializer;
+import com.fg.protection.limiter.RateLimiterFactory;
+import com.fg.protection.limiter.service.RateLimiter;
+import com.fg.serializer.SerializerFactory;
+import com.fg.serializer.service.Serializer;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -26,13 +28,24 @@ import java.util.Map;
 @Slf4j
 public class XmlResolver {
 
+    // 判断是否为服务端
+    private boolean isProvider() {
+        String mode = System.getProperty("rpc.mode");
+        return "provider".equals(mode);
+    }
+
     public void loadMergedConfig(Configuration configuration) {
         // 先加载 core 默认配置
         loadFromXml(configuration, "rpc-config.xml");
-        // 再加载 provider 自定义配置（覆盖核心配置）
-        loadFromXml(configuration, "provider-rpc-config.xml");
-        // 再加载 consumer 自定义配置
-        loadFromXml(configuration, "consumer-rpc-config.xml");
+        if (isProvider()) {
+            log.info("当前为服务端模式，加载provider-rpc-config.xml");
+            // 再加载 provider 自定义配置（覆盖核心配置）
+            loadFromXml(configuration, "provider-rpc-config.xml");
+        } else {
+            log.info("当前为客户端模式，加载consumer-rpc-config.xml");
+            // 再加载 consumer 自定义配置
+            loadFromXml(configuration, "consumer-rpc-config.xml");
+        }
     }
 
     /**
@@ -45,7 +58,7 @@ public class XmlResolver {
             // 加载resources目录下的配置文件
             InputStream inputStream = Configuration.class.getClassLoader().getResourceAsStream(fileName);
             if (inputStream == null) {
-                log.error("未找到rpc-config.xml配置文件，使用默认配置");
+                log.error("未找到{}配置文件，使用默认配置", fileName);
                 return;
             }
             // 解析XML文档
@@ -78,7 +91,10 @@ public class XmlResolver {
             if (applicationName != null) {
                 configuration.setApplicationName(applicationName);
             }
-            configuration.setRegistryConfig(resolveRegistryConfig(doc, xPath));
+            RegistryConfig registryConfig = resolveRegistryConfig(doc, xPath);
+            if (registryConfig != null) {
+                configuration.setRegistryConfig(registryConfig);
+            }
             String serializeType = resolveSerializeType(doc, xPath);
             if (serializeType != null) {
                 configuration.setSerializeType(serializeType);
@@ -95,8 +111,19 @@ public class XmlResolver {
             if (compressorObjectWrapper != null) {
                 CompressorFactory.addCompressor(compressorObjectWrapper);
             }
-            configuration.setLoadBalancer(resolveLoadBalancer(doc, xPath));
-            configuration.setIdGenerator(resolveIdGenerator(doc, xPath));
+            LoadBalancer loadBalancer = resolveLoadBalancer(doc, xPath);
+            if (loadBalancer != null) {
+                configuration.setLoadBalancer(loadBalancer);
+            }
+            RateLimiter limiter = resolveRateLimiter(doc, xPath);
+            if (limiter != null) {
+                configuration.setLimiter(limiter);
+            }
+            IdGenerator idGenerator = resolveIdGenerator(doc, xPath);
+            if (idGenerator != null) {
+                configuration.setIdGenerator(idGenerator);
+            }
+            System.out.println(configuration);
         } catch (IOException | SAXException | ParserConfigurationException e) {
             throw new RuntimeException("XML 配置加载异常", e);
         }
@@ -229,6 +256,9 @@ public class XmlResolver {
     private IdGenerator resolveIdGenerator(Document doc, XPath xPath) {
         String expression = "/configuration/idGenerator";
         Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
+        if (attrMap.isEmpty()) {
+            return null;
+        }
         // 设置默认值
         long dataCenterId = 1L;
         long machineId = 2L;
@@ -255,9 +285,13 @@ public class XmlResolver {
     private LoadBalancer resolveLoadBalancer(Document doc, XPath xPath) {
         String expression = "/configuration/loadBalancer";
         try {
-            LoadBalancer lb = parseObject(doc, xPath, expression, null);
-            return lb != null ? lb : new RoundRobinLoadBalancer();
-        } catch (RuntimeException e) {
+            // 节点缺失，不覆盖
+            XPathExpression express = xPath.compile(expression);
+            Node node = (Node) express.evaluate(doc, XPathConstants.NODE);
+            if (node == null) return null;
+            // 有节点，反射创建
+            return parseObject(doc, xPath, expression, null);
+        } catch (Exception e) {
             log.error("解析负载均衡器失败，使用默认RoundRobinLoadBalancer", e);
             return new RoundRobinLoadBalancer();
         }
@@ -273,7 +307,9 @@ public class XmlResolver {
     private String resolveCompressType(Document doc, XPath xPath) {
         String expression = "/configuration/compressType";
         Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
-        return attrMap.getOrDefault("type", "gzip");
+        if (attrMap.isEmpty()) return null;
+        String type = attrMap.get("type");
+        return (type == null || type.isEmpty()) ? "gzip" : type;
     }
 
 
@@ -301,7 +337,9 @@ public class XmlResolver {
     private String resolveSerializeType(Document doc, XPath xPath) {
         String expression = "/configuration/serializeType";
         Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
-        return attrMap.getOrDefault("type", "jdk");
+        if (attrMap.isEmpty()) return null;
+        String type = attrMap.get("type");
+        return (type == null || type.isEmpty()) ? "jdk" : type;
     }
 
     private ObjectWrapper<Serializer> resolveSerializer(Document doc, XPath xPath) {
@@ -310,11 +348,19 @@ public class XmlResolver {
             Serializer serializer = parseObject(doc, xPath, expression, null);
             Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
             if (serializer == null || attrMap.isEmpty()) return null;
-            return new ObjectWrapper<>(Byte.parseByte(attrMap.getOrDefault("code", "0")), attrMap.getOrDefault("type", "jdk"), serializer);
+            return new ObjectWrapper<>(Byte.parseByte(attrMap.getOrDefault("code", "0")),
+                    attrMap.getOrDefault("type", "jdk"), serializer);
         } catch (Exception e) {
             log.warn("加载 Serializer 失败，忽略该配置", e);
             return null;
         }
+    }
+
+    private RateLimiter resolveRateLimiter(Document doc, XPath xPath) {
+        String expression = "/configuration/limiter";
+        Map<String, String> limiterConf = parseAttribute(doc, xPath, expression);
+        if (limiterConf.isEmpty()) return null;
+        return RateLimiterFactory.create(limiterConf);
     }
 
     /**
@@ -327,6 +373,9 @@ public class XmlResolver {
     private RegistryConfig resolveRegistryConfig(Document doc, XPath xPath) {
         String expression = "/configuration/registry";
         Map<String, String> attrMap = parseAttribute(doc, xPath, expression);
+        if (attrMap.isEmpty()) {
+            return null;
+        }
         if (!attrMap.containsKey("url") || attrMap.get("url").isEmpty()) {
             log.warn("未配置 registry 的 url 属性，将使用默认地址");
             return new RegistryConfig("zookeeper://127.0.0.1:2181");

@@ -3,8 +3,7 @@ package com.fg.config;
 import com.fg.IdGenerator;
 import com.fg.discovery.RegistryConfig;
 import com.fg.loadbalancer.service.LoadBalancer;
-import com.fg.protection.CircuitBreaker;
-import com.fg.protection.limiter.service.impl.TokenBucketLimiter;
+import com.fg.protection.limiter.service.RateLimiter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,9 +28,7 @@ public class Configuration {
     // 负载均衡器
     private LoadBalancer loadBalancer;
     // 限流器
-    private TokenBucketLimiter limiter = new TokenBucketLimiter(10, 5);
-    // 熔断器
-    private CircuitBreaker circuitBreaker = new CircuitBreaker(3, 2, 5000);
+    private RateLimiter limiter;
     // 分组
     private String group = "default";
 

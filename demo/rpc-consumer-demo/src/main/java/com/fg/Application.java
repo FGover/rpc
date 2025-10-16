@@ -10,6 +10,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class Application {
     public static void main(String[] args) {
+
+        // 设置系统属性
+        System.setProperty("rpc.mode", "consumer");
+
         // 配置要引用的远程服务接口
         ReferenceConfig<HelloRpcService> reference = new ReferenceConfig<>();
         reference.setInterface(HelloRpcService.class);
@@ -45,7 +49,7 @@ public class Application {
                 } catch (Exception e) {
                     log.error("线程 {} 调用异常：{}", threadId, e.getMessage());
                 }
-            }, 0, 3000, TimeUnit.MILLISECONDS); // 每个线程每 300ms 发一次请求
+            }, 0, 100, TimeUnit.MILLISECONDS);
         }
     }
 }

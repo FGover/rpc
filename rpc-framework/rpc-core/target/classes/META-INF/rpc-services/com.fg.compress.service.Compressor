@@ -1,3 +1,0 @@
-1-gzip-com.fg.compress.service.impl.GzipCompressor
-2-snappy-com.fg.compress.service.impl.SnappyCompressor
-3-zstd-com.fg.compress.service.impl.ZstdCompressor

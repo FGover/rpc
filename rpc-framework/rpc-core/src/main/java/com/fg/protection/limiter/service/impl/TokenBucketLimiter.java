@@ -17,6 +17,11 @@ public class TokenBucketLimiter implements RateLimiter {
     // 上次补充令牌的时间戳（单位：纳秒）
     private volatile long lastRefillTimeNano;
 
+
+    public TokenBucketLimiter() {
+        this(10L, 5L); // 默认：容量10，每秒补5个
+    }
+
     /**
      * 构造方法：设置桶容量和令牌生成速率
      *

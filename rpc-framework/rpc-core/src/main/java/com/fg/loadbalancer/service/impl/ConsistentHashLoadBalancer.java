@@ -10,6 +10,9 @@ import java.net.InetSocketAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
@@ -25,12 +28,12 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
          * key：虚拟节点的哈希值
          * value：对应的真实服务节点地址
          */
-        private final SortedMap<Integer, InetSocketAddress> circle = new TreeMap<>();
+        private final ConcurrentSkipListMap<Integer, InetSocketAddress> circle = new ConcurrentSkipListMap<>();
         // 虚拟节点数量，用于增强负载均衡和防止数据倾斜
         private final int virtualNodes;
 
         // 命中计数器
-        private final Map<InetSocketAddress, Integer> hitCountMap = new HashMap<>();
+        private final Map<InetSocketAddress, AtomicInteger> hitCountMap = new ConcurrentHashMap<>();
 
 
         public ConsistentHashSelector(List<InetSocketAddress> serviceList, int virtualNodes) {
@@ -38,7 +41,7 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
             // 将所有真实节点添加到哈希环中，每个真实节点对应多个虚拟节点
             for (InetSocketAddress address : serviceList) {
                 addNodeToCircle(address);
-                hitCountMap.put(address, 0); // 初始化命中数为0
+                hitCountMap.put(address, new AtomicInteger(0)); // 初始化命中数为0
             }
         }
 
@@ -49,6 +52,9 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
          */
         @Override
         public InetSocketAddress selectServiceInstance() {
+            if (circle.isEmpty()) {
+                throw new RuntimeException("哈希环为空，无法选择服务实例");
+            }
             // 从线程上下文中获取当前请求
             RpcRequest request = RpcBootstrap.REQUEST_THREAD_LOCAL.get();
             // 获取请求ID，转为字符串作为哈希的输入
@@ -68,8 +74,7 @@ public class ConsistentHashLoadBalancer extends AbstractLoadBalancer {
             }
             InetSocketAddress selectedNode = circle.get(hash);
             // 命中计数 + 打印
-            hitCountMap.put(selectedNode, hitCountMap.getOrDefault(selectedNode, 0) + 1);
-            System.out.println("当前节点命中情况：" + hitCountMap);
+            hitCountMap.computeIfAbsent(selectedNode, k -> new AtomicInteger(0)).incrementAndGet();
             if (log.isDebugEnabled()) {
                 log.debug("一致性哈希选择器：请求ID [{}] 经过哈希 [{}] 选中节点 [{}]", requestId, hash, selectedNode);
             }

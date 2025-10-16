@@ -1,6 +1,5 @@
 package com.fg.spi;
 
-import com.fg.compress.service.Compressor;
 import com.fg.config.ObjectWrapper;
 import lombok.extern.slf4j.Slf4j;
 

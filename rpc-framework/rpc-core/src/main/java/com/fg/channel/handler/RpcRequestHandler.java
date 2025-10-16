@@ -5,7 +5,7 @@ import com.fg.ServiceConfig;
 import com.fg.enums.RequestType;
 import com.fg.enums.ResponseCode;
 import com.fg.heartbeat.ShutdownHolder;
-import com.fg.protection.limiter.service.impl.TokenBucketLimiter;
+import com.fg.protection.limiter.service.RateLimiter;
 import com.fg.transport.message.RequestPayload;
 import com.fg.transport.message.ResponsePayload;
 import com.fg.transport.message.RpcRequest;
@@ -55,8 +55,8 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
                 channelHandlerContext.writeAndFlush(rpcResponse);
                 return;
             }
-            // 2.限流逻辑：尝试获取令牌
-            TokenBucketLimiter limiter = RpcBootstrap.getInstance().getConfiguration().getLimiter();
+            // 2.限流器
+            RateLimiter limiter = RpcBootstrap.getInstance().getConfiguration().getLimiter();
             if (!limiter.tryAcquire()) {
                 log.error("请求{}被限流", rpcRequest.getRequestId());
                 rpcResponse.setResponsePayload(

@@ -2,10 +2,10 @@ package com.fg.heartbeat;
 
 import com.fg.NettyBootstrapInitializer;
 import com.fg.RpcBootstrap;
-import com.fg.compress.CompressorFactory;
+import com.fg.compressor.CompressorFactory;
 import com.fg.discovery.Registry;
 import com.fg.enums.RequestType;
-import com.fg.serialize.SerializerFactory;
+import com.fg.serializer.SerializerFactory;
 import com.fg.transport.message.RpcRequest;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -62,7 +62,7 @@ public class HeartBeatDetector {
             thread.setDaemon(true);
             return thread;
         });
-        heartbeatExecutor.scheduleAtFixedRate(new HeartBeatTask(), 0, 2, TimeUnit.SECONDS);
+        heartbeatExecutor.scheduleAtFixedRate(new HeartBeatTask(), 0, 3, TimeUnit.SECONDS);
         isRunning = true;
     }
 

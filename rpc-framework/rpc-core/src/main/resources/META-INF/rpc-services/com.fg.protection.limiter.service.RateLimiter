@@ -1,0 +1,4 @@
+1-token-com.fg.protection.limiter.service.impl.TokenBucketLimiter
+2-fixed-com.fg.protection.limiter.service.impl.FixedWindowLimiter
+3-leaky-com.fg.protection.limiter.service.impl.LeakyBucketLimiter
+4-sliding-com.fg.protection.limiter.service.impl.SlidingWindowLimiter

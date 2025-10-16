@@ -1,3 +1,0 @@
-1-jdk-com.fg.serialize.service.impl.JdkSerializer
-2-json-com.fg.serialize.service.impl.JsonSerializer
-3-hessian-com.fg.serialize.service.impl.HessianSerializer

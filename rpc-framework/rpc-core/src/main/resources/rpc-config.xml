@@ -9,13 +9,26 @@
 <!--    <registry url="nacos://127.0.0.1:8848"/>-->
 
     <serializeType type="hessian"/>
-    <serializer code="3" type="hessian" class="com.fg.serialize.service.impl.HessianSerializer"/>
+    <!-- 额外添加的时候可用到（不修改SPI），和SPI本质一样-->
+<!--    <serializer code="1" type="jdk" class="com.fg.serializer.service.impl.JdkSerializer"/>-->
 
     <compressType type="gzip"/>
-    <compressor code="1" type="gzip" class="com.fg.compress.service.impl.GzipCompressor"/>
+    <!-- 额外添加的时候可用到（不修改SPI），和SPI本质一样 -->
+<!--    <compressor code="1" type="gzip" class="com.fg.compressor.service.impl.GzipCompressor"/>-->
 
-    <loadBalancerType type="RoundRobin"/>
-    <loadBalancer class="com.fg.loadbalancer.service.impl.RoundRobinLoadBalancer"/>
+    <loadBalancer class="com.fg.loadbalancer.service.impl.ConsistentHashLoadBalancer"/>
+
+    <!-- 滑动窗口：1秒最多100次 -->
+    <limiter type="sliding" maxRequests="10" windowMs="1000"/>
+
+    <!-- 令牌桶：容量10，每秒补5个 -->
+    <!-- <limiter type="token" capacity="10" refillPerSecond="5"/> -->
+
+    <!-- 固定窗口：1秒最多200次 -->
+    <!-- <limiter type="fixed" qps="200" windowMs="1000"/> -->
+
+    <!-- 漏桶：容量100，出水速率50/s -->
+    <!-- <limiter type="leaky" capacity="100" leakPerSecond="50"/> -->
 
     <idGenerator class="com.fg.IdGenerator" dataCenterId="1" machineId="2"/>
 </configuration>

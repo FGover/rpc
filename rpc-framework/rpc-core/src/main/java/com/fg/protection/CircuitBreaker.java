@@ -2,6 +2,7 @@ package com.fg.protection;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -16,6 +17,8 @@ public class CircuitBreaker {
     private final int failureThreshold;
     // 半开状态允许尝试的成功次数
     private final int successThreshold;
+    // 半开阶段仅允许单并发探测
+    private final AtomicBoolean halfOpenPermit = new AtomicBoolean(true);
     // 熔断后等待多少毫秒后进入半开状态
     private final long timeout;
     // 当前失败次数计数器
@@ -57,8 +60,11 @@ public class CircuitBreaker {
                     // 否则直接拒绝请求
                     throw new Exception("熔断器已打开，拒绝请求！");
                 }
-                break;
             case HALF_OPEN:
+                // 并发限流：已有人在探测则拒绝
+                if (!halfOpenPermit.compareAndSet(true, false)) {
+                    throw new Exception("熔断器半开状态，正在探测中，拒绝并发请求！");
+                }
                 // 半开状态允许一定数量的请求探测服务是否恢复
                 try {
                     T result = supplier.get();  // 正常调用远程服务
@@ -71,6 +77,8 @@ public class CircuitBreaker {
                 } catch (Exception e) {
                     trip();  // 如果失败，重新熔断
                     throw e;
+                } finally {
+                    halfOpenPermit.set(true);  // 释放并发限流
                 }
             case CLOSED:
             default:
@@ -88,8 +96,6 @@ public class CircuitBreaker {
                     throw e;
                 }
         }
-        // 编译器兜底（实际上不会执行到这里）
-        throw new IllegalStateException("未知的熔断器状态：" + state);
     }
 
     /**

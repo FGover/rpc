@@ -10,6 +10,7 @@
                 compressor?,
                 loadBalancerType?,
                 loadBalancer?,
+                limiter?,
                 idGenerator?
                 )>
 
@@ -61,6 +62,18 @@
         <!ELEMENT loadBalancer EMPTY>
         <!ATTLIST loadBalancer
                 class CDATA #REQUIRED
+                >
+
+        <!-- 限流器 -->
+        <!ELEMENT limiter EMPTY>
+        <!ATTLIST limiter
+                type              CDATA  #IMPLIED
+                capacity          CDATA  #IMPLIED
+                refillPerSecond   CDATA  #IMPLIED
+                qps               CDATA  #IMPLIED
+                windowMs          CDATA  #IMPLIED
+                leakPerSecond     CDATA  #IMPLIED
+                maxRequests       CDATA  #IMPLIED
                 >
 
         <!-- ID生成器 -->

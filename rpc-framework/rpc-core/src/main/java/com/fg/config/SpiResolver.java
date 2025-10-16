@@ -1,10 +1,11 @@
 package com.fg.config;
 
-import com.fg.compress.CompressorFactory;
-import com.fg.compress.service.Compressor;
+import com.fg.compressor.CompressorFactory;
+import com.fg.compressor.service.Compressor;
 import com.fg.loadbalancer.service.LoadBalancer;
-import com.fg.serialize.SerializerFactory;
-import com.fg.serialize.service.Serializer;
+import com.fg.protection.limiter.service.RateLimiter;
+import com.fg.serializer.SerializerFactory;
+import com.fg.serializer.service.Serializer;
 import com.fg.spi.SpiHandler;
 
 import java.util.List;
@@ -31,6 +32,11 @@ public class SpiResolver {
         List<ObjectWrapper<Serializer>> serializerWrappers = SpiHandler.getAll(Serializer.class);
         if (!serializerWrappers.isEmpty()) {
             serializerWrappers.forEach(SerializerFactory::addSerializer);
+        }
+
+        List<ObjectWrapper<RateLimiter>> limiterWrappers = SpiHandler.getAll(RateLimiter.class);
+        if (!limiterWrappers.isEmpty()) {
+            configuration.setLimiter(limiterWrappers.get(0).getImpl());
         }
     }
 }

@@ -6,6 +6,9 @@ import com.fg.discovery.RegistryConfig;
 public class Application {
     public static void main(String[] args) {
 
+        // 设置系统属性
+        System.setProperty("rpc.mode", "provider");
+
         // 封装要发布的服务
 //        ServiceConfig<HelloRpcService> service = new ServiceConfig<>();
 //        service.setInterface(HelloRpcService.class);

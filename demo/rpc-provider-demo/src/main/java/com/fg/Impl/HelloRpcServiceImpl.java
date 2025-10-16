@@ -7,6 +7,6 @@ import com.fg.annotation.RpcService;
 public class HelloRpcServiceImpl implements HelloRpcService {
     @Override
     public String sayHello(String msg) {
-        return "Hi Consumer：" + msg;
+        return "Hi Consumer：哈哈哈" + msg;
     }
 }

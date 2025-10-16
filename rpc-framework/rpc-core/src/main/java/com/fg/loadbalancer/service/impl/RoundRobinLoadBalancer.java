@@ -34,9 +34,6 @@ public class RoundRobinLoadBalancer extends AbstractLoadBalancer {
         @Override
         public InetSocketAddress selectServiceInstance() {
             int current = index.getAndIncrement();
-            if (current > 100_000_000) {
-                index.compareAndSet(current + 1, 0);
-            }
             int pos = current & Integer.MAX_VALUE;
             // 使用模运算实现循环轮询
             int selectedIndex = pos % serviceList.size();
