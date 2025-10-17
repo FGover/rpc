@@ -145,4 +145,13 @@ public class NacosUtil {
             throw new DiscoveryException("关闭Nacos客户端失败");
         }
     }
+
+    public static void deregisterInstance(NamingService namingService, String serviceName, String group,
+                                          String ip, int port) {
+        try {
+            namingService.deregisterInstance(serviceName, group, ip, port);
+        } catch (Exception e) {
+            log.error("服务下线失败: {}", serviceName, e);
+        }
+    }
 }

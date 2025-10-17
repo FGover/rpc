@@ -48,23 +48,25 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         try {
             log.debug("调用远程方法：{}", method.getName());
-            // 封装请求报文
-            RpcRequest request = buildRpcRequest(method, args);
-            // 将请求存入当前线程
-            RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
             // 判断是否为幂等请求
             Idempotent idempotent = method.getAnnotation(Idempotent.class);
             int maxRetry = idempotent != null ? idempotent.maxRetry() : 1;
             long retryIntervalMs = idempotent != null ? idempotent.retryIntervalMs() : 0;
             int attempt = 0;
+            RpcRequest request = null;
             while (true) {
                 try {
+                    // 封装请求报文
+                    request = buildRpcRequest(method, args, attempt > 0);
+                    // 将请求存入当前线程
+                    RpcBootstrap.REQUEST_THREAD_LOCAL.set(request);
                     // 发送请求
                     String normGroup = (group == null || group.isBlank())
                             ? RpcBootstrap.getInstance().getConfiguration().getGroup()
-                            :group;
+                            : group;
                     CircuitBreaker circuitBreaker = BreakerRegistry.get(interfaceRef.getName(), normGroup);
-                    return circuitBreaker.call(() -> doRpcCall(request));
+                    RpcRequest finalRequest = request;
+                    return circuitBreaker.call(() -> doRpcCall(finalRequest));
                 } catch (Exception e) {
                     attempt++;
                     if (attempt >= maxRetry) {
@@ -93,7 +95,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
      * @param args
      * @return
      */
-    private RpcRequest buildRpcRequest(Method method, Object[] args) {
+    private RpcRequest buildRpcRequest(Method method, Object[] args, boolean isRetry) {
         RequestPayload requestPayload = RequestPayload.builder()
                 .interfaceName(interfaceRef.getName())
                 .methodName(method.getName())
@@ -101,8 +103,17 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                 .parametersValue(args)
                 .returnType(method.getReturnType())
                 .build();
+        // 幂等性
+        long requestId;
+        if (isRetry && RpcBootstrap.REQUEST_THREAD_LOCAL.get() != null) {
+            requestId = RpcBootstrap.REQUEST_THREAD_LOCAL.get().getRequestId();
+            log.info("=== 重试请求，使用相同requestId: {} ===", requestId);
+        } else {
+            requestId = RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId();
+            log.info("=== 首次请求，生成新requestId: {} ===", requestId);
+        }
         return RpcRequest.builder()
-                .requestId(RpcBootstrap.getInstance().getConfiguration().getIdGenerator().getId())
+                .requestId(requestId)
                 .requestType(RequestType.REQUEST.getId())
                 .compressType(CompressorFactory.getCompressor(RpcBootstrap.getInstance().getConfiguration()
                         .getCompressType()).getCode())
@@ -139,9 +150,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
                         completableFuture.completeExceptionally(promise.cause());
                     }
                 });
-        // 3.清理线程变量
-        RpcBootstrap.REQUEST_THREAD_LOCAL.remove();
-        // 4.阻塞等待响应
+        // 3.阻塞等待响应
         return completableFuture.get(10, TimeUnit.SECONDS);
     }
 

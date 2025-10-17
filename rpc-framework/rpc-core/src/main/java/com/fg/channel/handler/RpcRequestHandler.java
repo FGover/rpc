@@ -2,6 +2,7 @@ package com.fg.channel.handler;
 
 import com.fg.RpcBootstrap;
 import com.fg.ServiceConfig;
+import com.fg.annotation.Idempotent;
 import com.fg.enums.RequestType;
 import com.fg.enums.ResponseCode;
 import com.fg.heartbeat.ShutdownHolder;
@@ -15,12 +16,34 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
+    private static final Map<Long, Object> IDEMPOTENT_CACHE = new ConcurrentHashMap<>();
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcRequest rpcRequest) throws Exception {
+        log.info("收到请求ID: {}", rpcRequest.getRequestId());
+        // 幂等性验证
+        if (IDEMPOTENT_CACHE.containsKey(rpcRequest.getRequestId())) {
+            log.debug("检测到重复请求，返回缓存结果：{}", rpcRequest.getRequestId());
+            Object cachedResult = IDEMPOTENT_CACHE.get(rpcRequest.getRequestId());
+            // 返回缓存的结果
+            RpcResponse rpcResponse = new RpcResponse();
+            rpcResponse.setRequestId(rpcRequest.getRequestId());
+            rpcResponse.setRequestType(rpcRequest.getRequestType());
+            rpcResponse.setResponsePayload(
+                    ResponsePayload.builder()
+                            .code(ResponseCode.SUCCESS.getCode())
+                            .data(cachedResult)
+                            .build()
+            );
+            channelHandlerContext.writeAndFlush(rpcResponse);
+            return;
+        }
         log.info("收到请求：{}，进行请求处理...", rpcRequest);
         // 封装响应对象
         RpcResponse rpcResponse = new RpcResponse();
@@ -80,6 +103,25 @@ public class RpcRequestHandler extends SimpleChannelInboundHandler<RpcRequest> {
                                 .data(result)
                                 .build()
                 );
+                try {
+                    RequestPayload pl = rpcRequest.getRequestPayload();
+                    String interfaceName = pl.getInterfaceName();
+                    String methodName = pl.getMethodName();
+                    Class<?>[] paramTypes = pl.getParametersType();
+                    Object ref = RpcBootstrap.SERVICE_LIST.get(interfaceName).getRef();
+                    boolean idempotent =
+                            ref.getClass().getMethod(methodName, paramTypes).isAnnotationPresent(Idempotent.class)
+                                    || (ref.getClass().getInterfaces().length > 0
+                                    && ref.getClass().getInterfaces()[0].getMethod(methodName, paramTypes)
+                                    .isAnnotationPresent(Idempotent.class));
+
+                    if (idempotent) {
+                        // 将本次结果写入幂等缓存（顶部已有 IDEMPOTENT_CACHE 读取逻辑）
+                        IDEMPOTENT_CACHE.put(rpcRequest.getRequestId(),
+                                rpcResponse.getResponsePayload().getData());
+                    }
+                } catch (Exception ignore) {
+                }
             } catch (Exception e) {
                 log.error("处理请求{}失败", rpcRequest, e);
                 // 构造失败响应体

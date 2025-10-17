@@ -55,6 +55,19 @@ public class ZookeeperRegistry extends AbstractRegistry {
     }
 
     /**
+     * 注销服务
+     *
+     * @param serviceName
+     * @param address
+     */
+    @Override
+    public void unregister(String serviceName, InetSocketAddress address) {
+        String node = Constant.BASE_PROVIDERS_PATH + "/" + serviceName + "/" +
+                RpcBootstrap.getInstance().getConfiguration() + ":" + address.getPort();
+        ZookeeperUtil.deleteNode(zooKeeper, node);
+    }
+
+    /**
      * 查找服务
      *
      * @param serviceName

@@ -10,6 +10,9 @@ public interface Registry {
     // 注册服务
     void register(ServiceConfig<?> serviceConfig);
 
+    // 注销服务
+    void unregister(String serviceName, InetSocketAddress address);
+
     // 获取服务列表
     List<InetSocketAddress> lookup(String serviceName, String group);
 }

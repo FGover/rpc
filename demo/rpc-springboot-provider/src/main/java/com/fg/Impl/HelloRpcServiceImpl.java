@@ -9,4 +9,9 @@ public class HelloRpcServiceImpl implements HelloRpcService {
     public String sayHello(String msg) {
         return "Hi Consumer：" + msg;
     }
+
+    @Override
+    public String getIdempotentTest(String input) {
+        return "";
+    }
 }

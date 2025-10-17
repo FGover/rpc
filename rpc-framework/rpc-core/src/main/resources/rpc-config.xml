@@ -12,7 +12,7 @@
     <!-- 额外添加的时候可用到（不修改SPI），和SPI本质一样-->
 <!--    <serializer code="1" type="jdk" class="com.fg.serializer.service.impl.JdkSerializer"/>-->
 
-    <compressType type="gzip"/>
+    <compressType type="zstd"/>
     <!-- 额外添加的时候可用到（不修改SPI），和SPI本质一样 -->
 <!--    <compressor code="1" type="gzip" class="com.fg.compressor.service.impl.GzipCompressor"/>-->
 

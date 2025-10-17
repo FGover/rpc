@@ -20,6 +20,7 @@ public class HeartBeatDetector {
 
     private static volatile ScheduledExecutorService heartbeatExecutor;
     private static volatile boolean isRunning = false;
+    private static String serviceName;
 
     /**
      * 心跳检测
@@ -30,6 +31,7 @@ public class HeartBeatDetector {
      * @param serviceName
      */
     public static void detect(String serviceName) {
+        HeartBeatDetector.serviceName = serviceName;
         log.info("开始服务[{}]的心跳检测", serviceName);
         // 获取注册中心实例
         Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
@@ -127,6 +129,10 @@ public class HeartBeatDetector {
                             RpcBootstrap.PENDING_REQUEST_MAP.remove(request.getRequestId());
                             RpcBootstrap.RESPONSE_TIME_CHANNEL_MAP.entrySet()
                                     .removeIf(item -> item.getValue().equals(channel));
+                            // 从注册中心下线
+                            Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig()
+                                    .getRegistry();
+                            registry.unregister(serviceName, entry.getKey());
                             // 关闭channel
                             if (channel.isOpen()) {
                                 channel.close();
@@ -135,7 +141,7 @@ public class HeartBeatDetector {
                         // 重试前随机等待一小段时间，避免雪崩
                         try {
                             // 指数退避
-                            int retryDelay = 10 * (1 << (3 - tryTimes));   // 10ms, 20ms, 40ms
+                            int retryDelay = 1000 * (1 << (3 - tryTimes));   // 1000ms, 2000ms, 4000ms
                             Thread.sleep(retryDelay);
                         } catch (InterruptedException ex) {
                             Thread.currentThread().interrupt();

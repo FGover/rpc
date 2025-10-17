@@ -115,4 +115,18 @@ public class ZookeeperUtil {
             throw new ZookeeperException(e);
         }
     }
+
+    /**
+     * 删除节点
+     *
+     * @param zooKeeper
+     * @param nodePath
+     */
+    public static void deleteNode(ZooKeeper zooKeeper, String nodePath) {
+        try {
+            zooKeeper.delete(nodePath, -1);
+        } catch (Exception e) {
+            log.error("删除节点失败", e);
+        }
+    }
 }

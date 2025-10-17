@@ -47,6 +47,13 @@ public class NacosRegistry extends AbstractRegistry {
     }
 
     @Override
+    public void unregister(String serviceName, InetSocketAddress address) {
+        String group = RpcBootstrap.getInstance().getConfiguration().getGroup();
+        NacosUtil.deregisterInstance(namingService, serviceName, group,
+                address.getHostString(), address.getPort());
+    }
+
+    @Override
     public List<InetSocketAddress> lookup(String serviceName, String group) {
         String targetGroup = group != null ? group : "default";
         String subKey = serviceName + "::" + targetGroup;
