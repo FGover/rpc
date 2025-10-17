@@ -1,5 +1,8 @@
 手写rpc框架
 
+## 注册中心启动  
+本地启动Zookeeper或者Nacos即可
+
 
 ![image](https://github.com/user-attachments/assets/ace76d12-667a-41a9-be3d-40eb2162206e)
 
