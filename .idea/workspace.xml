@@ -4,7 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="" />
+    <list default="true" id="ca3fffed-5063-4214-a0c8-762decaad402" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/rpc-consumer-demo/target/classes/com/fg/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/Constant.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/Constant.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/IdGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/IdGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/DiscoveryException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/DiscoveryException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/NetworkException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/NetworkException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/ZookeeperException.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/exception/ZookeeperException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/DateUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/DateUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/NetUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/NetUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/nacos/NacosNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/nacos/NacosNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/nacos/NacosUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/nacos/NacosUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-common/target/classes/com/fg/utils/zookeeper/ZookeeperUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/src/main/java/com/fg/discovery/Impl/ZookeeperRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/channel/handler/RpcRequestHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/AbstractRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/AbstractRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/NacosRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/NacosRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/discovery/Impl/ZookeeperRegistry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector$HeartBeatTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector$HeartBeatTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/heartbeat/HeartBeatDetector.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rpc-framework/rpc-core/target/classes/com/fg/proxy/handler/RpcConsumerInvocationHandler.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -311,6 +333,8 @@
       <workItem from="1760518533409" duration="51172000" />
       <workItem from="1760674470970" duration="12397000" />
       <workItem from="1760692283847" duration="94000" />
+      <workItem from="1760700247888" duration="159000" />
+      <workItem from="1764915283399" duration="16589000" />
     </task>
     <servers />
   </component>
