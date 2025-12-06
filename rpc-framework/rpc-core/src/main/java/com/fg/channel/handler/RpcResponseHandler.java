@@ -30,10 +30,6 @@ public class RpcResponseHandler extends SimpleChannelInboundHandler<RpcResponse>
             InetSocketAddress remoteAddress = (InetSocketAddress) channelHandlerContext.channel().remoteAddress();
             RpcBootstrap.CHANNEL_MAP.remove(remoteAddress);
             log.info("已从CHANNEL_MAP中移除服务端：{}", remoteAddress);
-            // 重新负载均衡
-//            RpcRequest request = RpcBootstrap.REQUEST_THREAD_LOCAL.get();
-//            RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(
-//                    request.getRequestPayload().getInterfaceName(), RpcBootstrap.CHANNEL_MAP.keySet().stream().toList());
             return;
         }
 

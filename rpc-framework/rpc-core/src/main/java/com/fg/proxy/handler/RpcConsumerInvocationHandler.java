@@ -144,6 +144,7 @@ public class RpcConsumerInvocationHandler implements InvocationHandler {
         CompletableFuture<Object> completableFuture = new CompletableFuture<>();
         RpcBootstrap.PENDING_REQUEST_MAP.put(request.getRequestId(), completableFuture);
         completableFuture.whenComplete((r, ex) -> RpcBootstrap.PENDING_REQUEST_MAP.remove(request.getRequestId()));
+        // 发送请求
         channel.writeAndFlush(request)
                 .addListener((ChannelFutureListener) promise -> {
                     if (!promise.isSuccess()) {
