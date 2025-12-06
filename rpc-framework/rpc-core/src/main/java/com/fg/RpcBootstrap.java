@@ -1,6 +1,7 @@
 package com.fg;
 
 import com.fg.annotation.RpcService;
+import com.fg.channel.ProviderChannelInitializer;
 import com.fg.channel.handler.RpcRequestDecoder;
 import com.fg.channel.handler.RpcRequestHandler;
 import com.fg.channel.handler.RpcResponseEncoder;
@@ -140,16 +141,7 @@ public class RpcBootstrap {
             // 配置启动参数
             bootstrap.group(bossGroup, workerGroup)  // 设置线程组
                     .channel(NioServerSocketChannel.class)  // 设置通道类型
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast(new LoggingHandler())      // 双向调试日志
-                                    .addLast(new RpcRequestDecoder())   // [入站]解码器
-                                    .addLast(new RpcResponseEncoder())  // [出站]编码器
-                                    .addLast(new RpcRequestHandler());   // [入站]业务处理器 + 发出响应
-                        }
-                    });  // 设置通道初始化器
+                    .childHandler(new ProviderChannelInitializer());  // 设置通道初始化器
             // 绑定端口并同步阻塞知道绑定完成
             ChannelFuture channelFuture = bootstrap.bind(configuration.getPort()).sync();
             log.info("Netty服务{}已启动，监听端口：{}", configuration.getApplicationName(), configuration.getPort());
