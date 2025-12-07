@@ -11,7 +11,7 @@ public interface Registry {
     void register(ServiceConfig<?> serviceConfig);
 
     // 注销服务
-    void unregister(String serviceName, InetSocketAddress address);
+    void unregister(String serviceName, String group, InetSocketAddress address);
 
     // 获取服务列表
     List<InetSocketAddress> lookup(String serviceName, String group);

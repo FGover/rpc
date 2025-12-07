@@ -47,8 +47,7 @@ public class NacosRegistry extends AbstractRegistry {
     }
 
     @Override
-    public void unregister(String serviceName, InetSocketAddress address) {
-        String group = RpcBootstrap.getInstance().getConfiguration().getGroup();
+    public void unregister(String serviceName, String group, InetSocketAddress address) {
         NacosUtil.deregisterInstance(namingService, serviceName, group,
                 address.getHostString(), address.getPort());
     }

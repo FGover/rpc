@@ -189,7 +189,7 @@ public class RpcBootstrap {
         // 设置分组
         reference.setGroup(configuration.getGroup());
         // 开启心跳检测
-        HeartBeatDetector.detect(reference.getInterface().getName());
+        HeartBeatDetector.detect(reference.getInterface().getName(), reference.getGroup());
     }
 
     /**

@@ -21,6 +21,7 @@ public class HeartBeatDetector {
     private static volatile ScheduledExecutorService heartbeatExecutor;
     private static volatile boolean isRunning = false;
     private static String serviceName;
+    private static String group;
 
     /**
      * 心跳检测
@@ -30,14 +31,14 @@ public class HeartBeatDetector {
      *
      * @param serviceName
      */
-    public static void detect(String serviceName) {
+    public static void detect(String serviceName, String group) {
         HeartBeatDetector.serviceName = serviceName;
+        HeartBeatDetector.group = group;
         log.info("开始服务[{}]的心跳检测", serviceName);
         // 获取注册中心实例
         Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
         // 拉取服务节点列表
-        List<InetSocketAddress> serviceList = registry.lookup(serviceName, RpcBootstrap.getInstance().getConfiguration()
-                .getGroup());
+        List<InetSocketAddress> serviceList = registry.lookup(serviceName, group);
         // 建立连接缓存
         for (InetSocketAddress address : serviceList) {
             try {
@@ -132,7 +133,7 @@ public class HeartBeatDetector {
                             // 从注册中心下线
                             Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig()
                                     .getRegistry();
-                            registry.unregister(serviceName, entry.getKey());
+                            registry.unregister(serviceName, group, entry.getKey());
                             // 关闭channel
                             if (channel.isOpen()) {
                                 channel.close();

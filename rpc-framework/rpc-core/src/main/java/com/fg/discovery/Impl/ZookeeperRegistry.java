@@ -71,11 +71,7 @@ public class ZookeeperRegistry extends AbstractRegistry {
      * @param address
      */
     @Override
-    public void unregister(String serviceName, InetSocketAddress address) {
-        // 注销时需要找到对应的服务配置来获取正确的group
-        // 这里需要传递serviceConfig或者从某个地方获取正确的group
-        // 暂时保持原有逻辑，但添加注释说明问题
-        String group = RpcBootstrap.getInstance().getConfiguration().getGroup();
+    public void unregister(String serviceName, String group, InetSocketAddress address) {
         String node = Constant.BASE_PROVIDERS_PATH + "/" + serviceName + "/" + group + "/" +
                 address.getHostString() + ":" + address.getPort();
         try {
@@ -97,11 +93,11 @@ public class ZookeeperRegistry extends AbstractRegistry {
         String targetGroup = group != null ? group : "default";
         String subKey = serviceName + "::" + targetGroup;
         // 找到服务对应的节点
-        String serviceNode = Constant.BASE_PROVIDERS_PATH + "/" + serviceName + "/" + group;
+        String serviceNode = Constant.BASE_PROVIDERS_PATH + "/" + serviceName + "/" + targetGroup;
         // 防重复订阅：如果已订阅过，直接获取一次最新列表
         if (subscribed.putIfAbsent(subKey, Boolean.TRUE) == null) {
             // 首次订阅，创建Watcher缓存
-            ZkServiceChangeWatcher watcher = new ZkServiceChangeWatcher(serviceName);
+            ZkServiceChangeWatcher watcher = new ZkServiceChangeWatcher(serviceName, targetGroup);
             watchers.put(subKey, watcher);
             // 获取子节点
             List<String> children = ZookeeperUtil.getChildren(zooKeeper, serviceNode, watcher);
