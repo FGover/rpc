@@ -82,6 +82,7 @@ public class CircuitBreaker {
                 }
             case CLOSED:
             default:
+                // CLOSED 状态的逻辑：正常调用、统计失败次数、触发熔断
                 try {
                     T result = supplier.get();   // 正常执行
                     failureCount.set(0);  // 成功则清空失败计数器

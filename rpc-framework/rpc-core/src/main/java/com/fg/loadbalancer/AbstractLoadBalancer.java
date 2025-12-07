@@ -48,13 +48,15 @@ public abstract class AbstractLoadBalancer implements LoadBalancer {
      * @param serviceName
      */
     @Override
-    public synchronized void reLoadBalance(String serviceName, List<InetSocketAddress> addressList) {
+    public synchronized void reLoadBalance(String serviceName, String group, List<InetSocketAddress> addressList) {
         if (addressList == null || addressList.isEmpty()) {
             log.warn("服务[{}]的地址列表为空，跳过负载均衡刷新", serviceName);
             return;
         }
         // 根据最新服务列表重建选择器存入缓存
-        String normGroup = RpcBootstrap.getInstance().getConfiguration().getGroup();
+        String normGroup = (group == null || group.isBlank())
+                ? RpcBootstrap.getInstance().getConfiguration().getGroup()
+                : group;
         final String cacheKey = serviceName + "::" + normGroup;
         selectors.put(cacheKey, getSelector(addressList));
         log.info("服务[{}]的负载均衡已刷新，新的服务列表为: {}", serviceName, addressList);

@@ -18,9 +18,11 @@ public interface LoadBalancer {
     InetSocketAddress getServiceAddress(String serviceName, String group);
 
     /**
-     * 重新平衡负载
+     * 重新负载均衡
      *
      * @param serviceName
+     * @param group
+     * @param addressList
      */
-    void reLoadBalance(String serviceName, List<InetSocketAddress> addressList);
+    void reLoadBalance(String serviceName, String group, List<InetSocketAddress> addressList);
 }

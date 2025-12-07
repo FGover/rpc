@@ -30,9 +30,12 @@ public class ZkServiceChangeWatcher implements Watcher {
 
     // 服务名称
     private final String serviceName;
+    // 分组
+    private final String group;
 
-    public ZkServiceChangeWatcher(String serviceName) {
+    public ZkServiceChangeWatcher(String serviceName, String group) {
         this.serviceName = serviceName;
+        this.group = group;
     }
 
     /**
@@ -49,8 +52,10 @@ public class ZkServiceChangeWatcher implements Watcher {
                 try {
                     Registry registry = RpcBootstrap.getInstance().getConfiguration().getRegistryConfig().getRegistry();
                     // 重新拉取服务列表
-                    List<InetSocketAddress> addressList = registry.lookup(serviceName, RpcBootstrap.getInstance()
-                            .getConfiguration().getGroup());
+                    String normGroup = (group == null || group.isBlank())
+                            ? RpcBootstrap.getInstance().getConfiguration().getGroup()
+                            : group;
+                    List<InetSocketAddress> addressList = registry.lookup(serviceName, normGroup);
                     // 新增节点
                     for (InetSocketAddress address : addressList) {
                         // 已有连接直接跳过
@@ -100,7 +105,7 @@ public class ZkServiceChangeWatcher implements Watcher {
                         return false;
                     });
                     // 重新负载均衡
-                    RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(serviceName, addressList);
+                    RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(serviceName, normGroup, addressList);
                     log.info("刷新负载均衡器，服务[{}]当前列表为：{}", serviceName, addressList);
                 } catch (Exception e) {
                     log.warn("处理服务变化异常: service={}, err={}", serviceName, e.getMessage());

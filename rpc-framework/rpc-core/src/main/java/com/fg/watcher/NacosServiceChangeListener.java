@@ -89,7 +89,10 @@ public class NacosServiceChangeListener implements EventListener {
                     return false;
                 });
                 // 刷新负载均衡器
-                RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(serviceName, latest);
+                String normGroup = (group == null || group.isBlank())
+                        ? RpcBootstrap.getInstance().getConfiguration().getGroup()
+                        : group;
+                RpcBootstrap.getInstance().getConfiguration().getLoadBalancer().reLoadBalance(serviceName, normGroup, latest);
                 log.info("刷新负载均衡器，服务[{}]当前列表为：{}", serviceName, latest);
             } catch (Exception ex) {
                 log.warn("处理实例变化异常: service={}, group={}, err={}", serviceName, group, ex.getMessage());

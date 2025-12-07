@@ -72,6 +72,9 @@ public class ZookeeperRegistry extends AbstractRegistry {
      */
     @Override
     public void unregister(String serviceName, InetSocketAddress address) {
+        // 注销时需要找到对应的服务配置来获取正确的group
+        // 这里需要传递serviceConfig或者从某个地方获取正确的group
+        // 暂时保持原有逻辑，但添加注释说明问题
         String group = RpcBootstrap.getInstance().getConfiguration().getGroup();
         String node = Constant.BASE_PROVIDERS_PATH + "/" + serviceName + "/" + group + "/" +
                 address.getHostString() + ":" + address.getPort();

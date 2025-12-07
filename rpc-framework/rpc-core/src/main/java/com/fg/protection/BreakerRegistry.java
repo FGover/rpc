@@ -4,6 +4,9 @@ import com.fg.RpcBootstrap;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 熔断器注册表
+ */
 public class BreakerRegistry {
 
     private static final ConcurrentHashMap<String, CircuitBreaker> REG = new ConcurrentHashMap<>();
